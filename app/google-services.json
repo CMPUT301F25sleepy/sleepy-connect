@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "771930719315",
+    "project_id": "sleepy-connect",
+    "storage_bucket": "sleepy-connect.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:771930719315:android:e5aa332de21619d681f2a6",
+        "android_client_info": {
+          "package_name": "com.example.sleepy_connect"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLRlkihKm5WktZCu8O3aIhfRBD-c0V3Ak"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
