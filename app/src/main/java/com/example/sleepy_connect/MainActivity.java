@@ -12,7 +12,8 @@ import androidx.core.view.WindowInsetsCompat;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SignUpFragment.SignUpDialogueListener {
+    private DAL dal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,5 +41,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void SignUpPress(View view){
         new SignUpFragment().show(getSupportFragmentManager(),"Sign up");
+    }
+
+    @Override
+    public void addEntrant(Entrant entrant){
+        dal.addEntrant(entrant);
     }
 }
