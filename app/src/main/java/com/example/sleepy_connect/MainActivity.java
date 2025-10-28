@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements SignUpFragment.Si
             return insets; // checking
         });
 
-        // Testing firestore
+        // Testing firestore yay test
         DAL dal = new DAL();
         Entrant e1 = new Entrant("Test1", "Test1", "test1@gmail.com", "2000-01-01", "123", "test1", "password");
 
