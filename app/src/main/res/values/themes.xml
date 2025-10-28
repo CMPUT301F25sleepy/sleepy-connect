@@ -5,5 +5,25 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
+    <!-- res/values/themes.xml -->
+    <style name="CustomAlertDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+        <item name="colorSurface">@color/cyan_blue</item>
+        <item name="elevationOverlayEnabled">false</item>
+    </style>
+
+    <style name="PositiveButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/pale_yellow</item>
+        <item name="android:background">@color/cyan_blue</item>
+    </style>
+
+    <style name="NegativeButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/pale_yellow</item>
+        <item name="android:background">@color/cyan_blue</item>
+    </style>
+
+
+
     <style name="Theme.Sleepyconnect" parent="Base.Theme.Sleepyconnect" />
 </resources>
