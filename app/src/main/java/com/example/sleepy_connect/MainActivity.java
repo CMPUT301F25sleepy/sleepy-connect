@@ -12,20 +12,12 @@ import androidx.core.view.WindowInsetsCompat;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class MainActivity extends AppCompatActivity {
-
-    private FirebaseFirestore db;
-
-    private CollectionReference usersRef;
+public class MainActivity extends AppCompatActivity implements SignUpFragment.SignUpDialogueListener {
+    private DAL dal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Creating the database
-        db = FirebaseFirestore.getInstance();
-
-        // Creating a collection for users
-        usersRef = db.collection("users");
 
         // Boilerplate code
         EdgeToEdge.enable(this);
@@ -35,6 +27,16 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets; // checking
         });
+
+        // Testing firestore yay test
+        DAL dal = new DAL();
+        Entrant e1 = new Entrant("Test1", "Test1", "test1@gmail.com", "2000-01-01", "123", "test1", "password");
+
+        dal.addEntrant(e1);
+        //dal.removeEntrant(e1);
+        Entrant e2 = new Entrant("test2", "test2", "test2@gmail.com", "2000-01-01", "123", "test2", "password");
+        dal.addEntrant(e2);
+        //dal.removeEntrant(e2);
     }
 
     public void SignUpPress(View view){
@@ -43,6 +45,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void addEntrant(Entrant entrant){
-
+        dal.addEntrant(entrant);
     }
 }
