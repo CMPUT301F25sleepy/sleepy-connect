@@ -23,6 +23,11 @@
         <item name="android:background">@color/cyan_blue</item>
     </style>
 
+    <style name="CircularImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
 
 
     <style name="Theme.Sleepyconnect" parent="Base.Theme.Sleepyconnect" />

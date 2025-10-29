@@ -4,4 +4,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="cyan_blue">#4F6C7F</color>
     <color name="pale_yellow">#FFFFE2</color>
+    <color name="light_grey">#D2D0D0</color>
+    <color name="text_dark">#313131</color>
+    <color name="hint">#777777</color>
+    <color name="box_fill">#F8F8F8</color>
 </resources>

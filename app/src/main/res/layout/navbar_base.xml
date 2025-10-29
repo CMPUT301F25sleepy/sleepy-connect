@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Attach this xml to the correct activity in it's onCreate(), set the toolbar, and set it's title:
+@Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.navbar_base);
+
+        Toolbar toolbar = findViewById(R.id.top_toolbar);
+        setSupportActionBar(toolbar);
+
+        // Set the title of the Toolbar
+        getSupportActionBar().setTitle("My Custom Title");
+        -->
+
+
+<!--Every time you create a new fragment, have the fragment access the activity and change the title
+This will ensure that every time the fragment is accessed, it will change the title.
+Add this in the OnViewCreated of each fragment:
+if (getActivity() instanceof AppCompatActivity) {
+            AppCompatActivity activity = (AppCompatActivity) getActivity();
+            if (activity.getSupportActionBar() != null) {
+                activity.getSupportActionBar().setTitle("Fragment Title Here");
+            }
+        }
+        -->
+
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="visible"
+    android:theme="@style/Theme.Sleepyconnect">
+
+    <!--puts the layout from top_toolbar.xml on this layout so that it appears on every screen-->
+    <include layout="@layout/top_toolbar"/>
+
+    <!--Container to hold each fragment-->
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="62dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!--bottom navigation bar created in bottom_nav_menu.xml with a menu layout and then set into a BottomNavigationView-->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/cyan_blue"
+
+        app:itemBackground="@android:color/transparent"
+        app:itemIconSize="30dp"
+        app:itemIconTint="@color/black"
+        app:itemRippleColor="@android:color/transparent"
+        app:itemTextColor="@color/black"
+        app:labelVisibilityMode="labeled"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/bottom_nav_menu" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
