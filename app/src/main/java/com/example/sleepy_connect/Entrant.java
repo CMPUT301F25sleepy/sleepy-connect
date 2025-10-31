@@ -23,6 +23,7 @@ public class Entrant {
 //    public String hash; // Base 64 encoded String
     public String last_name;
     public String first_name;
+    public Integer access; // 1 is entrant, 2 is organizer, 3 is administrator
 
     public Entrant(String android_id) {
         this.android_id = android_id;
@@ -32,6 +33,7 @@ public class Entrant {
         this.birthday = "NULL";
         this.phone_number = "NULL";
         this.username = "NULL";
+        this.access = 1;
 
         /* Instead of storing a password, we generate a salt and a hash
         Reference: https://www.baeldung.com/java-password-hashing */
@@ -51,6 +53,10 @@ public class Entrant {
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             throw new RuntimeException(e);
         }*/
+    }
+
+    public Entrant() {
+        // Empty constructor for Firebase to use when retrieving stuff
     }
 
     public String getFirst_name() {
@@ -104,5 +110,9 @@ public class Entrant {
     public String getAndroid_id() {
         return android_id;
     }
+
+    public Integer getAccess() { return access; }
+
+    public void setAccess(Integer access) { this.access = access; }
 
 }
