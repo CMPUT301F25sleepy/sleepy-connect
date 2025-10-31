@@ -36,8 +36,25 @@ public class MainActivity extends AppCompatActivity implements SignUpFragment.Si
 
         // Retrieve the device ID and create an entrant based on it
         androidId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-        user = new Entrant(androidId);
-        dal.addEntrant(user);
+
+        // Get user by id. If user doesn't exist, make a new user.
+        dal.getEntrant(androidId, new DAL.OnEntrantRetrievedListener() {
+            @Override
+            public void onEntrantRetrieved(Entrant entrant) {
+                if (entrant != null) {
+                    // existing user
+                    user = entrant;
+//                    user.setAccess(30);
+//                    dal.updateEntrant(user);
+                } else {
+                    // new user
+                    user = new Entrant(androidId);
+                    dal.addEntrant(user);
+//                    user.setAccess(45);
+//                    dal.updateEntrant(user);
+                }
+            }
+        });
     }
 
     public void SignUpPress(View view){
