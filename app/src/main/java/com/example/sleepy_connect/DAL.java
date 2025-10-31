@@ -22,12 +22,12 @@ public class DAL {
     public void addEntrant(Entrant entrant) {
         /*Adding an entrant to users collection.
         Inputs: An entrant object to add to the collection.*/
-        usersRef.document(entrant.getUsername()).set(entrant)
+        usersRef.document(entrant.getAndroid_id()).set(entrant)
                 // Adding listeners that tell us whether it was successful
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-                        System.out.println("Entrant added: " + entrant.getUsername());
+                        System.out.println("Entrant added: " + entrant.getAndroid_id());
                     }
                 })
                 // Adding listeners that tell us whether it was successful
@@ -42,12 +42,12 @@ public class DAL {
     public void removeEntrant(Entrant entrant) {
         /*Removing an entrant from the users collection
         Inputs: An entrant object to be removed.*/
-        usersRef.document(entrant.getUsername()).delete()
+        usersRef.document(entrant.getAndroid_id()).delete()
                 // Adding listeners that tell us whether it was successful
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-                        System.out.println("Entrant removed: " + entrant.getUsername());
+                        System.out.println("Entrant removed: " + entrant.getAndroid_id());
                     }
                 })
                 // Adding listeners that tell us whether it was successful

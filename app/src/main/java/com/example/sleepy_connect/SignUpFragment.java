@@ -58,7 +58,7 @@ public class SignUpFragment extends DialogFragment {
                     String phone = editPhone.getText().toString();
                     String username = editUsername.getText().toString();
                     String password = editPassword.getText().toString();
-                    listener.addEntrant(new Entrant(firstName, lastName, email, birthday, phone, username, password));
+                    //listener.addEntrant(new Entrant(firstName, lastName, email, birthday, phone, username, password));
                 })
                 .create();
         }
