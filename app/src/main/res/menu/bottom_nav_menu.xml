@@ -6,6 +6,9 @@
     <item android:title="Alerts"
         android:icon="@drawable/notif"
         android:id="@+id/alert_button"/>
+    <item android:title="Create"
+        android:icon="@drawable/create"
+        android:id="@+id/create_button"/>
     <item android:title="Events"
         android:icon="@drawable/calendar"
         android:id="@+id/event_button"/>
