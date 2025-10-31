@@ -58,4 +58,8 @@ public class DAL {
                     }
                 });
     }
+
+    public Entrant getEntrant(String android_id) {
+
+    }
 }
