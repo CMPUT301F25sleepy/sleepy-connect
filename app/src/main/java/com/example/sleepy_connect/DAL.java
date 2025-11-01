@@ -21,7 +21,7 @@ public class DAL {
         db = FirebaseFirestore.getInstance();
 
         // Creating a collection for users
-        usersRef = db.collection("users");
+        usersRef = db.collection("users"); // testing
     }
 
     public void addEntrant(Entrant entrant) {
