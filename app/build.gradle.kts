@@ -49,4 +49,6 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
     implementation("com.google.android.material:material:1.12.0")
 
+    // ZXing for QR code generation + scanning
+    implementation ("com.journeyapps:zxing-android-embedded:4.3.0")
 }

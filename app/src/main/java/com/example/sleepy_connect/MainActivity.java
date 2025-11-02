@@ -1,5 +1,6 @@
 package com.example.sleepy_connect;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
@@ -12,6 +13,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import android.provider.Settings;
+import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity implements SignUpFragment.SignUpDialogueListener{
     public DAL dal;
@@ -55,6 +57,20 @@ public class MainActivity extends AppCompatActivity implements SignUpFragment.Si
                 }
             }
         });
+
+        // navigate to testing activity
+        Button navigateToTestingActivityButton = findViewById(R.id.navToTestingActivityButton);
+        navigateToTestingActivityButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 3. Create an Intent to navigate to the new activity
+                Intent intent = new Intent(MainActivity.this, TestingActivity.class);
+
+                // 4. Start the new activity
+                startActivity(intent);
+            }
+        });
+
     }
 
     public void SignUpPress(View view){
