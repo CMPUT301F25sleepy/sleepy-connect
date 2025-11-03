@@ -7,5 +7,5 @@
     <color name="light_grey">#D2D0D0</color>
     <color name="text_dark">#313131</color>
     <color name="hint">#777777</color>
-    <color name="box_fill">#F8F8F8</color>
+    <color name="box_fill">#F0F0F0</color>
 </resources>

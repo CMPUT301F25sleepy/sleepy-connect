@@ -10,31 +10,35 @@ import javax.crypto.spec.PBEKeySpec;
 
 public class Entrant {
     /* Creates an entrant object:
-    Input: First Name, Last Name, Email, Birthday, Phone, Username, Password
-    Output: Entrant object with: First Name, Last Name, Email, Birthday, Phone, Username, Salt, Hash
+    Input: android_id
+    Output: Entrant object with: First Name, Last Name, Email, Birthday, Phone, Username initialized to NULL
     */
+    public String android_id;
     public String birthday;
     public String email;
     public String phone_number;
     public String username;
 //    public String password;
-    public String salt; // Base 64 encoded String
-    public String hash; // Base 64 encoded String
+//    public String salt; // Base 64 encoded String
+//    public String hash; // Base 64 encoded String
     public String last_name;
     public String first_name;
+    public Integer access; // 1 is entrant, 2 is organizer, 3 is administrator
 
-    public Entrant(String first_name, String last_name, String email, String birthday, String phone, String username, String password) {
-        this.first_name = first_name;
-        this.last_name = last_name;
-        this.email = email;
-        this.birthday = birthday;
-        this.phone_number = phone;
-        this.username = username;
+    public Entrant(String android_id) {
+        this.android_id = android_id;
+        this.first_name = "NULL";
+        this.last_name = "NULL";
+        this.email = "NULL";
+        this.birthday = "NULL";
+        this.phone_number = "NULL";
+        this.username = "NULL";
+        this.access = 1;
 
         /* Instead of storing a password, we generate a salt and a hash
         Reference: https://www.baeldung.com/java-password-hashing */
 
-        // Salt
+/*        // Salt
         SecureRandom random = new SecureRandom();
         byte[] salt = new byte[16];
         random.nextBytes(salt);
@@ -48,7 +52,11 @@ public class Entrant {
             this.hash = Base64.encodeToString(hash, Base64.DEFAULT);
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             throw new RuntimeException(e);
-        }
+        }*/
+    }
+
+    public Entrant() {
+        // Empty constructor for Firebase to use when retrieving stuff
     }
 
     public String getFirst_name() {
@@ -99,13 +107,12 @@ public class Entrant {
         this.email = email;
     }
 
-    public String getHash() { return hash; }
+    public String getAndroid_id() {
+        return android_id;
+    }
 
-    public String getSalt() { return salt; }
+    public Integer getAccess() { return access; }
 
-    public void setSalt(String salt) { this.salt = salt; }
-
-    public void setHash(String hash) { this.hash = hash; }
-
+    public void setAccess(Integer access) { this.access = access; }
 
 }
