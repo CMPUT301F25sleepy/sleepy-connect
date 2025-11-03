@@ -5,7 +5,14 @@
     <color name="cyan_blue">#4F6C7F</color>
     <color name="pale_yellow">#FFFFE2</color>
     <color name="light_grey">#D2D0D0</color>
+
     <color name="text_dark">#313131</color>
+    <color name="text_light">#F4F4F4</color>
     <color name="hint">#777777</color>
+
+    <color name="error_text">#C73939</color>
+    <color name="error_border">#C77C7C</color>
+
     <color name="box_fill">#F0F0F0</color>
+    <color name="button">#3972C7</color>
 </resources>

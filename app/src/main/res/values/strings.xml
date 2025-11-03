@@ -12,4 +12,7 @@
     <string name="label_geolocation">Geolocation</string>
     <string name="label_capacity">Capacity</string>
     <string name="label_description">Event Description</string>
+    <string name="label_save_changes">Save Changes</string>
+
+    <string name="error_create_event">Error: Highlighted fields must be filled</string>
 </resources>
