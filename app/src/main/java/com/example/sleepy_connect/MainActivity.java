@@ -2,6 +2,7 @@ package com.example.sleepy_connect;
 
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -9,9 +10,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
+import com.google.firebase.messaging.FirebaseMessaging;
+
 import android.provider.Settings;
+
+import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity implements SignUpFragment.SignUpDialogueListener{
     public DAL dal;
@@ -55,6 +63,31 @@ public class MainActivity extends AppCompatActivity implements SignUpFragment.Si
                 }
             }
         });
+
+        // This part is for FCM token initialization so that Firestore can send a notification
+        // I think Firestore handles this cause it'd be hard to actually identify devices arbitrarily
+        FirebaseApp.initializeApp(this);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        String userId = "95531acb940aa984";
+
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.w("MainActivity", "Fetching FCM registration token failed", task.getException());
+                        return;
+                    }
+
+                    // Gets new FCM registration token
+                    String token = task.getResult();
+                    Log.d("MainActivity", "FCM Token: " + token);
+
+                    // Saves the token to Firestore within the userId
+                    db.collection("users").document(userId)
+                            .set(Collections.singletonMap("token", token), SetOptions.merge())
+                            .addOnSuccessListener(aVoid -> Log.d("MainActivity", "Token saved successfully"))
+                            .addOnFailureListener(e -> Log.e("MainActivity", "Error saving token", e));
+                });
     }
 
     public void SignUpPress(View view){
