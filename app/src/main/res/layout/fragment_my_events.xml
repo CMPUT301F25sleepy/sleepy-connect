@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<!-- Screen reached by clicking my events button on navbar
+Make title of toolbar "My Events"-->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <RadioGroup
+        android:id="@+id/event_time_frame"
+        android:checkedButton="@id/current_event_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="80dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <RadioButton
+            android:id="@+id/current_event_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/roboto"
+            android:text="Current"
+            android:textSize="20sp" />
+
+
+        <RadioButton
+            android:id="@+id/all_event_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/roboto"
+            android:text="All Time"
+            android:textSize="20sp" />
+    </RadioGroup>
+
+
+    <TextView
+        android:id="@+id/waitlisted_events_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/roboto_medium"
+        android:text="Waitlisted"
+        android:textColor="@color/hint"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/event_time_frame" />
+
+
+    <View
+        android:id="@+id/line_under_waitlisted"
+        android:layout_width="0dp"
+        android:layout_height="3dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="10dp"
+        android:background="@color/hint"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/waitlisted_events_label" />
+
+
+    <TextView
+        android:id="@+id/enrolled_events_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="3dp"
+        android:fontFamily="@font/roboto_medium"
+        android:text="Enrolled"
+        android:textColor="@color/hint"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/line_under_enrolled"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/waitlisted_events_list" />
+
+
+    <View
+        android:id="@+id/line_under_enrolled"
+        android:layout_width="0dp"
+        android:layout_height="3dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="10dp"
+        android:background="@color/hint"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/enrolled_events_label"/>
+
+
+    <ListView
+        android:id="@+id/waitlisted_events_list"
+        android:layout_width="0dp"
+        android:layout_height="290dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:clipToPadding="false"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="10dp"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="5dp"
+        app:layout_constraintBottom_toTopOf="@+id/enrolled_events_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/line_under_waitlisted"
+        tools:listitem="@layout/event_item_layout" />
+
+
+    <ListView
+        android:id="@+id/enrolled_events_list"
+        android:layout_width="0dp"
+        android:layout_height="290dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="8dp"
+        android:clipToPadding="false"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="10dp"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/line_under_enrolled"
+        tools:listitem="@layout/event_item_layout"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
