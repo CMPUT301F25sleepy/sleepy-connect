@@ -2,6 +2,7 @@ package com.example.sleepy_connect;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,17 @@ public class SignUpFragment extends DialogFragment {
     }
 
     private SignUpDialogueListener listener;
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof SignUpDialogueListener){
+            listener = (SignUpDialogueListener) context;
+        }
+        else {
+            throw new RuntimeException("Implement listener");
+        }
+    }
 
     @NonNull
     @Override
@@ -46,7 +58,7 @@ public class SignUpFragment extends DialogFragment {
                     String phone = editPhone.getText().toString();
                     String username = editUsername.getText().toString();
                     String password = editPassword.getText().toString();
-                    listener.addEntrant(new Entrant(firstName, lastName, email, birthday, phone, username, password));
+                    //listener.addEntrant(new Entrant(firstName, lastName, email, birthday, phone, username, password));
                 })
                 .create();
         }

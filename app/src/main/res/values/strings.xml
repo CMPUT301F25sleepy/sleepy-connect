@@ -1,9 +1,15 @@
 <resources>
     <string name="app_name">sleepy-connect</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
     <string name="hint_event_title">Event Title</string>
-    <string name="label_starts">Starts</string>
-    <string name="label_ends">Ends</string>
+    <string name="hint_capacity">Leave empty for no capcacity</string>
+    <string name="hint_description">Enter event description</string>
+
+    <string name="label_reg_starts">Registration Start</string>
+    <string name="label_reg_ends">Registration End</string>
+    <string name="label_event_start">Event Start</string>
     <string name="label_geolocation">Geolocation</string>
-    <string name="label_capacity">Geolocation</string>
+    <string name="label_capacity">Capacity</string>
+    <string name="label_description">Event Description</string>
 </resources>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="Home"
+        android:icon="@drawable/home"
+        android:id="@+id/home_button"/>
+    <item android:title="Alerts"
+        android:icon="@drawable/notif"
+        android:id="@+id/alert_button"/>
+    <item android:title="Create"
+        android:icon="@drawable/create"
+        android:id="@+id/create_button"/>
+    <item android:title="Events"
+        android:icon="@drawable/calendar"
+        android:id="@+id/event_button"/>
+    <item android:title="Profile"
+        android:icon="@drawable/profile"
+        android:id="@+id/profile_button"/>
+
+  
+</menu>
