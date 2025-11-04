@@ -1,13 +1,22 @@
 package com.example.sleepy_connect.eventdetails;
 
+import static androidx.core.content.res.ResourcesCompat.getDrawable;
+
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +28,8 @@ import android.widget.TextView;
 
 import com.example.sleepy_connect.R;
 
+import java.net.URI;
+
 /**
  * Fragment class for creating new events
  * @author Sam Francisco
@@ -27,8 +38,20 @@ public class CreateEventFragment extends Fragment {
 
     private static final String UID = "uid"; // to be updated
     private String uid;
-    private boolean imageSet = false;
     private boolean geolocationOn = false;
+    private Uri posterUri = null;
+
+    // Registers a photo picker activity launcher in single-select mode.
+    ActivityResultLauncher<PickVisualMediaRequest> pickMedia =
+            registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
+                // Callback is invoked after the user selects a media item or closes the photo picker.
+                if (uri != null) {
+                    Log.d("PhotoPicker", "Selected URI: " + uri);
+                    posterUri = uri;
+                } else {
+                    Log.d("PhotoPicker", "No media selected");
+                }
+            });
 
     public CreateEventFragment() {
         // Required empty public constructor
@@ -89,9 +112,10 @@ public class CreateEventFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                // TODO: get image
-
-                // TODO: set imageSet if successful
+                // Launch the photo picker and let the user choose only images.
+                pickMedia.launch(new PickVisualMediaRequest.Builder()
+                        .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                        .build());
 
             }
         });
@@ -121,11 +145,12 @@ public class CreateEventFragment extends Fragment {
             TextView eventEndDate = view.findViewById(R.id.edit_event_end_date);
             TextView eventEndTime = view.findViewById(R.id.edit_event_end_time);
 
-            // TODO: check if mandatory fields are set
+            // check if mandatory fields are set and set their backgrounds if not
+            if (!mandatoryFieldsFilled(title, eventCapacity, recCenter, address, regStartDate, regEndDate, eventStartDate)) {
+                return;
+            }
 
-            // TODO: unset mandatory fields -> highlight unset fields, click done
-
-            // TODO: store data in database, click done
+            // TODO: store data in database
 
         });
     }
@@ -142,14 +167,28 @@ public class CreateEventFragment extends Fragment {
 
     public boolean mandatoryFieldsFilled(EditText title, EditText eventCapacity, EditText recCenter, EditText address,
                                      TextView regStartDate, TextView regEndDate, TextView eventStartDate) {
-        // TODO: logical or all the views' values' isEmpty
-        return true;
+
+        // bitwise & all the views' values' isComplete
+        boolean complete = isComplete(title) & isComplete(eventCapacity) & isComplete(recCenter) &
+                isComplete(address) & isComplete(regStartDate) & isComplete(eventStartDate);
+
+        // show error message if not complete
+        if (!complete) {
+            assert getView() != null;
+            TextView errorBox = getView().findViewById(R.id.edit_event_error_box);
+            errorBox.setVisibility(View.VISIBLE);
+        }
+
+        return complete;
     }
 
-    public void highlightErrorFields(EditText title, EditText eventCapacity, EditText recCenter, EditText address,
-                                     TextView regStartDate, TextView regEndDate, TextView eventStartDate) {
-        // TODO: change all empty mandatory views' borders to red
+    public boolean isComplete(TextView tv) {
 
-        // TODO: show error message
+        if (tv.getText().length() == 0) {
+            // highlight red if empty
+            tv.setBackground(getDrawable(getResources(), R.drawable.error_text_border, null));
+            return false;
+        }
+        return true;
     }
 }
