@@ -13,6 +13,7 @@ public class DAL {
     private final FirebaseFirestore db;
     private final CollectionReference usersRef;
     private final CollectionReference eventsRef;
+    private final DocumentReference counterRef;
     // For events, make a collection metadata with document eventCounter and field nextID set to 0
 
     public DAL() {
@@ -22,6 +23,8 @@ public class DAL {
         usersRef = db.collection("users");
         // Creating a collection for events
         eventsRef = db.collection("events");
+        // Creating a reference to the counter for IDs for events
+        counterRef = db.collection("metadata").document("eventCounter");
     }
 
     // -------------------------- ENTRANT -------------------------- //
@@ -129,27 +132,50 @@ public class DAL {
 
     public void addEvent(Event event) {
         /* Adds an event object to the database. Generates an event ID by using a document in Firebase
-        * Inputs: Event object
-        */
-        // get DB and ID document references
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference counterRef = db.collection("metadata").document("eventCounter");
+         * Inputs: Event object
+         */
+        // Get the current nextID, increment it, and store the event
+        counterRef.get()
+                // The counter exists
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        // get the id and increment it (The id is a long in firebase, but a string in event)
+                        Long currentID = documentSnapshot.getLong("nextID");
+                        if (currentID == null) currentID = 0L; // Android Studio wants this code
+                        long newID = currentID + 1;
 
-        // Overkill, but run a db transaction to add ID to the event.
-        db.runTransaction(transaction -> {
-                    Long currentID = transaction.get(counterRef).getLong("nextID");
-                    if (currentID == null) currentID = 0L; // Android studio wants to check for null
-                    long newID = currentID + 1;
-                    transaction.update(counterRef, "nextID", newID); // increment in the database
-
-                    event.setEventID((int) newID); // cast long to int before storing
-                    eventsRef.document(String.valueOf(newID)).set(event);
-                    return null;
-
-                }).addOnSuccessListener(unused ->
-                        System.out.println("Event added, ID: " + event.getEventID()))
-                .addOnFailureListener(e ->
-                        System.err.println("Error adding event: " + e.getMessage()));
+                        // Update the counter in Firestore
+                        counterRef.update("nextID", newID)
+                                .addOnSuccessListener(unused -> {
+                                    event.setEventID(String.valueOf(newID)); // assign ID to the event
+                                    eventsRef.document(event.getEventID()).set(event) // Create the document
+                                            // Adding listeners that tell us whether it was successful
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void unused) {
+                                                    System.out.println("Event added: " + event.getEventID());
+                                                }
+                                            })
+                                            // Adding listeners that tell us whether it was successful
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    System.err.println("Error with event.");
+                                                }
+                                            });
+                                })
+                                .addOnFailureListener(e ->
+                                        System.err.println("Error updating counter: " + e.getMessage()));
+                    }
+                })
+                // Problem with counter document
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        System.err.println("Someone deleted the counter again.");
+                    }
+                });
     }
 
 }
