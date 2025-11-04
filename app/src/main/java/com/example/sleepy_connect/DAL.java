@@ -4,25 +4,30 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.Optional;
-
-import kotlin.contracts.Returns;
-
 public class DAL {
     /*Data Access Layer - Stores all functions that interface with the database.*/
-    private FirebaseFirestore db;
-    private CollectionReference usersRef;
+    private final FirebaseFirestore db;
+    private final CollectionReference usersRef;
+    private final CollectionReference eventsRef;
+    private final DocumentReference counterRef;
+    // For events, make a collection metadata with document eventCounter and field nextID set to 0
 
     public DAL() {
         // Creating the database
         db = FirebaseFirestore.getInstance();
-
         // Creating a collection for users
-        usersRef = db.collection("users"); // testin
+        usersRef = db.collection("users");
+        // Creating a collection for events
+        eventsRef = db.collection("events");
+        // Creating a reference to the counter for IDs for events
+        counterRef = db.collection("metadata").document("eventCounter");
     }
+
+    // -------------------------- ENTRANT -------------------------- //
 
     public void addEntrant(Entrant entrant) {
         /*Adding an entrant to users collection.
@@ -96,9 +101,8 @@ public class DAL {
                     }
                 });
     }
-
-    // Interface for the callback from getEntrant -> UI people, use this in your calls
     public interface OnEntrantRetrievedListener {
+        // Interface for the callback from getEntrant -> UI people, use this in your calls
         void onEntrantRetrieved(Entrant entrant);
     }
 
@@ -123,4 +127,55 @@ public class DAL {
                     }
                 });
     }
+
+    // -------------------------- EVENT -------------------------- //
+
+    public void addEvent(Event event) {
+        /* Adds an event object to the database. Generates an event ID by using a document in Firebase
+         * Inputs: Event object
+         */
+        // Get the current nextID, increment it, and store the event
+        counterRef.get()
+                // The counter exists
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        // get the id and increment it (The id is a long in firebase, but a string in event)
+                        Long currentID = documentSnapshot.getLong("nextID");
+                        if (currentID == null) currentID = 0L; // Android Studio wants this code
+                        long newID = currentID + 1;
+
+                        // Update the counter in Firestore
+                        counterRef.update("nextID", newID)
+                                .addOnSuccessListener(unused -> {
+                                    event.setEventID(String.valueOf(newID)); // assign ID to the event
+                                    eventsRef.document(event.getEventID()).set(event) // Create the document
+                                            // Adding listeners that tell us whether it was successful
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void unused) {
+                                                    System.out.println("Event added: " + event.getEventID());
+                                                }
+                                            })
+                                            // Adding listeners that tell us whether it was successful
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    System.err.println("Error with event.");
+                                                }
+                                            });
+                                })
+                                .addOnFailureListener(e ->
+                                        System.err.println("Error updating counter: " + e.getMessage()));
+                    }
+                })
+                // Problem with counter document
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        System.err.println("Someone deleted the counter again.");
+                    }
+                });
+    }
+
 }

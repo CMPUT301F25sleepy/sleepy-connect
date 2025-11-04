@@ -5,14 +5,11 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import android.provider.Settings;
+import java.time.Instant;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,6 +64,27 @@ public class MainActivity extends AppCompatActivity implements SignUpFragment.Si
         mock_list.add(mockAlert1);
         mock_list.add(mockAlert2);
 
+        // Testing event creation
+        long now = Instant.now().toEpochMilli();
+
+        Event testEvent = new Event(
+                "Community BBQ",              // eventName
+                "Join us for free burgers and games!",  // Description
+                "Clareview Community Centre",           // communityCentre
+                "3804 139 Ave NW, Edmonton, AB",        // communityCentreLocation
+                "QR12345",                              // QRCode
+                androidId,                              // creatorID (this device’s user)
+                null,                                   // poster (optional)
+                now + 86400000L,                        // registration opens in 1 day
+                now + 604800000L,                       // registration closes in 7 days
+                now + 691200000L,                       // event starts in 8 days
+                now + 699840000L,                       // event ends in 8 days + 1 hour
+                100,                                    // eventCapacity
+                10,                                     // waitlistCapacity
+                true                                    // geolocationEnabled
+        );
+
+        dal.addEvent(testEvent);
     }
 
     /* Listener for sign up */
@@ -82,8 +100,8 @@ public class MainActivity extends AppCompatActivity implements SignUpFragment.Si
         startActivity(i);
     }
 
+    // What does this do?
     @Override
-    @NonNull
     public void addEntrant(Entrant entrant){
         dal.addEntrant(entrant);
     }

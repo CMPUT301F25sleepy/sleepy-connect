@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.sleepy_connect"
-        minSdk = 24
+        minSdk = 26 // Changed from 24 this is Android 8.0, launched in 2017
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
