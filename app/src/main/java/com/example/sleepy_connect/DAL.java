@@ -4,25 +4,27 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.Optional;
-
-import kotlin.contracts.Returns;
-
 public class DAL {
     /*Data Access Layer - Stores all functions that interface with the database.*/
-    private FirebaseFirestore db;
-    private CollectionReference usersRef;
+    private final FirebaseFirestore db;
+    private final CollectionReference usersRef;
+    private final CollectionReference eventsRef;
+    // For events, make a collection metadata with document eventCounter and field nextID set to 0
 
     public DAL() {
         // Creating the database
         db = FirebaseFirestore.getInstance();
-
         // Creating a collection for users
-        usersRef = db.collection("users"); // testin
+        usersRef = db.collection("users");
+        // Creating a collection for events
+        eventsRef = db.collection("events");
     }
+
+    // -------------------------- ENTRANT -------------------------- //
 
     public void addEntrant(Entrant entrant) {
         /*Adding an entrant to users collection.
@@ -96,9 +98,8 @@ public class DAL {
                     }
                 });
     }
-
-    // Interface for the callback from getEntrant -> UI people, use this in your calls
     public interface OnEntrantRetrievedListener {
+        // Interface for the callback from getEntrant -> UI people, use this in your calls
         void onEntrantRetrieved(Entrant entrant);
     }
 
@@ -123,4 +124,32 @@ public class DAL {
                     }
                 });
     }
+
+    // -------------------------- EVENT -------------------------- //
+
+    public void addEvent(Event event) {
+        /* Adds an event object to the database. Generates an event ID by using a document in Firebase
+        * Inputs: Event object
+        */
+        // get DB and ID document references
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference counterRef = db.collection("metadata").document("eventCounter");
+
+        // Overkill, but run a db transaction to add ID to the event.
+        db.runTransaction(transaction -> {
+                    Long currentID = transaction.get(counterRef).getLong("nextID");
+                    if (currentID == null) currentID = 0L; // Android studio wants to check for null
+                    long newID = currentID + 1;
+                    transaction.update(counterRef, "nextID", newID); // increment in the database
+
+                    event.setEventID((int) newID); // cast long to int before storing
+                    eventsRef.document(String.valueOf(newID)).set(event);
+                    return null;
+
+                }).addOnSuccessListener(unused ->
+                        System.out.println("Event added, ID: " + event.getEventID()))
+                .addOnFailureListener(e ->
+                        System.err.println("Error adding event: " + e.getMessage()));
+    }
+
 }
