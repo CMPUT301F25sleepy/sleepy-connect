@@ -9,7 +9,14 @@
     <string name="label_reg_starts">Registration Start</string>
     <string name="label_reg_ends">Registration End</string>
     <string name="label_event_start">Event Start</string>
+    <string name="label_event_end">Event End</string>
     <string name="label_geolocation">Geolocation</string>
-    <string name="label_capacity">Capacity</string>
+    <string name="label_waitlist_capacity">Waitlist Capacity</string>
+    <string name="label_host_rec_center">Host Rec Center</string>
+    <string name="label_host_address">Location Address</string>
+    <string name="label_event_capacity">Event Capacity</string>
     <string name="label_description">Event Description</string>
+    <string name="label_save_changes">Save Changes</string>
+
+    <string name="error_create_event">Error: Highlighted fields must be filled</string>
 </resources>
