@@ -5,8 +5,25 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:background="@color/cyan_blue">
+    android:background="@color/cyan_blue"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/alert_button_test"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto"
+        android:onClick="alertPress"
+        android:text="Alerts"
+        android:textAllCaps="false"
+        android:textColor="@color/pale_yellow"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button"
+        app:layout_constraintVertical_bias="0.669" />
 
     <Button
         android:id="@+id/button"
@@ -16,8 +33,8 @@
         android:fontFamily="@font/roboto"
         android:onClick="SignUpPress"
         android:text="Sign Up"
-        android:textColor="@color/pale_yellow"
         android:textAllCaps="false"
+        android:textColor="@color/pale_yellow"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
