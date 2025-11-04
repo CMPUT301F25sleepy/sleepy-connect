@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Event {
-    public Integer eventID;
+    public String eventID;
     public String eventName;
-    public String Description;
+    public String description;
     public String communityCentre;
     public String communityCentreLocation;
-    public String QRCode;
+    public String qrCode;
     public String creatorID;
     public long createdDate;
     public Image poster;
@@ -26,19 +26,19 @@ public class Event {
     public List<String> declinedList; // List of entrants that declines / were rejected
     public List<String> acceptedList; // List of accepted entrants
 
-    public Event(String eventName, String Description, String communityCentre, String communityCentreLocation,
-                 String QRCode, String creatorID, Image poster, long registrationOpens, long registrationCloses,
+    public Event(String eventName, String description, String communityCentre, String communityCentreLocation,
+                 String qrCode, String creatorID, Image poster, long registrationOpens, long registrationCloses,
                  long eventStartDate, long eventEndDate, Integer eventCapacity, Integer waitlistCapacity,
                  boolean geolocationEnabled) {
         /*title, photo(optional), start date, end date, start time, end time,
         Registration start date, registration end date, description, geolocation toggle,
         event capacity, waitlist capacity(optional), rec center, rec center location*/
-        this.eventID = 0; // Will be overwritten after DAL touches it
+        this.eventID = "0"; // Will be overwritten after DAL touches it
         this.eventName = eventName;
-        this.Description = Description;
+        this.description = description;
         this.communityCentre = communityCentre;
         this.communityCentreLocation = communityCentreLocation;
-        this.QRCode = QRCode;
+        this.qrCode = qrCode;
         this.creatorID = creatorID;
         Instant instant = Instant.now();
         this.createdDate = instant.toEpochMilli(); // Gets current time from user device
@@ -56,11 +56,11 @@ public class Event {
         this.acceptedList = new ArrayList<>();
     }
 
-    public Integer getEventID() {
+    public String getEventID() {
         return eventID;
     }
 
-    public void setEventID(Integer eventID) {
+    public void setEventID(String eventID) {
         this.eventID = eventID;
     }
 
@@ -73,11 +73,11 @@ public class Event {
     }
 
     public String getDescription() {
-        return Description;
+        return description;
     }
 
     public void setDescription(String description) {
-        Description = description;
+        this.description = description;
     }
 
     public String getCommunityCentre() {
@@ -96,12 +96,12 @@ public class Event {
         this.communityCentreLocation = communityCentreLocation;
     }
 
-    public String getQRCode() {
-        return QRCode;
+    public String getQrCode() {
+        return qrCode;
     }
 
-    public void setQRCode(String QRCode) {
-        this.QRCode = QRCode;
+    public void setQrCode(String qrCode) {
+        this.qrCode = qrCode;
     }
 
     public String getCreatorID() {
