@@ -22,8 +22,8 @@ public class Entrant {
     public String username;
     public String last_name;
     public String first_name;
-    public ArrayList<Notification> notification_list;
     public int access; // 1 is entrant, 2 is organizer, 3 is administrator
+    public ArrayList<Notification> notification_list;
 
     public Entrant(String android_id) {
         this.android_id = android_id;
