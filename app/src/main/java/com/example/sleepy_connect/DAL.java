@@ -178,4 +178,59 @@ public class DAL {
                 });
     }
 
+    public void removeEvent(Event event) {
+        /*Removing an event from the event collection
+         * Inputs: An event object to be removed.*/
+        eventsRef.document(event.getEventID()).delete()
+                // Adding listeners that tell us whether it was successful
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        System.out.println("Event removed: " + event.getEventID());
+                    }
+                })
+                // Adding listeners that tell us whether it was successful
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        System.err.println("Error removing event: " + e.getMessage());
+                    }
+                });
+    }
+
+    public void getEvent(String eventID, OnEventRetrievedListener listener) {
+        /*Retrieves an event given a string ID.
+        * Inputs: eventID -> String
+        * Outputs: Event object */
+        eventsRef.document(eventID).get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    // Get a document back
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        // The entrant is in the database
+                        if (documentSnapshot.exists()) {
+                            Event event = documentSnapshot.toObject(Event.class);
+                            listener.onEventRetrieved(event);
+                            System.out.println("Event retrieved: " + eventID);
+                        }
+                        // entrant is not in the db
+                        else {
+                            System.err.println("No event found with ID: " + eventID);
+                            listener.onEventRetrieved(null);
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    // Something else went wrong with the request
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        System.err.println("Error retrieving event: " + e.getMessage());
+                        listener.onEventRetrieved(null);
+                    }
+                });
+    }
+    public interface OnEventRetrievedListener {
+        // Interface for the callback from getEvent -> UI people, use this in your calls
+        void onEventRetrieved(Event event);
+    }
 }

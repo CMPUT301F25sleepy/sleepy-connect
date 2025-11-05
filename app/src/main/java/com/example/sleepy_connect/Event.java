@@ -29,7 +29,7 @@ public class Event {
 
     public Event(String eventName, String description, String communityCentre, String communityCentreLocation,
                  String qrCode, String creatorID, Image poster, long registrationOpens, long registrationCloses,
-                 long eventStartDate, long eventEndDate, Integer eventCapacity, Integer waitlistCapacity,
+                 long eventStartDate, long eventEndDate, int eventCapacity, int waitlistCapacity,
                  boolean geolocationEnabled, String eventTime) {
         /*title, photo(optional), start date, end date, start time, end time,
         Registration start date, registration end date, description, geolocation toggle,
@@ -56,6 +56,37 @@ public class Event {
         this.pendingList = new ArrayList<>();
         this.declinedList = new ArrayList<>();
         this.acceptedList = new ArrayList<>();
+    }
+
+    public Event() {
+        // Empty constructor for Firebase to use when retrieving stuff
+    }
+
+    @Override
+    public String toString() {
+        return "Event{" +
+                "eventID='" + eventID + '\'' +
+                ", eventName='" + eventName + '\'' +
+                ", description='" + description + '\'' +
+                ", communityCentre='" + communityCentre + '\'' +
+                ", communityCentreLocation='" + communityCentreLocation + '\'' +
+                ", qrCode='" + qrCode + '\'' +
+                ", creatorID='" + creatorID + '\'' +
+                ", createdDate=" + createdDate +
+                ", poster=" + poster +
+                ", registrationOpens=" + registrationOpens +
+                ", registrationCloses=" + registrationCloses +
+                ", eventStartDate=" + eventStartDate +
+                ", eventEndDate=" + eventEndDate +
+                ", eventTime='" + eventTime + '\'' +
+                ", eventCapacity=" + eventCapacity +
+                ", waitlistCapacity=" + waitlistCapacity +
+                ", geolocationEnabled=" + geolocationEnabled +
+                ", waitingList=" + waitingList +
+                ", pendingList=" + pendingList +
+                ", declinedList=" + declinedList +
+                ", acceptedList=" + acceptedList +
+                '}';
     }
 
     public String getEventID() {
@@ -162,19 +193,19 @@ public class Event {
         this.eventEndDate = eventEndDate;
     }
 
-    public Integer getEventCapacity() {
+    public int getEventCapacity() {
         return eventCapacity;
     }
 
-    public void setEventCapacity(Integer eventCapacity) {
+    public void setEventCapacity(int eventCapacity) {
         this.eventCapacity = eventCapacity;
     }
 
-    public Integer getWaitlistCapacity() {
+    public int getWaitlistCapacity() {
         return waitlistCapacity;
     }
 
-    public void setWaitlistCapacity(Integer waitlistCapacity) {
+    public void setWaitlistCapacity(int waitlistCapacity) {
         this.waitlistCapacity = waitlistCapacity;
     }
 
@@ -224,13 +255,5 @@ public class Event {
 
     public void setEventTime(String eventTime) {
         this.eventTime = eventTime;
-    }
-
-    public void setEventCapacity(int eventCapacity) {
-        this.eventCapacity = eventCapacity;
-    }
-
-    public void setWaitlistCapacity(int waitlistCapacity) {
-        this.waitlistCapacity = waitlistCapacity;
     }
 }
