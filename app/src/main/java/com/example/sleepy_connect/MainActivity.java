@@ -16,7 +16,8 @@ import java.util.ArrayList;
 import java.time.LocalDateTime;
 
 public class MainActivity extends AppCompatActivity{
-    public DAL dal;
+    public EntrantDAL entrantDal;
+    public EventDAL eventDal;
     public Entrant user;
     public String androidID;
 
@@ -29,13 +30,14 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.activity_main);
 
         // Access to Firebase
-        dal = new DAL();
+        entrantDal = new EntrantDAL();
+        eventDal = new EventDAL();
 
         // Retrieve the device ID and create an entrant based on it
         androidID = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
 
         // Get user by id. If user doesn't exist, make a new user.
-        dal.getEntrant(androidID, new DAL.OnEntrantRetrievedListener() {
+        entrantDal.getEntrant(androidID, new EntrantDAL.OnEntrantRetrievedListener() {
             @Override
             public void onEntrantRetrieved(Entrant entrant) {
                 if (entrant != null) {
@@ -46,7 +48,7 @@ public class MainActivity extends AppCompatActivity{
                 } else {
                     // new user
                     user = new Entrant(androidID);
-                    dal.addEntrant(user);
+                    entrantDal.addEntrant(user);
 //                    user.setAccess(45);
 //                    dal.updateEntrant(user);
                 }
@@ -72,7 +74,7 @@ public class MainActivity extends AppCompatActivity{
                 true                                        // geolocationEnabled (Required)
         );
 
-        dal.addEvent(testEvent);
+        eventDal.addEvent(testEvent);
     }
 
 
