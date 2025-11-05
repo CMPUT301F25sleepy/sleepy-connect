@@ -155,6 +155,12 @@ public class CreateEventFragment extends Fragment {
         });
     }
 
+    /**
+     *
+     * @param view
+     * @param dateViewId
+     * @param timeViewId
+     */
     public void updateDateTime(View view, int dateViewId, int timeViewId) {
 
         // TODO: open date time picker activity and get date and time
@@ -165,6 +171,17 @@ public class CreateEventFragment extends Fragment {
 
     }
 
+    /**
+     *
+     * @param title
+     * @param eventCapacity
+     * @param recCenter
+     * @param address
+     * @param regStartDate
+     * @param regEndDate
+     * @param eventStartDate
+     * @return
+     */
     public boolean mandatoryFieldsFilled(EditText title, EditText eventCapacity, EditText recCenter, EditText address,
                                      TextView regStartDate, TextView regEndDate, TextView eventStartDate) {
 
@@ -182,6 +199,11 @@ public class CreateEventFragment extends Fragment {
         return complete;
     }
 
+    /**
+     *
+     * @param tv
+     * @return
+     */
     public boolean isComplete(TextView tv) {
 
         if (tv.getText().length() == 0) {
