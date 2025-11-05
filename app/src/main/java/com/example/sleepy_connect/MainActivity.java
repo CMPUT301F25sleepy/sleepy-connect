@@ -10,8 +10,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import java.time.Instant;
+import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
     public DAL dal;
     public Entrant user;
     public String androidId;
@@ -80,6 +81,7 @@ public class MainActivity extends AppCompatActivity{
     }
 
     /* Listener for sign up */
-    public void SignUpPress(View view){
-        new SignUpFragment().show(getSupportFragmentManager(),"Sign up");
+    public void SignUpPress(View view) {
+        new SignUpFragment().show(getSupportFragmentManager(), "Sign up");
+    }
 }
