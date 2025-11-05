@@ -123,8 +123,31 @@ public class EventDAL {
                     }
                 });
     }
+
     public interface OnEventRetrievedListener {
         // Interface for the callback from getEvent -> UI people, use this in your calls
         void onEventRetrieved(Event event);
+    }
+
+    public void updateEvent(Event event) {
+        /*Updates the corresponding event object in the firebase. When you make changes locally,
+         * It doesn't sync to firebase unless you call this after.
+         * Input: Event object that was changed in the app
+         * Output: Nothing. Updates the entrant in the Firebase.*/
+        eventsRef.document(event.getEventID()).set(event)
+                // Adding listeners that tell us whether it was successful
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        System.out.println("Event updated: " + event.getEventID());
+                    }
+                })
+                // Adding listeners that tell us whether it was successful
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        System.err.println("Error updating event: " + e.getMessage());
+                    }
+                });
     }
 }

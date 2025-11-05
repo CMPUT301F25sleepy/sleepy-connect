@@ -1,19 +1,12 @@
 package com.example.sleepy_connect;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.time.LocalDateTime;
 
 public class MainActivity extends AppCompatActivity{
     public EntrantDAL entrantDal;
@@ -54,8 +47,6 @@ public class MainActivity extends AppCompatActivity{
                 }
             }
         });
-
-
 
         // Testing event creation
         long now = Instant.now().toEpochMilli();
