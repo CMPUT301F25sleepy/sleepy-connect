@@ -1,5 +1,6 @@
 package com.example.sleepy_connect;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -14,11 +15,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.time.LocalDateTime;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
     public DAL dal;
     public Entrant user;
     public String androidId;
-    public ArrayList<Notification> mock_list = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,11 +53,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Setup notification list for testing
-        Notification mockAlert1 = new Notification("Event at 2pm", true);
-        Notification mockAlert2 = new Notification("Another Event at 2pm", false);
-        mock_list.add(mockAlert1);
-        mock_list.add(mockAlert2);
+
 
         // Testing event creation
         long now = Instant.now().toEpochMilli();
@@ -83,8 +79,13 @@ public class MainActivity extends AppCompatActivity {
         dal.addEvent(testEvent);
     }
 
-    /* Listener for sign up */
-    public void SignUpPress(View view) {
-        new SignUpFragment().show(getSupportFragmentManager(), "Sign up");
+
+    // TODO - Make the user go straight to the navigation
+    //  page once their android id has been added to the database
+    public void startPress(View view){
+        // button to switch to the main app (the navigation activity)
+        Intent i = new Intent(MainActivity.this, NavigationActivity.class);
+        startActivity(i);
     }
+
 }

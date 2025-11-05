@@ -17,7 +17,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class SignUpFragment extends DialogFragment {
 
-
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
