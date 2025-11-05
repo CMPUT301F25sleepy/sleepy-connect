@@ -18,6 +18,7 @@ public class Event {
     public long registrationCloses;
     public long eventStartDate;
     public long eventEndDate;
+    public String eventTime;                         // Time for the event
     public int eventCapacity;
     public int waitlistCapacity;
     public boolean geolocationEnabled;
@@ -29,7 +30,7 @@ public class Event {
     public Event(String eventName, String description, String communityCentre, String communityCentreLocation,
                  String qrCode, String creatorID, Image poster, long registrationOpens, long registrationCloses,
                  long eventStartDate, long eventEndDate, Integer eventCapacity, Integer waitlistCapacity,
-                 boolean geolocationEnabled) {
+                 boolean geolocationEnabled, String eventTime) {
         /*title, photo(optional), start date, end date, start time, end time,
         Registration start date, registration end date, description, geolocation toggle,
         event capacity, waitlist capacity(optional), rec center, rec center location*/
@@ -47,6 +48,7 @@ public class Event {
         this.registrationCloses = registrationCloses;
         this.eventStartDate = eventStartDate;
         this.eventEndDate = eventEndDate;
+        this.eventTime = eventTime;
         this.eventCapacity = eventCapacity;
         this.waitlistCapacity = waitlistCapacity;
         this.geolocationEnabled = geolocationEnabled;
@@ -214,5 +216,21 @@ public class Event {
 
     public void setAcceptedList(List<String> acceptedList) {
         this.acceptedList = acceptedList;
+    }
+
+    public String getEventTime() {
+        return eventTime;
+    }
+
+    public void setEventTime(String eventTime) {
+        this.eventTime = eventTime;
+    }
+
+    public void setEventCapacity(int eventCapacity) {
+        this.eventCapacity = eventCapacity;
+    }
+
+    public void setWaitlistCapacity(int waitlistCapacity) {
+        this.waitlistCapacity = waitlistCapacity;
     }
 }

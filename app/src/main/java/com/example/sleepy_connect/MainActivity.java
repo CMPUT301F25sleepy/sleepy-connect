@@ -76,7 +76,8 @@ public class MainActivity extends AppCompatActivity {
                 now + 699840000L,                       // event ends in 8 days + 1 hour
                 100,                                    // eventCapacity
                 10,                                     // waitlistCapacity
-                true                                    // geolocationEnabled
+                true,                                   // geolocationEnabled
+                "18:10 - 19:20"
         );
 
         dal.addEvent(testEvent);
