@@ -4,31 +4,23 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class DAL {
-    /*Data Access Layer - Stores all functions that interface with the database.*/
-    private final FirebaseFirestore db;
+public class EntrantDAL {
     private final CollectionReference usersRef;
-    private final CollectionReference eventsRef;
-    // For events, make a collection metadata with document eventCounter and field nextID set to 0
 
-    public DAL() {
+    public EntrantDAL() {
         // Creating the database
-        db = FirebaseFirestore.getInstance();
+        /* Entrant Data Access Layer - Stores all functions that interface with the database for the entrant.*/
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
         // Creating a collection for users
         usersRef = db.collection("users");
-        // Creating a collection for events
-        eventsRef = db.collection("events");
     }
-
-    // -------------------------- ENTRANT -------------------------- //
 
     public void addEntrant(Entrant entrant) {
         /*Adding an entrant to users collection.
-        * Inputs: An entrant object to add to the collection.*/
+         * Inputs: An entrant object to add to the collection.*/
         usersRef.document(entrant.getAndroid_id()).set(entrant)
                 // Adding listeners that tell us whether it was successful
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -48,7 +40,7 @@ public class DAL {
 
     public void removeEntrant(Entrant entrant) {
         /*Removing an entrant from the users collection
-        * Inputs: An entrant object to be removed.*/
+         * Inputs: An entrant object to be removed.*/
         usersRef.document(entrant.getAndroid_id()).delete()
                 // Adding listeners that tell us whether it was successful
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -68,9 +60,9 @@ public class DAL {
 
     public void getEntrant(String android_id, OnEntrantRetrievedListener listener) {
         /*Retrieves an entrant from the database.
-        * Input: String android_id of a user
-        * Output: Entrant object from database corresponding to the android_id
-        * Uses a listener to access the data. Please implement the interface (OnEntrantRetrievedListener) when using this.*/
+         * Input: String android_id of a user
+         * Output: Entrant object from database corresponding to the android_id
+         * Uses a listener to access the data. Please implement the interface (OnEntrantRetrievedListener) when using this.*/
         usersRef.document(android_id).get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     // Get a document back
@@ -98,6 +90,7 @@ public class DAL {
                     }
                 });
     }
+
     public interface OnEntrantRetrievedListener {
         // Interface for the callback from getEntrant -> UI people, use this in your calls
         void onEntrantRetrieved(Entrant entrant);
@@ -105,9 +98,9 @@ public class DAL {
 
     public void updateEntrant(Entrant entrant) {
         /*Updates the corresponding entrant object in the firebase. When you make changes locally,
-        * It doesn't sync to firebase unless you call this after.
-        * Input: Entrant object that was changed in the app
-        * Output: Nothing. Updates the entrant in the Firebase.*/
+         * It doesn't sync to firebase unless you call this after.
+         * Input: Entrant object that was changed in the app
+         * Output: Nothing. Updates the entrant in the Firebase.*/
         usersRef.document(entrant.getAndroid_id()).set(entrant)
                 // Adding listeners that tell us whether it was successful
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -124,32 +117,4 @@ public class DAL {
                     }
                 });
     }
-
-    // -------------------------- EVENT -------------------------- //
-
-    public void addEvent(Event event) {
-        /* Adds an event object to the database. Generates an event ID by using a document in Firebase
-        * Inputs: Event object
-        */
-        // get DB and ID document references
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference counterRef = db.collection("metadata").document("eventCounter");
-
-        // Overkill, but run a db transaction to add ID to the event.
-        db.runTransaction(transaction -> {
-                    Long currentID = transaction.get(counterRef).getLong("nextID");
-                    if (currentID == null) currentID = 0L; // Android studio wants to check for null
-                    long newID = currentID + 1;
-                    transaction.update(counterRef, "nextID", newID); // increment in the database
-
-                    event.setEventID((int) newID); // cast long to int before storing
-                    eventsRef.document(String.valueOf(newID)).set(event);
-                    return null;
-
-                }).addOnSuccessListener(unused ->
-                        System.out.println("Event added, ID: " + event.getEventID()))
-                .addOnFailureListener(e ->
-                        System.err.println("Error adding event: " + e.getMessage()));
-    }
-
 }
