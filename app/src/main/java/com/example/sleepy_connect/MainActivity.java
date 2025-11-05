@@ -11,9 +11,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import java.time.Instant;
-
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
 
 public class MainActivity extends AppCompatActivity{
     public DAL dal;
@@ -27,11 +27,6 @@ public class MainActivity extends AppCompatActivity{
         // Boilerplate code
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
 
         // Access to Firebase
         dal = new DAL();
@@ -77,7 +72,8 @@ public class MainActivity extends AppCompatActivity{
                 now + 699840000L,                       // event ends in 8 days + 1 hour
                 100,                                    // eventCapacity
                 10,                                     // waitlistCapacity
-                true                                    // geolocationEnabled
+                true,                                   // geolocationEnabled
+                "18:10 - 19:20"
         );
 
         dal.addEvent(testEvent);
