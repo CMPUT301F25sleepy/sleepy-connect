@@ -18,8 +18,8 @@ public class Event {
     public long registrationCloses;
     public long eventStartDate;
     public long eventEndDate;
-    public Integer eventCapacity;
-    public Integer waitlistCapacity;
+    public int eventCapacity;
+    public int waitlistCapacity;
     public boolean geolocationEnabled;
     public List<String> waitingList; // List of entrants
     public List<String> pendingList; // List of invited entrants
