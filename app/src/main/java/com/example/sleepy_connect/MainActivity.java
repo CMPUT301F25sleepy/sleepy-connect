@@ -1,5 +1,6 @@
 package com.example.sleepy_connect;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -14,11 +15,10 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements SignUpFragment.SignUpDialogueListener{
+public class MainActivity extends AppCompatActivity{
     public DAL dal;
     public Entrant user;
     public String androidId;
-    public ArrayList<Notification> mock_list = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,11 +58,7 @@ public class MainActivity extends AppCompatActivity implements SignUpFragment.Si
             }
         });
 
-        // Setup notification list for testing
-        Notification mockAlert1 = new Notification("Event at 2pm", true);
-        Notification mockAlert2 = new Notification("Another Event at 2pm", false);
-        mock_list.add(mockAlert1);
-        mock_list.add(mockAlert2);
+
 
         // Testing event creation
         long now = Instant.now().toEpochMilli();
@@ -87,22 +83,13 @@ public class MainActivity extends AppCompatActivity implements SignUpFragment.Si
         dal.addEvent(testEvent);
     }
 
-    /* Listener for sign up */
-    public void SignUpPress(View view){
-        new SignUpFragment().show(getSupportFragmentManager(),"Sign up");
-    }
 
-    /* Listener for sign up
-    *  - will open an activity with the notification list*/
-    public void alertPress(View view){
-        Intent i = new Intent(MainActivity.this, AlertActivity.class);
-        i.putExtra("mock_list",mock_list);
+    // TODO - Make the user go straight to the navigation
+    //  page once their android id has been added to the database
+    public void startPress(View view){
+        // button to switch to the main app (the navigation activity)
+        Intent i = new Intent(MainActivity.this, NavigationActivity.class);
         startActivity(i);
     }
 
-    // What does this do?
-    @Override
-    public void addEntrant(Entrant entrant){
-        dal.addEntrant(entrant);
-    }
 }

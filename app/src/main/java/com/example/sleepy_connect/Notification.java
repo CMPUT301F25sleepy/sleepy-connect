@@ -26,4 +26,6 @@ public class Notification implements Serializable {
     public void setSelected(boolean selected) {
         this.selected = selected;
     }
+
+
 }
