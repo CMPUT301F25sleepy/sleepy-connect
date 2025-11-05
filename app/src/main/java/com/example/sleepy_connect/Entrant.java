@@ -20,9 +20,6 @@ public class Entrant {
     public String email;
     public String phone_number;
     public String username;
-//    public String password;
-//    public String salt; // Base 64 encoded String
-//    public String hash; // Base 64 encoded String
     public String last_name;
     public String first_name;
     public ArrayList<Notification> notification_list;
@@ -37,25 +34,6 @@ public class Entrant {
         this.phone_number = "NULL";
         this.username = "NULL";
         this.access = 1;
-
-        /* Instead of storing a password, we generate a salt and a hash
-        Reference: https://www.baeldung.com/java-password-hashing */
-
-/*        // Salt
-        SecureRandom random = new SecureRandom();
-        byte[] salt = new byte[16];
-        random.nextBytes(salt);
-        this.salt = Base64.encodeToString(salt, Base64.DEFAULT);
-
-        // Hash
-        KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
-        try {
-            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-            byte[] hash = factory.generateSecret(spec).getEncoded();
-            this.hash = Base64.encodeToString(hash, Base64.DEFAULT);
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            throw new RuntimeException(e);
-        }*/
     }
 
     public Entrant() {
