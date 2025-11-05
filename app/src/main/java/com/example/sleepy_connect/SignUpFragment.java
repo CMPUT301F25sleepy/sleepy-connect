@@ -17,22 +17,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class SignUpFragment extends DialogFragment {
 
-    interface SignUpDialogueListener{
-        void addEntrant(Entrant entrant);
-    }
-
-    private SignUpDialogueListener listener;
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        if (context instanceof SignUpDialogueListener){
-            listener = (SignUpDialogueListener) context;
-        }
-        else {
-            throw new RuntimeException("Implement listener");
-        }
-    }
 
     @NonNull
     @Override
