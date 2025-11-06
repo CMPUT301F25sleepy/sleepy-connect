@@ -32,4 +32,5 @@ public class ExportCSV {
      }
      // How to use this method: exportCSVFile(this, event, "events.csv");
      // Where event is an Event object and "events.csv" is the filename
+     // Saves the people as an Android ID and not their name but I dont want to deal with that rn :)
 }
