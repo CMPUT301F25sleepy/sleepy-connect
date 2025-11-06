@@ -7,6 +7,9 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+
+import com.example.sleepy_connect.eventdetails.CreateEventFragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,6 +62,19 @@ public class EventManagerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_event_manager, container, false);
+        View view =  inflater.inflate(R.layout.fragment_event_manager, container, false);
+
+        Button newEventButton = view.findViewById(R.id.new_event_button);
+
+        newEventButton.setOnClickListener(v-> openCreateEvent());
+        return view;
+    }
+
+    //supposed to open event creator but doesnt work with CreateEventFragment()
+    private void openCreateEvent() {
+        requireActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, new CreateEventFragment())
+                .commit();
     }
 }

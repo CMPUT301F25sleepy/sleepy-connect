@@ -59,7 +59,7 @@ if (getActivity() instanceof AppCompatActivity) {
         app:itemBackground="@android:color/transparent"
         app:itemIconSize="37dp"
         app:itemIconTint="@color/black"
-        app:itemPaddingBottom="8dp"
+        app:itemPaddingBottom="0dp"
         app:itemPaddingTop="8dp"
         app:itemRippleColor="@android:color/transparent"
         app:itemTextColor="@color/black"
