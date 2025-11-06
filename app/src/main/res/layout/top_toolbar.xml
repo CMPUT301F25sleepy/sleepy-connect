@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/top_toolbar"
     android:layout_width="match_parent"
-    android:layout_height="?attr/actionBarSize"
+    android:layout_height="72dp"
     android:background="@color/cyan_blue"
     android:elevation="4dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
@@ -11,11 +11,12 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/top_logo"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="47dp"
+        android:layout_height="47dp"
         android:scaleType="centerCrop"
         android:src="@drawable/logo"
-        app:shapeAppearanceOverlay="@style/CircularImageView" />
+        app:shapeAppearanceOverlay="@style/CircularImageView"
+        android:layout_marginTop="20dp"/>
 
 
     <TextView
@@ -23,6 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
+        android:layout_marginTop="25dp"
         android:fontFamily="@font/roboto_serif"
         android:text="My Title"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"

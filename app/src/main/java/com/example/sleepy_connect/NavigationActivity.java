@@ -59,7 +59,7 @@ public class NavigationActivity extends AppCompatActivity {
                 replaceFragment(AlertFragment.newInstance(mock_list));
             } else if (item.getItemId() == R.id.create_button) {
                 title.setText("Create Event");
-                replaceFragment(new CreateEventFragment());
+                replaceFragment(new EventManagerFragment());
             } else if (item.getItemId() == R.id.event_button) {
                 title.setText("My Events");
                 replaceFragment(new EventFragment());
