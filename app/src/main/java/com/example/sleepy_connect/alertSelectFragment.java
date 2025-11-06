@@ -54,6 +54,10 @@ public class alertSelectFragment extends DialogFragment {
             message_text.setText("You have not been selected for this event. Would you like to stay in the waiting list?");
             negative_button.setText("Opt out");
         }
+        if (notif.isCancelled()){
+            alert_text.setText("Cancelled from event at 2pm");
+            message_text.setText("Unfortunately, you have been cancelled for this event");
+        }
 
         // Creates fragment with buttons
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext(),R.style.MaterialAlertDialog_NoRoundedCorners);

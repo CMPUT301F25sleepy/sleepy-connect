@@ -44,8 +44,10 @@ public class NavigationActivity extends AppCompatActivity {
         // Setup notification list for testing
         Notification mockAlert1 = new Notification("Event at 2pm", true);
         Notification mockAlert2 = new Notification("Another Event at 2pm", false);
+        Notification mockAlert3 = new Notification("Cancelled from Event at 2pm", false, true);
         mock_list.add(mockAlert1);
         mock_list.add(mockAlert2);
+        mock_list.add(mockAlert3);
 
 
         // Sets up navigation bar to switch between fragments

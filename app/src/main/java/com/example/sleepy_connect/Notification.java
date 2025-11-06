@@ -10,7 +10,15 @@ public class Notification implements Serializable {
     public Notification(String event_name, boolean selected){
         this.event_name = event_name;
         this.selected = selected;
+        this.cancelled = false;
     }
+
+    public Notification(String event_name, boolean selected, boolean cancelled){
+        this.event_name = event_name;
+        this.selected = selected;
+        this.cancelled = cancelled;
+    }
+
 
     public String getEvent_name() {
         return event_name;
