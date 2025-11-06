@@ -41,7 +41,7 @@
             android:layout_marginTop="10dp"
             android:fontFamily="@font/roboto_medium"
             android:text="@string/error_create_event"
-            android:textAlignment="center"
+            android:textAlignment="viewStart"
             android:textColor="@color/error_text"
             android:visibility="gone"
             app:layout_constraintEnd_toStartOf="@+id/right_guideline"
@@ -84,6 +84,7 @@
                 android:text="@string/label_reg_starts"
                 android:textColor="@color/text_dark"
                 android:textSize="14sp"
+                app:layout_constraintBottom_toTopOf="@+id/edit_reg_start_date"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -99,24 +100,9 @@
                 android:textColor="@color/text_dark"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/edit_reg_start_time"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edit_reg_start_label" />
-
-            <TextView
-                android:id="@+id/edit_reg_start_time"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_medium"
-                android:padding="10dp"
-                android:textAlignment="viewStart"
-                android:textColor="@color/text_dark"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/edit_reg_start_date"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/edit_reg_start_label" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -150,30 +136,14 @@
                 android:id="@+id/edit_reg_end_date"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:fontFamily="@font/roboto_medium"
-                android:textAlignment="viewStart"
-                android:textSize="16sp"
-                android:textColor="@color/text_dark"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/edit_reg_end_time"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edit_reg_end_label" />
-
-            <TextView
-                android:id="@+id/edit_reg_end_time"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto_medium"
                 android:padding="10dp"
                 android:textAlignment="viewStart"
-                android:textSize="16sp"
                 android:textColor="@color/text_dark"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/edit_reg_end_date"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/edit_reg_end_label" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -207,30 +177,14 @@
                 android:id="@+id/edit_event_start_date"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:fontFamily="@font/roboto_medium"
-                android:textAlignment="viewStart"
-                android:textSize="16sp"
-                android:textColor="@color/text_dark"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/edit_event_start_time"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edit_event_start_label" />
-
-            <TextView
-                android:id="@+id/edit_event_start_time"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto_medium"
                 android:padding="10dp"
                 android:textAlignment="viewStart"
-                android:textSize="16sp"
                 android:textColor="@color/text_dark"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/edit_event_start_date"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/edit_event_start_label" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -264,31 +218,97 @@
                 android:id="@+id/edit_event_end_date"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
                 android:fontFamily="@font/roboto_medium"
+                android:padding="10dp"
                 android:textAlignment="viewStart"
-                android:textSize="16sp"
                 android:textColor="@color/text_dark"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/edit_event_end_time"
-                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/edit_event_end_label" />
 
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/edit_event_time_start_button"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/light_text_border"
+            app:layout_constraintEnd_toStartOf="@+id/right_guideline"
+            app:layout_constraintStart_toStartOf="@+id/left_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/edit_event_end_button">
+
             <TextView
-                android:id="@+id/edit_event_end_time"
+                android:id="@+id/edit_event_time_start_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_medium"
+                android:padding="5dp"
+                android:text="@string/label_event_time_start"
+                android:textColor="@color/text_dark"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toTopOf="@+id/edit_event_time_start_time"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/edit_event_time_start_time"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto_medium"
                 android:padding="10dp"
                 android:textAlignment="viewStart"
-                android:textSize="16sp"
                 android:textColor="@color/text_dark"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/edit_event_end_date"
-                app:layout_constraintTop_toBottomOf="@+id/edit_event_end_label" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edit_event_time_start_label" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/edit_event_time_end_button"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/light_text_border"
+            app:layout_constraintEnd_toStartOf="@+id/right_guideline"
+            app:layout_constraintStart_toStartOf="@+id/left_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/edit_event_time_start_button">
+
+            <TextView
+                android:id="@+id/edit_event_time_end_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_medium"
+                android:padding="5dp"
+                android:text="@string/label_event_time_end"
+                android:textColor="@color/text_dark"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toTopOf="@+id/edit_event_time_end_time"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/edit_event_time_end_time"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_medium"
+                android:padding="10dp"
+                android:textAlignment="viewStart"
+                android:textColor="@color/text_dark"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edit_event_time_end_label" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -300,7 +320,7 @@
             android:background="@drawable/light_text_border"
             app:layout_constraintEnd_toStartOf="@+id/right_guideline"
             app:layout_constraintStart_toStartOf="@+id/left_guideline"
-            app:layout_constraintTop_toBottomOf="@+id/edit_event_end_button">
+            app:layout_constraintTop_toBottomOf="@+id/edit_event_time_end_button">
 
             <TextView
                 android:id="@+id/edit_event_capacity_label"
