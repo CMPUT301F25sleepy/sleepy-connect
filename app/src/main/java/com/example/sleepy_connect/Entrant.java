@@ -1,14 +1,6 @@
 package com.example.sleepy_connect;
 
-import android.util.Base64;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.KeySpec;
 import java.util.ArrayList;
-
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
 
 public class Entrant {
     /* Creates an entrant object:
@@ -22,18 +14,23 @@ public class Entrant {
     public String username;
     public String last_name;
     public String first_name;
-    public int access; // 1 is entrant, 2 is organizer, 3 is administrator
     public ArrayList<Notification> notification_list;
+    public ArrayList<String> all_event_list;                // List of all events that entrant is affiliated with
+    public ArrayList<String> created_event_list;            // List of all events that entrant may have created (organizer)
 
     public Entrant(String android_id) {
         this.android_id = android_id;
-        this.first_name = "NULL";
-        this.last_name = "NULL";
-        this.email = "NULL";
-        this.birthday = "NULL";
-        this.phone_number = "NULL";
-        this.username = "NULL";
-        this.access = 1;
+        this.first_name = null;
+        this.last_name = null;
+        this.email = null;
+        this.birthday = null;
+        this.phone_number = null;
+        this.username = null;
+
+        // These will store notifications and ids of events that entrant is affiliated with in some way
+        this.notification_list = new ArrayList<>();
+        this.all_event_list = new ArrayList<>();
+        this.created_event_list = new ArrayList<>();
     }
 
     public Entrant() {
@@ -91,9 +88,5 @@ public class Entrant {
     public String getAndroid_id() {
         return android_id;
     }
-
-    public Integer getAccess() { return access; }
-
-    public void setAccess(Integer access) { this.access = access; }
 
 }
