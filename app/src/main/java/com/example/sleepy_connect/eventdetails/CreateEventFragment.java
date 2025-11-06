@@ -2,6 +2,7 @@ package com.example.sleepy_connect.eventdetails;
 
 import static androidx.core.content.res.ResourcesCompat.getDrawable;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -29,6 +31,10 @@ import android.widget.TextView;
 import com.example.sleepy_connect.R;
 
 import java.net.URI;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+import java.util.Objects;
 
 /**
  * Fragment class for creating new events
@@ -37,9 +43,11 @@ import java.net.URI;
 public class CreateEventFragment extends Fragment {
 
     private static final String UID = "uid"; // to be updated
-    private String uid;
+    private int uid;
     private boolean geolocationOn = false;
     private Uri posterUri = null;
+    private ImageView ivPoster;
+    SimpleDateFormat format = new SimpleDateFormat("EEE MMM d, y", Locale.getDefault());
 
     // Registers a photo picker activity launcher in single-select mode.
     ActivityResultLauncher<PickVisualMediaRequest> pickMedia =
@@ -47,15 +55,18 @@ public class CreateEventFragment extends Fragment {
                 // Callback is invoked after the user selects a media item or closes the photo picker.
                 if (uri != null) {
                     Log.d("PhotoPicker", "Selected URI: " + uri);
+
+                    // record uri, load new image on imageview
                     posterUri = uri;
+                    ivPoster.setImageURI(uri);
+
                 } else {
                     Log.d("PhotoPicker", "No media selected");
                 }
             });
 
-    public CreateEventFragment() {
-        // Required empty public constructor
-    }
+    // Required empty public constructor
+    public CreateEventFragment() {}
 
     /**
      * Factory method to create a new instance of
@@ -78,7 +89,7 @@ public class CreateEventFragment extends Fragment {
 
         // retrieve parameters
         if (getArguments() != null) {
-            uid = getArguments().getString(UID);
+            uid = getArguments().getInt(UID);
         }
     }
 
@@ -96,19 +107,19 @@ public class CreateEventFragment extends Fragment {
         // initiate view listeners
 
         ConstraintLayout regStart = view.findViewById(R.id.edit_reg_start_button);
-        regStart.setOnClickListener(v -> updateDateTime(v, R.id.edit_reg_start_date, R.id.edit_reg_start_time));
+        regStart.setOnClickListener(v -> updateDateTime(v, R.id.edit_reg_start_date));
 
         ConstraintLayout regEnd = view.findViewById(R.id.edit_reg_end_button);
-        regEnd.setOnClickListener(v -> updateDateTime(v, R.id.edit_reg_end_date, R.id.edit_reg_end_time));
+        regEnd.setOnClickListener(v -> updateDateTime(v, R.id.edit_reg_end_date));
 
         ConstraintLayout eventStart = view.findViewById(R.id.edit_event_start_button);
-        eventStart.setOnClickListener(v -> updateDateTime(v, R.id.edit_event_start_date, R.id.edit_event_start_time));
+        eventStart.setOnClickListener(v -> updateDateTime(v, R.id.edit_event_start_date));
 
         ConstraintLayout eventEnd = view.findViewById(R.id.edit_event_end_button);
-        eventEnd.setOnClickListener(v -> updateDateTime(v, R.id.edit_event_end_date, R.id.edit_event_end_time));
+        eventEnd.setOnClickListener(v -> updateDateTime(v, R.id.edit_event_end_date));
 
-        ImageView poster = view.findViewById(R.id.edit_event_poster);
-        poster.setOnClickListener(new View.OnClickListener() {
+        ivPoster = view.findViewById(R.id.edit_event_poster);
+        ivPoster.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -126,27 +137,23 @@ public class CreateEventFragment extends Fragment {
             geolocationOn = isChecked;
         });
 
-        Button saveBtn = view.findViewById(R.id.event_confirm_edit_button);
+        TextView saveBtn = view.findViewById(R.id.event_confirm_edit_button);
         saveBtn.setOnClickListener(v -> {
 
             // link views
-            EditText title = view.findViewById(R.id.edit_event_title);
-            EditText eventCapacity = view.findViewById(R.id.edit_event_capacity_value);
-            EditText waitlistCapacity = view.findViewById(R.id.edit_waitlist_capacity_value);
-            EditText recCenter = view.findViewById(R.id.edit_host_rec_center_text);
-            EditText address = view.findViewById(R.id.edit_host_address_text);
-            EditText description = view.findViewById(R.id.edit_event_descr_text);
-            TextView regStartDate = view.findViewById(R.id.edit_reg_start_date);
-            TextView regStartTime = view.findViewById(R.id.edit_reg_start_time);
-            TextView regEndDate = view.findViewById(R.id.edit_reg_end_date);
-            TextView regEndTime = view.findViewById(R.id.edit_reg_end_time);
-            TextView eventStartDate = view.findViewById(R.id.edit_event_start_date);
-            TextView eventStartTime = view.findViewById(R.id.edit_event_start_time);
-            TextView eventEndDate = view.findViewById(R.id.edit_event_end_date);
-            TextView eventEndTime = view.findViewById(R.id.edit_event_end_time);
+            EditText etTitle = view.findViewById(R.id.edit_event_title);
+            EditText etEventCapacity = view.findViewById(R.id.edit_event_capacity_value);
+            EditText etWaitlistCapacity = view.findViewById(R.id.edit_waitlist_capacity_value);
+            EditText etRecCenter = view.findViewById(R.id.edit_host_rec_center_text);
+            EditText etAddress = view.findViewById(R.id.edit_host_address_text);
+            EditText etDescription = view.findViewById(R.id.edit_event_descr_text);
+
+            TextView tvRegStartDate = view.findViewById(R.id.edit_reg_start_date);
+            TextView tvRegEndDate = view.findViewById(R.id.edit_reg_end_date);
+            TextView tvEventStartDate = view.findViewById(R.id.edit_event_start_date);
 
             // check if mandatory fields are set and set their backgrounds if not
-            if (!mandatoryFieldsFilled(title, eventCapacity, recCenter, address, regStartDate, regEndDate, eventStartDate)) {
+            if (!mandatoryFieldsFilled(etTitle, etEventCapacity, etRecCenter, etAddress, tvRegStartDate, tvRegEndDate, tvEventStartDate)) {
                 return;
             }
 
@@ -157,18 +164,33 @@ public class CreateEventFragment extends Fragment {
 
     /**
      *
-     * @param view
+     * @param rootView
      * @param dateViewId
-     * @param timeViewId
      */
-    public void updateDateTime(View view, int dateViewId, int timeViewId) {
+    public void updateDateTime(View rootView, int dateViewId) {
 
-        // TODO: open date time picker activity and get date and time
+        // open date picker
+        Calendar today = Calendar.getInstance();
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                requireContext(),
+                (view, year, month, dayOfMonth) -> {
 
-        // TODO: update event_end date and time
-        TextView dateView = view.findViewById(dateViewId);
-        TextView timeView = view.findViewById(timeViewId);
+                    // get selected date
+                    Calendar date = Calendar.getInstance();
+                    date.set(year, month, dayOfMonth);
+                    String dateString = format.format(date.getTime());
 
+                    // update textview
+                    TextView tv = rootView.findViewById(dateViewId);
+                    tv.setText(dateString);
+                },
+                today.get(Calendar.YEAR),
+                today.get(Calendar.MONTH),
+                today.get(Calendar.DAY_OF_MONTH)
+        );
+
+        // show date picker dialog
+        datePickerDialog.show();
     }
 
     /**
