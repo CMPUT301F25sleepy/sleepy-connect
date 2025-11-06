@@ -197,7 +197,7 @@ In the java code, check whether the user is joined in the waitlist already and i
         app:layout_constraintTop_toBottomOf="@+id/dayOfWeek_label" />
 
     <FrameLayout
-        android:id="@+id/event_display_fragment_container"
+        android:id="@+id/event_details_fragment_container"
         android:layout_width="330dp"
         android:layout_height="500dp"
         app:layout_constraintBottom_toBottomOf="parent"

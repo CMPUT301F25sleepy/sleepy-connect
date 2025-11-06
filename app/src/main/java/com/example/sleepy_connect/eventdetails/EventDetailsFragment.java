@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.sleepy_connect.R;
 
@@ -48,6 +49,7 @@ public class EventDetailsFragment extends Fragment {
         return fragment;
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +63,18 @@ public class EventDetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_event_details, container, false);
+        View view = inflater.inflate(R.layout.fragment_event_details, container, false);
+        Button lotteryButton = view.findViewById(R.id.lottery_guidelines_button);
+
+        lotteryButton.setOnClickListener(v -> {
+            getChildFragmentManager().beginTransaction()
+                    .replace(R.id.event_details_fragment_container, new LotteryGuidelinesFragment())
+                    .commit();
+        });
+
+
+
+        return view;
+
     }
 }
