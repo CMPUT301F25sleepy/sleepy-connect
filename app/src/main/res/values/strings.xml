@@ -17,6 +17,8 @@
     <string name="label_event_capacity">Event Capacity</string>
     <string name="label_description">Event Description</string>
     <string name="label_save_changes">Save Changes</string>
+    <string name="label_event_time_start">Start Time</string>
+    <string name="label_event_time_end">End Time</string>
 
     <string name="error_create_event">Error: Highlighted fields must be filled</string>
 
