@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 // Making use of the alertSelectFragment as the functions are similar
+// Actually just deprecate this a whole class for such a small function is not worth it
 public class NotifyCancelled extends alertSelectFragment {
 
     @NonNull
