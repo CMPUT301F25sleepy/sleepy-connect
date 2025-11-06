@@ -4,7 +4,6 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 public class Event {
@@ -65,7 +64,7 @@ public class Event {
         this.waitlistCapacity = Integer.MAX_VALUE;
 
         // Automatic
-        this.eventID = null;                              // DAL will overwrite when it touches it
+        this.eventID = null;
         this.qrCode = null;
         this.createdDate = Instant.now().toEpochMilli();
         this.eventDayOfWeek = Instant.ofEpochMilli(eventStartDate)
