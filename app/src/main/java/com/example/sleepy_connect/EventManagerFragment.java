@@ -1,4 +1,4 @@
-package com.example.sleepy_connect.eventdetails;
+package com.example.sleepy_connect;
 
 import android.os.Bundle;
 
@@ -9,14 +9,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.example.sleepy_connect.R;
+import com.example.sleepy_connect.eventdetails.CreateEventFragment;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link EventDetailsFragment#newInstance} factory method to
+ * Use the {@link EventManagerFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class EventDetailsFragment extends Fragment {
+public class EventManagerFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -27,7 +27,7 @@ public class EventDetailsFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public EventDetailsFragment() {
+    public EventManagerFragment() {
         // Required empty public constructor
     }
 
@@ -37,18 +37,17 @@ public class EventDetailsFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment EventDetailsFragment.
+     * @return A new instance of fragment EventMangerFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static EventDetailsFragment newInstance(String param1, String param2) {
-        EventDetailsFragment fragment = new EventDetailsFragment();
+    public static EventManagerFragment newInstance(String param1, String param2) {
+        EventManagerFragment fragment = new EventManagerFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,18 +62,19 @@ public class EventDetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_event_details, container, false);
-        Button lotteryButton = view.findViewById(R.id.lottery_guidelines_button);
+        View view =  inflater.inflate(R.layout.fragment_event_manager, container, false);
 
-        lotteryButton.setOnClickListener(v -> {
-            getChildFragmentManager().beginTransaction()
-                    .replace(R.id.event_details_fragment_container, new LotteryGuidelinesFragment())
-                    .commit();
-        });
+        Button newEventButton = view.findViewById(R.id.new_event_button);
 
-
-
+        newEventButton.setOnClickListener(v-> openCreateEvent());
         return view;
+    }
 
+    //supposed to open event creator but doesnt work with CreateEventFragment()
+    private void openCreateEvent() {
+        requireActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, new CreateEventFragment())
+                .commit();
     }
 }

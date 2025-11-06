@@ -9,7 +9,7 @@
     <item android:title="Create"
         android:icon="@drawable/create"
         android:id="@+id/create_button"/>
-    <item android:title="Events"
+    <item android:title="My Events"
         android:icon="@drawable/calendar"
         android:id="@+id/event_button"/>
     <item android:title="Profile"
