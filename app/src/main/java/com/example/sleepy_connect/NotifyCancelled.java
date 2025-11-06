@@ -1,35 +1,20 @@
 package com.example.sleepy_connect;
 
-import androidx.appcompat.app.AlertDialog;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import android.app.Dialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-
-public class alertSelectFragment extends DialogFragment {
-    /* fragment for when a user clicks on notification */
-
-    static alertSelectFragment newInstance(Notification notif){
-
-        // creates a new fragment with selected notification as it's argument and return it
-        Bundle args =  new Bundle();
-        args.putSerializable("notification", notif);
-        alertSelectFragment fragment = new alertSelectFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
+// Making use of the alertSelectFragment as the functions are similar
+// Actually just deprecate this a whole class for such a small function is not worth it
+public class NotifyCancelled extends alertSelectFragment {
 
     @NonNull
     @Override
@@ -44,19 +29,10 @@ public class alertSelectFragment extends DialogFragment {
         Button positive_button = view.findViewById(R.id.postive_button);
         Button negative_button = view.findViewById(R.id.negative_button);
 
-        // Changes text of alert and message depending if user was notified of being selected or not
-        if (notif.isSelected()){
-            alert_text.setText("Congratulations!");
-            message_text.setText("You have been selected for this event");
-        }
-        else{
-            alert_text.setText("Update");
-            message_text.setText("You have not been selected for this event. Would you like to stay in the waiting list?");
-            negative_button.setText("Opt out");
-        }
+        // If the user is cancelled, send the notification with these texts
         if (notif.isCancelled()){
-            alert_text.setText("Cancelled from event at 2pm");
-            message_text.setText("Unfortunately, you have been cancelled for this event");
+            alert_text.setText("Cancelled");
+            message_text.setText("Unfortunately, you have been cancelled from this event");
         }
 
         // Creates fragment with buttons
@@ -81,6 +57,5 @@ public class alertSelectFragment extends DialogFragment {
 
         return dialog;
     }
-
-
 }
+

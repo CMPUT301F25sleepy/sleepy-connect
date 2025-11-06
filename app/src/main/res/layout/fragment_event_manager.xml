@@ -13,7 +13,7 @@ Make title of toolbar "My Event Manager" -->
 
 
     <Button
-        android:id="@+id/new_event_button6"
+        android:id="@+id/new_event_button"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="273dp"
         android:layout_height="53dp"
@@ -39,7 +39,7 @@ Make title of toolbar "My Event Manager" -->
         android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/new_event_button6" />
+        app:layout_constraintTop_toBottomOf="@+id/new_event_button" />
 
 
     <View
