@@ -50,6 +50,12 @@ public class AlertAdapter extends ArrayAdapter<Notification> {
         else {
             alert_message.setText("You have been selected to enroll in:");
         }
+        // Added cancelled if statement in case the user is cancelled instead of selected
+        if (notif.cancelled){
+            outside_box.setCardBackgroundColor(Color.parseColor("#F9EEFD"));
+            alert_message.setText("Cancelled from event:");
+        }
+
 
         // set event_name to the event name where the notification is coming from
         event_name.setText(notif.getEvent_name());
