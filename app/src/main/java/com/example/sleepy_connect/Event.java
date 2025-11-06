@@ -1,8 +1,11 @@
 package com.example.sleepy_connect;
 
 import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class Event {
     public String eventID;                                  // Automatic
@@ -22,10 +25,11 @@ public class Event {
     public int eventCapacity;                               // Required
     public int waitlistCapacity;                            // Optional. Default -> No limit
     public boolean geolocationEnabled;                      // Required
-    public List<String> waitingList;                        // Automatic. List of entrant android IDs
-    public List<String> pendingList;                        // Automatic. List of invited entrant android IDs
-    public List<String> declinedList;                       // Automatic. List of entrants that declines / were rejected by android ID
-    public List<String> acceptedList;                       // Automatic. List of accepted entrant android IDs
+    public String eventDayOfWeek;                           // Automatic. Calculates string for the day of the week on which the event occurs.
+    public ArrayList<String> waitingList;                   // Automatic. List of entrant android IDs
+    public ArrayList<String> pendingList;                   // Automatic. List of invited entrant android IDs
+    public ArrayList<String> declinedList;                  // Automatic. List of entrants that declines / were rejected by android ID
+    public ArrayList<String> acceptedList;                  // Automatic. List of accepted entrant android IDs
 
     public Event(
             String eventName,
@@ -56,14 +60,18 @@ public class Event {
         this.geolocationEnabled = geolocationEnabled;
 
         // Optional
-        this.description = "";
+        this.description = null;
         this.poster = null;
         this.waitlistCapacity = Integer.MAX_VALUE;
 
         // Automatic
-        this.eventID = "0";                              // DAL will overwrite when it touches it
-        this.qrCode = "";
+        this.eventID = null;                              // DAL will overwrite when it touches it
+        this.qrCode = null;
         this.createdDate = Instant.now().toEpochMilli();
+        this.eventDayOfWeek = Instant.ofEpochMilli(eventStartDate)
+                .atZone(ZoneId.systemDefault())
+                .getDayOfWeek()
+                .getDisplayName(TextStyle.FULL, Locale.ENGLISH);
         this.waitingList = new ArrayList<>();
         this.pendingList = new ArrayList<>();
         this.declinedList = new ArrayList<>();
@@ -181,23 +189,27 @@ public class Event {
         return geolocationEnabled;
     }
 
-    public List<String> getWaitingList() {
-        return waitingList;
+    public String getEventTime() {
+        return eventTime;
     }
 
-    public List<String> getPendingList() {
+    public ArrayList<String> getPendingList() {
         return pendingList;
     }
 
-    public List<String> getDeclinedList() {
+    public ArrayList<String> getWaitingList() {
+        return waitingList;
+    }
+
+    public ArrayList<String> getDeclinedList() {
         return declinedList;
     }
 
-    public List<String> getAcceptedList() {
+    public ArrayList<String> getAcceptedList() {
         return acceptedList;
     }
 
-    public String getEventTime() {
-        return eventTime;
+    public String getEventDayOfWeek() {
+        return eventDayOfWeek;
     }
 }
