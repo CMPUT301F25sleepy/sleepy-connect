@@ -7,26 +7,20 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.Optional;
+public class EntrantDAL {
+    private final CollectionReference usersRef;
 
-import kotlin.contracts.Returns;
-
-public class DAL {
-    /*Data Access Layer - Stores all functions that interface with the database.*/
-    private FirebaseFirestore db;
-    private CollectionReference usersRef;
-
-    public DAL() {
+    public EntrantDAL() {
         // Creating the database
-        db = FirebaseFirestore.getInstance();
-
+        /* Entrant Data Access Layer - Stores all functions that interface with the database for the entrant.*/
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
         // Creating a collection for users
-        usersRef = db.collection("users"); // testin
+        usersRef = db.collection("users");
     }
 
     public void addEntrant(Entrant entrant) {
         /*Adding an entrant to users collection.
-        * Inputs: An entrant object to add to the collection.*/
+         * Inputs: An entrant object to add to the collection.*/
         usersRef.document(entrant.getAndroid_id()).set(entrant)
                 // Adding listeners that tell us whether it was successful
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -46,7 +40,7 @@ public class DAL {
 
     public void removeEntrant(Entrant entrant) {
         /*Removing an entrant from the users collection
-        * Inputs: An entrant object to be removed.*/
+         * Inputs: An entrant object to be removed.*/
         usersRef.document(entrant.getAndroid_id()).delete()
                 // Adding listeners that tell us whether it was successful
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -66,9 +60,9 @@ public class DAL {
 
     public void getEntrant(String android_id, OnEntrantRetrievedListener listener) {
         /*Retrieves an entrant from the database.
-        * Input: String android_id of a user
-        * Output: Entrant object from database corresponding to the android_id
-        * Uses a listener to access the data. Please implement the interface (OnEntrantRetrievedListener) when using this.*/
+         * Input: String android_id of a user
+         * Output: Entrant object from database corresponding to the android_id
+         * Uses a listener to access the data. Please implement the interface (OnEntrantRetrievedListener) when using this.*/
         usersRef.document(android_id).get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     // Get a document back
@@ -97,16 +91,16 @@ public class DAL {
                 });
     }
 
-    // Interface for the callback from getEntrant -> UI people, use this in your calls
     public interface OnEntrantRetrievedListener {
+        // Interface for the callback from getEntrant -> UI people, use this in your calls
         void onEntrantRetrieved(Entrant entrant);
     }
 
     public void updateEntrant(Entrant entrant) {
         /*Updates the corresponding entrant object in the firebase. When you make changes locally,
-        * It doesn't sync to firebase unless you call this after.
-        * Input: Entrant object that was changed in the app
-        * Output: Nothing. Updates the entrant in the Firebase.*/
+         * It doesn't sync to firebase unless you call this after.
+         * Input: Entrant object that was changed in the app
+         * Output: Nothing. Updates the entrant in the Firebase.*/
         usersRef.document(entrant.getAndroid_id()).set(entrant)
                 // Adding listeners that tell us whether it was successful
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

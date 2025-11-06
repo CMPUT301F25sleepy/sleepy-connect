@@ -3,7 +3,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="hint_event_title">Event Title</string>
-    <string name="hint_capacity">Leave empty for no capcacity</string>
+    <string name="hint_capacity">Leave empty for no capacity</string>
     <string name="hint_description">Enter event description</string>
 
     <string name="label_reg_starts">Registration Start</string>
@@ -19,4 +19,23 @@
     <string name="label_save_changes">Save Changes</string>
 
     <string name="error_create_event">Error: Highlighted fields must be filled</string>
+
+    <string name="lottery_guidelines">Signing up for events through Sleepy works on a lottery system!
+   Since we have so many people wanting to sign up for events, we like to give everyone an equal
+   chance of getting in without waiting in front of your computer for sign up time or in a long
+   line at the rec centre.\n\nAll event have a registration period which are the dates that people
+   can join the waitlist. You will know if an event is open for registration when the event details
+   have a Join Waitlist button at the bottom. When you click to join a waitlist, you will be prompted
+   for your information. Once you confirm your information, you will be placed on the waitlist.\n\nOnce
+   the registration window ends, a random group of people off the waitlist will be sent invites to
+   enroll in the event. Upon this initial selection, you will be sent a notification on whether you
+   were invited or not but do not worry! This is not your last chance.\n\nWhen notified that you have
+   not been invited to enroll, you will be asked if you would like to stay on the waitlist. If you
+   stay on the waitlist, you will be given the chance to still be invited in the case that someone
+   else who was invited chooses to decline their invitation.\n\nIf you were invited to enroll in an
+   event, you can either decline and not enroll or accept and enroll in the event. Upon enrollment
+   you will be able to attend the event once it begins. We ask that all people invited accept or
+   decline their invitations as soon as they can to give others a chance to enroll.\n\nGood luck!\n
+    </string>
+
 </resources>

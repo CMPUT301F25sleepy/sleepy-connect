@@ -4,7 +4,7 @@
 change toolbar title to "Event Details"
 In the java code, check whether the user is joined in the waitlist already and if they are, change the title and colour of the join button to
  say "leave waitlist" and be red. otherwise, keep it the same.
- Also when the user clicks the join button it should change and the waitlist count displayed should be updated.
+ Also when the user clicks the join button and inputs their information it should change and the waitlist count displayed should be updated.
  Essentially its the same button that adds or removes form the waitlist depending on whether the user is already in the waitlist-->
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -195,5 +195,16 @@ In the java code, check whether the user is joined in the waitlist already and i
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dayOfWeek_label" />
+
+    <FrameLayout
+        android:id="@+id/event_details_fragment_container"
+        android:layout_width="330dp"
+        android:layout_height="500dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

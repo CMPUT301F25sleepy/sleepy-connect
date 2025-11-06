@@ -1,30 +1,18 @@
 package com.example.sleepy_connect;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.View;
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import java.time.Instant;
 
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.SetOptions;
-import com.google.firebase.messaging.FirebaseMessaging;
-
-import android.provider.Settings;
-
-import java.util.Collections;
-
-public class MainActivity extends AppCompatActivity implements SignUpFragment.SignUpDialogueListener{
-    public DAL dal;
+public class MainActivity extends AppCompatActivity{
+    public EntrantDAL entrantDal;
+    public EventDAL eventDal;
     public Entrant user;
-    public String androidId;
+    public String androidID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,20 +21,16 @@ public class MainActivity extends AppCompatActivity implements SignUpFragment.Si
         // Boilerplate code
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
 
         // Access to Firebase
-        dal = new DAL();
+        entrantDal = new EntrantDAL();
+        eventDal = new EventDAL();
 
         // Retrieve the device ID and create an entrant based on it
-        androidId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+        androidID = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
 
         // Get user by id. If user doesn't exist, make a new user.
-        dal.getEntrant(androidId, new DAL.OnEntrantRetrievedListener() {
+        entrantDal.getEntrant(androidID, new EntrantDAL.OnEntrantRetrievedListener() {
             @Override
             public void onEntrantRetrieved(Entrant entrant) {
                 if (entrant != null) {
@@ -56,47 +40,41 @@ public class MainActivity extends AppCompatActivity implements SignUpFragment.Si
 //                    dal.updateEntrant(user);
                 } else {
                     // new user
-                    user = new Entrant(androidId);
-                    dal.addEntrant(user);
+                    user = new Entrant(androidID);
+                    entrantDal.addEntrant(user);
 //                    user.setAccess(45);
 //                    dal.updateEntrant(user);
                 }
             }
         });
 
-        // This part is for FCM token initialization so that Firestore can send a notification
-        // I think Firestore handles this cause it'd be hard to actually identify devices arbitrarily
-        FirebaseApp.initializeApp(this);
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        // Testing event creation
+        long now = Instant.now().toEpochMilli();
 
-        String userId = "95531acb940aa984";
+        Event testEvent = new Event(
+                "Morning Yoga Workshop",          // eventName (Required)
+                "Riverbend Community Centre",               // communityCentre (Required)
+                "123 Riverbend Rd, Edmonton, AB",           // communityCentreLocation (Required)
+                androidID,                                  // creatorID (Required) -> entrant.getAndroidID()
+                1730788800000L,                             // registrationOpens (Required) - e.g., Nov 5, 2024
+                1731393600000L,                             // registrationCloses (Required) - e.g., Nov 12, 2024
+                1731476400000L,                             // eventStartDate (Required) - e.g., Nov 13, 2024
+                1731487200000L,                             // eventEndDate (Required) - e.g., Nov 13, 2024
+                "10:00 AM - 1:00 PM",                       // eventTime (Required)
+                30,                                         // eventCapacity (Required)
+                true                                        // geolocationEnabled (Required)
+        );
 
-        FirebaseMessaging.getInstance().getToken()
-                .addOnCompleteListener(task -> {
-                    if (!task.isSuccessful()) {
-                        Log.w("MainActivity", "Fetching FCM registration token failed", task.getException());
-                        return;
-                    }
-
-                    // Gets new FCM registration token
-                    String token = task.getResult();
-                    Log.d("MainActivity", "FCM Token: " + token);
-
-                    // Saves the token to Firestore within the userId
-                    db.collection("users").document(userId)
-                            .set(Collections.singletonMap("token", token), SetOptions.merge())
-                            .addOnSuccessListener(aVoid -> Log.d("MainActivity", "Token saved successfully"))
-                            .addOnFailureListener(e -> Log.e("MainActivity", "Error saving token", e));
-                });
+        eventDal.addEvent(testEvent);
     }
 
-    public void SignUpPress(View view){
-        new SignUpFragment().show(getSupportFragmentManager(),"Sign up");
+
+    // TODO - Make the user go straight to the navigation
+    //  page once their android id has been added to the database
+    public void startPress(View view){
+        // button to switch to the main app (the navigation activity)
+        Intent i = new Intent(MainActivity.this, NavigationActivity.class);
+        startActivity(i);
     }
 
-    @Override
-    @NonNull
-    public void addEntrant(Entrant entrant){
-        dal.addEntrant(entrant);
-    }
 }
