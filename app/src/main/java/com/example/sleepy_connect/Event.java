@@ -58,7 +58,7 @@ public class Event {
         this.geolocationEnabled = geolocationEnabled;
 
         // Optional
-        this.description = null;
+        this.description = "";
         this.poster = null;
         this.waitlistCapacity = Integer.MAX_VALUE;
 
@@ -253,6 +253,10 @@ public class Event {
 
     public void setDeclinedList(ArrayList<String> declinedList) {
         this.declinedList = declinedList;
+    }
+
+    public int getWaitlistSize() {
+        return waitingList.size();
     }
 
 }
