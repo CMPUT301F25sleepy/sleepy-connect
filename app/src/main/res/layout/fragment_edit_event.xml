@@ -543,7 +543,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:layout_marginBottom="4dp"
+            android:layout_marginBottom="30dp"
             android:background="@drawable/button"
             android:fontFamily="@font/roboto_medium"
             android:padding="10dp"
@@ -559,7 +559,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/generate_qr_code_layout"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             app:layout_constraintEnd_toStartOf="@+id/right_guideline"
             app:layout_constraintStart_toStartOf="@+id/left_guideline"
@@ -575,10 +575,10 @@
                 android:text="@string/qr_code_generator_label"
                 android:textColor="@color/text_dark"
                 android:textSize="14sp"
-                app:layout_constraintEnd_toStartOf="@id/right_guideline"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@id/left_guideline"
-                app:layout_constraintTop_toBottomOf="@+id/edit_event_descr_text" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
 
             <Button
@@ -590,6 +590,7 @@
                 android:backgroundTint="#2196F3"
                 android:text="View your QR code"
                 android:textColorLink="@color/button"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -604,7 +605,6 @@
                 android:textColor="@color/error_text"
                 android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.15"
                 app:layout_constraintStart_toEndOf="@+id/generate_qr_code_label"
                 app:layout_constraintTop_toTopOf="parent" />
 
