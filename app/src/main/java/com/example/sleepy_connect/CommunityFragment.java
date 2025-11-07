@@ -78,10 +78,10 @@ public class CommunityFragment extends Fragment {
             TextView locationName = view1.findViewById(R.id.alert_message);
             String clickedLocationName = locationName.getText().toString();
 
-            EventListFragment eventListFrag = new EventListFragment(clickedLocationName);
+            EventListFragment eventListFrag = EventListFragment.newInstance(clickedLocationName);
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragment_container, EventListFragment.class, null)
+                    .replace(R.id.fragment_container, eventListFrag)
                     .setReorderingAllowed(true)
                     .addToBackStack(null)
                     .commit();

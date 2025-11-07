@@ -22,12 +22,12 @@ public class EventListFragment extends Fragment {
     private EventListFragment.EventListAdapter adapter;
     private final List<Event> eventList = new ArrayList<>();
 
-    public EventListFragment(String locationName) {
+    public EventListFragment() {
         // Required empty public constructor
     }
 
     public static EventListFragment newInstance(String locationName) {
-        EventListFragment fragment = new EventListFragment(locationName);
+        EventListFragment fragment = new EventListFragment();
         Bundle args = new Bundle();
         args.putString(ARG_LOCNAME, locationName);
         fragment.setArguments(args);
