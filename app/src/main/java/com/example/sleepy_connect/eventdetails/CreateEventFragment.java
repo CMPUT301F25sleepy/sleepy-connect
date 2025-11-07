@@ -31,6 +31,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.sleepy_connect.CommunityCentre;
+import com.example.sleepy_connect.CommunityCentreDAL;
 import com.example.sleepy_connect.Entrant;
 import com.example.sleepy_connect.EntrantDAL;
 import com.example.sleepy_connect.Event;
@@ -47,6 +48,7 @@ import java.net.URI;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -59,6 +61,7 @@ public class CreateEventFragment extends Fragment {
     private boolean geolocationOn = false;
     private Uri posterUri = null;
     private ImageView ivPoster;
+    private Event event;
     SimpleDateFormat format = new SimpleDateFormat("EEE MMM d, y", Locale.getDefault());
 
     // Registers a photo picker activity launcher in single-select mode.
@@ -92,9 +95,6 @@ public class CreateEventFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // get current user from viewmodel
-        user = UserViewModel.getUser().getValue();
     }
 
     @Override
@@ -146,91 +146,105 @@ public class CreateEventFragment extends Fragment {
         });
 
         TextView saveBtn = view.findViewById(R.id.event_confirm_edit_button);
-        saveBtn.setOnClickListener(v -> {
 
-            // set mandatory values
-            Event newEvent = setMandatoryEventData(view);
-            if (newEvent == null) {
+        saveBtn.setOnClickListener(v -> {
+            // link views
+            EditText etTitle = view.findViewById(R.id.edit_event_title);
+            EditText etEventCapacity = view.findViewById(R.id.edit_event_capacity_value);
+            EditText etRecCenter = view.findViewById(R.id.edit_host_rec_center_text);
+            EditText etAddress = view.findViewById(R.id.edit_host_address_text);
+            EditText etEventStartTime = view.findViewById(R.id.edit_event_time_start_time);
+            EditText etEventEndTime = view.findViewById(R.id.edit_event_time_end_time);
+            TextView tvRegStartDate = view.findViewById(R.id.edit_reg_start_date);
+            TextView tvRegEndDate = view.findViewById(R.id.edit_reg_end_date);
+            TextView tvEventStartDate = view.findViewById(R.id.edit_event_start_date);
+            TextView tvEventEndDate = view.findViewById(R.id.edit_event_end_date);
+
+            if (!mandatoryFieldsFilled(etTitle, etEventCapacity, etRecCenter, etAddress, tvRegStartDate, tvRegEndDate, tvEventStartDate)) {
                 return;
             }
 
-            // set optional values
-            try {
-                setOptionalEventData(view, newEvent);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            // Get current user
+            user = UserViewModel.getUser().getValue();
 
-            // store event in db
+            // Get new EventID
             EventDAL eventDal = new EventDAL();
-            eventDal.addEvent(newEvent);
 
-            // update entrant
-            EntrantDAL entrantDal = new EntrantDAL();
-            user.addCreatedEvent(newEvent.getEventID());
-            entrantDal.updateEntrant(user);
+            eventDal.getNextID(newID -> {
+                Log.d("EventDAL", "New ID: " + newID);
+
+                // add new community centre to database //TODO: check existing community centres
+                CommunityCentre recCenter = new CommunityCentre(
+                        etRecCenter.getText().toString(),
+                        etAddress.getText().toString()
+                );
+                CommunityCentreDAL communityDal = new CommunityCentreDAL();
+
+                try {
+                    event = new Event(
+                            newID,
+                            etTitle.getText().toString(),
+                            recCenter,
+                            user.getAndroid_id(),
+                            Objects.requireNonNull(format.parse(tvRegStartDate.getText().toString())).getTime(),
+                            Objects.requireNonNull(format.parse(tvRegEndDate.getText().toString())).getTime(),
+                            Objects.requireNonNull(format.parse(tvEventStartDate.getText().toString())).getTime(),
+                            Objects.requireNonNull(format.parse(tvEventEndDate.getText().toString())).getTime(),
+                            createTimeString(etEventStartTime, etEventEndTime),
+                            Integer.parseInt(etEventCapacity.getText().toString()),
+                            geolocationOn
+                    );
+
+                    Log.d("CreateEventFragment", "Event created successfully with ID: " + event.getEventID());
+
+                    // set description (optional)
+                    TextView description = view.findViewById(R.id.edit_event_descr_text);
+                    Log.i("CreateEventFragment", description.getText().toString());
+                    if (!description.getText().toString().isEmpty()) {
+                        event.setDescription(description.getText().toString());
+                    }
+
+                    // set waitlist capacity (optional)
+                    EditText etWaitlistCap = view.findViewById(R.id.edit_waitlist_capacity_value);
+                    String waitlistCapStr = etWaitlistCap.getText().toString();
+                    if (!waitlistCapStr.isEmpty()) {
+                        event.setWaitlistCapacity(Integer.parseInt(waitlistCapStr));
+                    }
+
+                    // set poster (optional)
+                    if (posterUri != null) {
+                        try {
+                            event.setPoster(new Image(getContext(), posterUri));
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    // Now push rec center
+                    recCenter.addEvent(event.getEventID());
+                    communityDal.addCommunityCentre(recCenter);
+
+                    // Update and push entrant
+                    user.addCreatedEvent(event.getEventID());
+                    EntrantDAL entrantDal = new EntrantDAL();
+                    entrantDal.updateEntrant(user);
+
+                    // Push event
+                    eventDal.addEvent(event);
+
+                    // Return to previous fragment
+                    if (!isAdded()) return;
+                    requireActivity().getSupportFragmentManager().popBackStack();
+
+                } catch (ParseException e) {
+                    Log.e("CreateEventFragment", "Failed." + e.getMessage(), e);
+                } catch (Exception e) {
+                    Log.e("CreateEventFragment", "Failed.", e);
+                }
+            }, e -> {
+                Log.e("EventDAL", "Failed.", e);
+            });
         });
-    }
-
-    public Event setMandatoryEventData(View root) {
-
-        // link views
-        EditText etTitle = root.findViewById(R.id.edit_event_title);
-        EditText etEventCapacity = root.findViewById(R.id.edit_event_capacity_value);
-        EditText etRecCenter = root.findViewById(R.id.edit_host_rec_center_text);
-        EditText etAddress = root.findViewById(R.id.edit_host_address_text);
-        EditText etEventStartTime = root.findViewById(R.id.edit_event_time_start_time);
-        EditText etEventEndTime = root.findViewById(R.id.edit_event_time_end_time);
-        TextView tvRegStartDate = root.findViewById(R.id.edit_reg_start_date);
-        TextView tvRegEndDate = root.findViewById(R.id.edit_reg_end_date);
-        TextView tvEventStartDate = root.findViewById(R.id.edit_event_start_date);
-        TextView tvEventEndDate = root.findViewById(R.id.edit_event_end_date);
-
-
-        // check if mandatory fields are set and set their backgrounds if not
-        if (!mandatoryFieldsFilled(etTitle, etEventCapacity, etRecCenter, etAddress, tvRegStartDate, tvRegEndDate, tvEventStartDate)) {
-            return null;
-        }
-
-        // create event object with mandatory attributes
-        Event event = null;
-        try {
-            event = new Event(
-                    etTitle.getText().toString(),
-                    new CommunityCentre(etRecCenter.getText().toString(), etAddress.getText().toString()),
-                    user.getAndroid_id(),
-                    Objects.requireNonNull(format.parse((String) tvRegStartDate.getText())).getTime(),
-                    Objects.requireNonNull(format.parse((String) tvRegEndDate.getText())).getTime(),
-                    Objects.requireNonNull(format.parse((String) tvEventStartDate.getText())).getTime(),
-                    Objects.requireNonNull(format.parse((String) tvEventEndDate.getText())).getTime(),
-                    createTimeString(etEventStartTime, etEventEndTime),
-                    Integer.parseInt(etEventCapacity.getText().toString()),
-                    geolocationOn
-            );
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-
-        return event;
-    }
-
-    public void setOptionalEventData(View root, Event newEvent) throws IOException {
-
-        // set description
-        TextView description = root.findViewById(R.id.edit_event_descr_text);
-        newEvent.setDescription(description.getText().toString());
-
-        // set poster if provided by user
-        if (posterUri != null) {
-            newEvent.setPoster(new Image(getContext(), posterUri));
-        }
-
-        // set waitlist capacity if provided by user
-        EditText etWaitlistCap = root.findViewById(R.id.edit_waitlist_capacity_value);
-        String waitlistCapStr = etWaitlistCap.getText().toString();
-        if (!waitlistCapStr.isEmpty()) {
-            newEvent.setWaitlistCapacity(Integer.parseInt(waitlistCapStr));
-        }
     }
 
     public String createTimeString(EditText etEventStart, EditText etEventEnd) {

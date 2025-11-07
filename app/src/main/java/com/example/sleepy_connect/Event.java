@@ -32,6 +32,7 @@ public class Event {
     public EventDAL DAL;
 
     public Event(
+            String eventID,
             String eventName,
             CommunityCentre communityCentre,
             String creatorID,
@@ -46,6 +47,7 @@ public class Event {
     /* You need to set the optional fields manually after creating the event using setters. */
     {
         // Required
+        this.eventID = eventID;
         this.eventName = eventName;
         this.communityCentre = communityCentre;
         this.creatorID = creatorID;
@@ -63,7 +65,6 @@ public class Event {
         this.waitlistCapacity = Integer.MAX_VALUE;
 
         // Automatic
-        this.eventID = null;
         this.qrCode = null;
         this.createdDate = Instant.now().toEpochMilli();
         this.eventDayOfWeek = Instant.ofEpochMilli(eventStartDate)
