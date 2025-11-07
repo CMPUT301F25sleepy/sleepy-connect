@@ -48,34 +48,34 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
-        // Testing community centre
-        CommunityCentre testCommunityCentre = new CommunityCentre("Terwillegar Community Centre", "2051 Leger Rd NW, Edmonton, AB T6R 0R9");
+//        // Testing community centre
+//        CommunityCentre testCommunityCentre = new CommunityCentre("Terwillegar Community Centre", "2051 Leger Rd NW, Edmonton, AB T6R 0R9");
+//
+//        communityCentreDAL.addCommunityCentre(testCommunityCentre);
+//
+//        // Testing community centre
+//        CommunityCentre testCommunityCentre1 = new CommunityCentre("All Locations", "See all events");
+//
+//        communityCentreDAL.addCommunityCentre(testCommunityCentre1);
 
-        communityCentreDAL.addCommunityCentre(testCommunityCentre);
 
-        // Testing community centre
-        CommunityCentre testCommunityCentre1 = new CommunityCentre("All Locations", "See all events");
-
-        communityCentreDAL.addCommunityCentre(testCommunityCentre1);
-
-
-        // Testing event creation
-        long now = Instant.now().toEpochMilli();
-
-        Event testEvent = new Event(
-                "Morning Yoga Workshop",          // eventName (Required)
-                testCommunityCentre,                        // Community centre (Required)
-                androidID,                                  // creatorID (Required) -> entrant.getAndroidID()
-                1730788800000L,                             // registrationOpens (Required) - e.g., Nov 5, 2024
-                1731393600000L,                             // registrationCloses (Required) - e.g., Nov 12, 2024
-                1731476400000L,                             // eventStartDate (Required) - e.g., Nov 13, 2024
-                1731487200000L,                             // eventEndDate (Required) - e.g., Nov 13, 2024
-                "10:00 AM - 1:00 PM",                       // eventTime (Required)
-                30,                                         // eventCapacity (Required)
-                true                                        // geolocationEnabled (Required)
-        );
-
-        eventDal.addEvent(testEvent);
+//        // Testing event creation
+//        long now = Instant.now().toEpochMilli();
+//
+//        Event testEvent = new Event(
+//                "Morning Yoga Workshop",          // eventName (Required)
+//                testCommunityCentre,                        // Community centre (Required)
+//                androidID,                                  // creatorID (Required) -> entrant.getAndroidID()
+//                1730788800000L,                             // registrationOpens (Required) - e.g., Nov 5, 2024
+//                1731393600000L,                             // registrationCloses (Required) - e.g., Nov 12, 2024
+//                1731476400000L,                             // eventStartDate (Required) - e.g., Nov 13, 2024
+//                1731487200000L,                             // eventEndDate (Required) - e.g., Nov 13, 2024
+//                "10:00 AM - 1:00 PM",                       // eventTime (Required)
+//                30,                                         // eventCapacity (Required)
+//                true                                        // geolocationEnabled (Required)
+//        );
+//
+//        eventDal.addEvent(testEvent);
     }
 
 

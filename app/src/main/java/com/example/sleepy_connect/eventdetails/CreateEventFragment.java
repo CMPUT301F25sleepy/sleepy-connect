@@ -61,6 +61,7 @@ public class CreateEventFragment extends Fragment {
     private boolean geolocationOn = false;
     private Uri posterUri = null;
     private ImageView ivPoster;
+    private Event event;
     SimpleDateFormat format = new SimpleDateFormat("EEE MMM d, y", Locale.getDefault());
 
     // Registers a photo picker activity launcher in single-select mode.
@@ -152,25 +153,6 @@ public class CreateEventFragment extends Fragment {
 
             // set mandatory values
             Event newEvent = setMandatoryEventData(view);
-            if (newEvent == null) {
-                return;
-            }
-
-            // set optional values
-            /*try {
-                setOptionalEventData(view, newEvent);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }*/
-
-            // store event in db
-            EventDAL eventDal = new EventDAL();
-            eventDal.addEvent(newEvent);
-
-            // update entrant
-            EntrantDAL entrantDal = new EntrantDAL();
-            user.addCreatedEvent(newEvent.getEventID());
-            entrantDal.updateEntrant(user);
 
             // return to previous fragment
             requireActivity().getSupportFragmentManager().popBackStack();
@@ -199,11 +181,9 @@ public class CreateEventFragment extends Fragment {
 
         // add new community centre to database
         CommunityCentre recCenter = new CommunityCentre(etRecCenter.getText().toString(), etAddress.getText().toString());
-        CommunityCentreDAL dal = new CommunityCentreDAL();
-        dal.addCommunityCentre(recCenter);
+        CommunityCentreDAL communityDal = new CommunityCentreDAL();
 
         // create event object with mandatory attributes
-        Event event = null;
         try {
             event = new Event(
                     etTitle.getText().toString(),
@@ -221,6 +201,16 @@ public class CreateEventFragment extends Fragment {
             throw new RuntimeException(e);
         }
 
+        // update and push rec center
+        recCenter.addEvent(event.getEventID());
+        communityDal.addCommunityCentre(recCenter);
+
+        // update and push entrant
+        user.addCreatedEvent(event.getEventID());
+        EntrantDAL entrantDal = new EntrantDAL();
+        entrantDal.updateEntrant(user);
+
+        // return the event
         return event;
     }
 
