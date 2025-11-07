@@ -31,6 +31,7 @@ public class Entrant implements Serializable {
     public ArrayList<String> all_event_list;                // List of all events that entrant is affiliated with
     public ArrayList<String> created_event_list;            // List of all events that entrant may have created (organizer)
 
+
     public Entrant(String android_id) {
         this.android_id = android_id;
         this.first_name = null;
@@ -106,4 +107,11 @@ public class Entrant implements Serializable {
         this.created_event_list.add(eventID);
     }
 
+    public ArrayList<Notification> getNotification_list() {
+        return notification_list;
+    }
+
+    public void setNotification_list(ArrayList<Notification> notification_list) {
+        this.notification_list = notification_list;
+    }
 }
