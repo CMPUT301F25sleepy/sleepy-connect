@@ -173,7 +173,7 @@ public class CreateEventFragment extends Fragment {
             eventDal.getNextID(newID -> {
                 Log.d("EventDAL", "New ID: " + newID);
 
-                // add new community centre to database
+                // add new community centre to database //TODO: check existing community centres
                 CommunityCentre recCenter = new CommunityCentre(
                         etRecCenter.getText().toString(),
                         etAddress.getText().toString()
