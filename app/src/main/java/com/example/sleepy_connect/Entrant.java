@@ -1,8 +1,21 @@
 package com.example.sleepy_connect;
 
+import android.util.Base64;
+
+import java.io.Serial;
+import java.io.Serializable;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.KeySpec;
 import java.util.ArrayList;
 
-public class Entrant {
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+
+import java.util.ArrayList;
+
+public class Entrant implements Serializable {
     /* Creates an entrant object:
     Input: android_id
     Output: Entrant object with: First Name, Last Name, Email, Birthday, Phone, Username initialized to NULL
