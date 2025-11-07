@@ -138,13 +138,31 @@ public class CreateEventFragment extends Fragment {
             String centreName = etRecCenter.getText().toString();
             String centreAddress = etAddress.getText().toString();
 
-            communityDal.getCommunityCentre(centreName, existingCentre -> {
-                CommunityCentre recCenter = (existingCentre != null)
-                        ? existingCentre
+            // Gets all community centres TODO: Matching doesnt actually work
+            communityDal.getCommunityCentres(centres -> {
+                CommunityCentre match = null;
+
+                // Matches all community centres
+                for (CommunityCentre c : centres) {
+                    if (c.getCommunityCentreName().equalsIgnoreCase(centreName)
+                            || c.getCommunityCentreLocation().equalsIgnoreCase(centreAddress)) {
+                        match = c;
+                        break;
+                    }
+                }
+
+                // Found a match
+                CommunityCentre recCenter = (match != null)
+                        ? match
                         : new CommunityCentre(centreName, centreAddress);
 
-                if (existingCentre == null)
+                // Didnt find a match
+                if (match == null) {
                     communityDal.addCommunityCentre(recCenter);
+                    Log.d("CreateEventFragment", "New community centre: " + centreName);
+                } else {
+                    Log.d("CreateEventFragment", "Old community centre: " + match.getCommunityCentreName());
+                }
 
                 try {
                     event = new Event(
@@ -176,30 +194,27 @@ public class CreateEventFragment extends Fragment {
                         event.setPoster(new Image(getContext(), posterUri));
                     }
 
-                    // Add event to the rec centre
+                    // Add event to this rec centre
                     recCenter.addEvent(event.getEventID());
                     communityDal.updateCommunityCentre(recCenter);
 
-                    // Add event to list of all events
+                    // Add to All Locations
                     communityDal.getCommunityCentre("All Locations", allEventsCentre -> {
                         if (allEventsCentre != null) {
                             allEventsCentre.addEvent(event.getEventID());
                             communityDal.updateCommunityCentre(allEventsCentre);
-                            Log.d("CreateEventFragment", "Added event to All Events centre");
                         } else {
                             CommunityCentre allEvents = new CommunityCentre("All Locations", "See all events");
                             allEvents.addEvent(event.getEventID());
                             communityDal.addCommunityCentre(allEvents);
-                            Log.d("CreateEventFragment", "Created All Locations");
                         }
                     });
 
-                    // Add event to entrant
+                    // Add event to entrant and DB
                     user.addCreatedEvent(event.getEventID());
                     new EntrantDAL().updateEntrant(user);
-
-                    // add event to firebase
                     eventDal.addEvent(event);
+
                     if (isAdded()) requireActivity().getSupportFragmentManager().popBackStack();
 
                 } catch (ParseException | IOException e) {
