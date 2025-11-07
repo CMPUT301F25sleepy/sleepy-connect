@@ -50,6 +50,7 @@ dependencies {
     implementation(libs.constraintlayout)
     implementation("androidx.cardview:cardview:1.0.0")
     implementation(libs.play.services.location)
+    implementation(libs.firebase.storage)
     testImplementation(libs.junit)
     testImplementation(libs.junit.junit)
     testImplementation(libs.junit.junit)
