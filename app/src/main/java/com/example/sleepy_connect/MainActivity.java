@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity{
 
         eventDal.addEvent(testEvent);
 
-        // Testing community centre
+        // Testing community centre creation
         CommunityCentre testCommunityCentre = new CommunityCentre("Terwillegar Community Centre", "2051 Leger Rd NW, Edmonton, AB T6R 0R9");
 
         communityCentreDAL.addCommunityCentre(testCommunityCentre);
