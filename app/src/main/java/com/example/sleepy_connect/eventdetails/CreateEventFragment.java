@@ -197,6 +197,29 @@ public class CreateEventFragment extends Fragment {
 
                     Log.d("CreateEventFragment", "Event created successfully with ID: " + event.getEventID());
 
+                    // set description (optional)
+                    TextView description = view.findViewById(R.id.edit_event_descr_text);
+                    Log.i("CreateEventFragment", description.getText().toString());
+                    if (!description.getText().toString().isEmpty()) {
+                        event.setDescription(description.getText().toString());
+                    }
+
+                    // set waitlist capacity (optional)
+                    EditText etWaitlistCap = view.findViewById(R.id.edit_waitlist_capacity_value);
+                    String waitlistCapStr = etWaitlistCap.getText().toString();
+                    if (!waitlistCapStr.isEmpty()) {
+                        event.setWaitlistCapacity(Integer.parseInt(waitlistCapStr));
+                    }
+
+                    // set poster (optional)
+                    if (posterUri != null) {
+                        try {
+                            event.setPoster(new Image(getContext(), posterUri));
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
                     // Now push rec center
                     recCenter.addEvent(event.getEventID());
                     communityDal.addCommunityCentre(recCenter);
@@ -209,7 +232,8 @@ public class CreateEventFragment extends Fragment {
                     // Push event
                     eventDal.addEvent(event);
 
-                    // Optionally return to previous fragment or notify user
+                    // Return to previous fragment
+                    if (!isAdded()) return;
                     requireActivity().getSupportFragmentManager().popBackStack();
 
                 } catch (ParseException e) {
@@ -217,33 +241,10 @@ public class CreateEventFragment extends Fragment {
                 } catch (Exception e) {
                     Log.e("CreateEventFragment", "Failed.", e);
                 }
-
             }, e -> {
                 Log.e("EventDAL", "Failed.", e);
             });
-
-            // return to previous fragment
-            requireActivity().getSupportFragmentManager().popBackStack();
         });
-    }
-
-    public void setOptionalEventData(View root, Event newEvent) throws IOException {
-
-        // set description
-        TextView description = root.findViewById(R.id.edit_event_descr_text);
-        newEvent.setDescription(description.getText().toString());
-
-        // set poster if provided by user
-        if (posterUri != null) {
-            newEvent.setPoster(new Image(getContext(), posterUri));
-        }
-
-        // set waitlist capacity if provided by user
-        EditText etWaitlistCap = root.findViewById(R.id.edit_waitlist_capacity_value);
-        String waitlistCapStr = etWaitlistCap.getText().toString();
-        if (!waitlistCapStr.isEmpty()) {
-            newEvent.setWaitlistCapacity(Integer.parseInt(waitlistCapStr));
-        }
     }
 
     public String createTimeString(EditText etEventStart, EditText etEventEnd) {
