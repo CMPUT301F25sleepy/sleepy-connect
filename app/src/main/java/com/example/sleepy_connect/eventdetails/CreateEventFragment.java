@@ -30,6 +30,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.sleepy_connect.CommunityCentre;
 import com.example.sleepy_connect.Entrant;
 import com.example.sleepy_connect.EntrantDAL;
 import com.example.sleepy_connect.Event;
@@ -41,6 +42,7 @@ import com.google.firebase.firestore.auth.User;
 
 import org.w3c.dom.Text;
 
+import java.io.IOException;
 import java.net.URI;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -153,7 +155,11 @@ public class CreateEventFragment extends Fragment {
             }
 
             // set optional values
-            setOptionalEventData(view, newEvent);
+            try {
+                setOptionalEventData(view, newEvent);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
 
             // store event in db
             EventDAL eventDal = new EventDAL();
@@ -191,8 +197,7 @@ public class CreateEventFragment extends Fragment {
         try {
             event = new Event(
                     etTitle.getText().toString(),
-                    etRecCenter.getText().toString(),
-                    etAddress.getText().toString(),
+                    new CommunityCentre(etRecCenter.getText().toString(), etAddress.getText().toString()),
                     user.getAndroid_id(),
                     Objects.requireNonNull(format.parse((String) tvRegStartDate.getText())).getTime(),
                     Objects.requireNonNull(format.parse((String) tvRegEndDate.getText())).getTime(),
@@ -209,7 +214,7 @@ public class CreateEventFragment extends Fragment {
         return event;
     }
 
-    public void setOptionalEventData(View root, Event newEvent) {
+    public void setOptionalEventData(View root, Event newEvent) throws IOException {
 
         // set description
         TextView description = root.findViewById(R.id.edit_event_descr_text);
@@ -217,7 +222,7 @@ public class CreateEventFragment extends Fragment {
 
         // set poster if provided by user
         if (posterUri != null) {
-            newEvent.setPoster(new Image());
+            newEvent.setPoster(new Image(getContext(), posterUri));
         }
 
         // set waitlist capacity if provided by user
@@ -274,7 +279,7 @@ public class CreateEventFragment extends Fragment {
         // make sure there's an event title
         TextView eventTitle = requireView().findViewById(R.id.edit_event_title);
 
-        if(isComplete(eventTitle)) {
+        if(isComplete(eventTitle, true)) {
             // event title passed to QR code fragment
             QRCodeFragment qrCodeFragment = QRCodeFragment.newInstance(eventTitle.getText().toString());
 
