@@ -7,27 +7,40 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-
+import android.util.Log;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.example.sleepy_connect.eventdetails.EditEventFragment;
+import com.example.sleepy_connect.eventdetails.EventDetailsFragment;
+import com.example.sleepy_connect.eventdetails.EventViewModel;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class EventListFragment extends Fragment {
     private static final String ARG_LOCNAME = "locationName";
 
     private String locationName;
-
     private ListView listView;
-    private EventListFragment.EventListAdapter adapter;
+    private EventListAdapter adapter;
     private final List<Event> eventList = new ArrayList<>();
 
-    public EventListFragment(String locationName) {
+    private EventDAL eventDAL;
+
+    public EventListFragment() {
         // Required empty public constructor
     }
 
     public static EventListFragment newInstance(String locationName) {
-        EventListFragment fragment = new EventListFragment(locationName);
+        EventListFragment fragment = new EventListFragment();
         Bundle args = new Bundle();
         args.putString(ARG_LOCNAME, locationName);
         fragment.setArguments(args);
@@ -35,51 +48,102 @@ public class EventListFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        eventDAL = new EventDAL();
         if (getArguments() != null) {
             locationName = getArguments().getString(ARG_LOCNAME);
         }
     }
 
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_event_display, container, false);
 
-        listView =view.findViewById(R.id.event_list_view);
-        adapter = new EventListFragment.EventListAdapter(eventList);
+        listView = view.findViewById(R.id.event_list_view);
+        adapter = new EventListAdapter(eventList);
         listView.setAdapter(adapter);
 
-        if (getArguments() != null) {
-            String location = getArguments().getString(ARG_LOCNAME);
-            TextView event_location = view.findViewById(R.id.location);
-            event_location.setText(location);
+        TextView eventLocation = view.findViewById(R.id.location);
+        if (locationName != null) {
+            eventLocation.setText(locationName);
+        } else {
+            Log.e("EventListFragment", "Location name null");
         }
 
-        listView.setOnItemClickListener((parent, view1, position, id) -> {
+        // Fetch and display events for this community centre
+        fetchEventsForLocation(locationName);
 
-            //openEventDetails();
+        listView.setOnItemClickListener((parent, view1, position, id) -> {
+            Event selectedEvent = eventList.get(position);
+            Log.d("EventListFragment", "Clicked event: " + selectedEvent.getEventName());
+
+            // pass selected event to viewmodel
+            EventViewModel vmEvent = new ViewModelProvider(requireActivity()).get(EventViewModel.class);
+            vmEvent.setEvent(selectedEvent);
+
+            // open event details
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, EventDetailsFragment.class, null)
+                    .setReorderingAllowed(true)
+                    .addToBackStack(null)
+                    .commit();
         });
 
         return view;
     }
 
-    //TODO-Change to open specific event details
-    /*private void openEventDetails() {
-        requireActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment_container, MyEventFragment.class, null)
-                .setReorderingAllowed(true)
-                .addToBackStack(null)
-                .commit();
-    }*/
+    private void fetchEventsForLocation(String locationName) {
+        /*Gets all events for a rec centre if you give the name*/
+        if (locationName == null || locationName.isEmpty()) {
+            Log.e("EventListFragment", "cant get events when null");
+            return;
+        }
 
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+        // Get the community centre
+        db.collection("community centres").document(locationName)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (!documentSnapshot.exists()) {
+                        Log.e("EventListFragment", "Community centre broke)");
+                        return;
+                    }
 
-    // Adapter for Amelia's Fancy ListView
+                    List<String> eventIDs = (List<String>) documentSnapshot.get("events");
+                    if (eventIDs == null || eventIDs.isEmpty()) {
+                        Log.d("EventListFragment", "No events in " + locationName);
+                        return;
+                    }
+
+                    Log.d("EventListFragment", "got " + eventIDs.size() + " event ids in " + locationName);
+
+                    // get event by ID
+                    eventList.clear();
+                    for (String id : eventIDs) {
+                        db.collection("events").document(id)
+                                .get()
+                                .addOnSuccessListener(eventDoc -> {
+                                    if (eventDoc.exists()) {
+                                        Event event = eventDoc.toObject(Event.class);
+                                        eventList.add(event);
+                                        adapter.notifyDataSetChanged();
+                                        Log.d("EventListFragment", "Got event" + event.getEventName());
+                                    }
+                                })
+                                .addOnFailureListener(e ->
+                                        Log.e("EventListFragment", "Something broke with event"));
+                    }
+                })
+                .addOnFailureListener(e ->
+                        Log.e("EventListFragment", "Something broke"));
+    }
+
     private class EventListAdapter extends BaseAdapter {
-
         private final List<Event> events;
 
         public EventListAdapter(List<Event> events) {
@@ -103,22 +167,25 @@ public class EventListFragment extends Fragment {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            EventListFragment.EventListAdapter.ViewHolder holder;
+            ViewHolder holder;
             if (convertView == null) {
                 convertView = getLayoutInflater().inflate(R.layout.event_item_layout, parent, false);
-                holder = new EventListFragment.EventListAdapter.ViewHolder();
+                holder = new ViewHolder();
                 holder.name = convertView.findViewById(R.id.event_title);
                 holder.dates = convertView.findViewById(R.id.event_dates);
                 holder.dayOfWeek = convertView.findViewById(R.id.event_dayOfWeek);
-                holder.time = convertView.findViewById((R.id.event_times));
+                holder.time = convertView.findViewById(R.id.event_times);
                 convertView.setTag(holder);
             } else {
-                holder = (EventListFragment.EventListAdapter.ViewHolder) convertView.getTag();
+                holder = (ViewHolder) convertView.getTag();
             }
 
             Event event = events.get(position);
             holder.name.setText(event.getEventName());
-            holder.dates.setText("startDate-endDate");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("M/d/y", Locale.getDefault());
+            String start = dateFormat.format(new Date(event.getEventStartDate()));
+            String end = dateFormat.format(new Date(event.getEventEndDate()));
+            holder.dates.setText(start + " - " + end);
             holder.dayOfWeek.setText(event.getEventDayOfWeek());
             holder.time.setText(event.getEventTime());
 
@@ -133,4 +200,3 @@ public class EventListFragment extends Fragment {
         }
     }
 }
-

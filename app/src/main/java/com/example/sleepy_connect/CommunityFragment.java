@@ -14,12 +14,6 @@ import java.util.List;
 
 public class CommunityFragment extends Fragment {
 
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    private String mParam1;
-    private String mParam2;
-
     private ListView listView;
     private CommunityCentreAdapter adapter;
     private final List<CommunityCentre> centreList = new ArrayList<>();
@@ -28,22 +22,13 @@ public class CommunityFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static CommunityFragment newInstance(String param1, String param2) {
-        CommunityFragment fragment = new CommunityFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    public static CommunityFragment newInstance() {
+        return new CommunityFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -78,10 +63,10 @@ public class CommunityFragment extends Fragment {
             TextView locationName = view1.findViewById(R.id.alert_message);
             String clickedLocationName = locationName.getText().toString();
 
-            EventListFragment eventListFrag = new EventListFragment(clickedLocationName);
+            EventListFragment eventListFrag = EventListFragment.newInstance(clickedLocationName);
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragment_container, EventListFragment.class, null)
+                    .replace(R.id.fragment_container, eventListFrag)
                     .setReorderingAllowed(true)
                     .addToBackStack(null)
                     .commit();
