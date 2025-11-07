@@ -1,31 +1,34 @@
 package com.example.sleepy_connect.eventdetails;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.example.sleepy_connect.CommunityCentre;
+import com.example.sleepy_connect.Event;
 import com.example.sleepy_connect.R;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link EventDetailsFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * @author Sam
  */
 public class EventDetailsFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    Event event;
+    SimpleDateFormat dateFormat = new SimpleDateFormat("M/d/y", Locale.getDefault());
 
     public EventDetailsFragment() {
         // Required empty public constructor
@@ -35,37 +38,35 @@ public class EventDetailsFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment EventDetailsFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static EventDetailsFragment newInstance(String param1, String param2) {
-        EventDetailsFragment fragment = new EventDetailsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+        return new EventDetailsFragment();
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_event_details, container, false);
-        Button lotteryButton = view.findViewById(R.id.lottery_guidelines_button);
+        return inflater.inflate(R.layout.fragment_event_details, container, false);
+    }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        // receive event details from viewmodel
+        event = EventViewModel.getEvent().getValue();
+
+        setFields(view);
+
+        // implement lottery button click showing lottery guidelines
+        Button lotteryButton = view.findViewById(R.id.lottery_guidelines_button);
         lotteryButton.setOnClickListener(v -> {
             getChildFragmentManager().beginTransaction()
                     .replace(R.id.event_details_fragment_container, new LotteryGuidelinesFragment())
@@ -74,7 +75,63 @@ public class EventDetailsFragment extends Fragment {
 
 
 
-        return view;
+    }
 
+    @SuppressLint("DefaultLocale")
+    public void setFields(View view) {
+
+        // set title
+        TextView title = view.findViewById(R.id.event_title_display);
+        title.setText(event.getEventName());
+
+        // set location
+        TextView location = view.findViewById(R.id.event_location);
+        location.setText(formatLocation(event));
+
+        // set registration date
+        TextView regPeriod = view.findViewById(R.id.reg_deadline);
+        regPeriod.setText(formatDatePeriod(event.getRegistrationOpens(), event.getRegistrationCloses()));
+
+        // set event date
+        TextView eventPeriod = view.findViewById(R.id.event_dates);
+        eventPeriod.setText(formatDatePeriod(event.getEventStartDate(), event.getEventEndDate()));
+
+        // set time
+        TextView time = view.findViewById(R.id.event_time);
+        time.setText(event.getEventTime());
+
+        // set day of week
+        TextView dayOfWeek = view.findViewById(R.id.dayOfWeek_label);
+        dayOfWeek.setText(event.getEventDayOfWeek());
+
+        // set description
+        if (event.getDescription() != null) {
+            TextView description = view.findViewById(R.id.event_description);
+            description.setText(event.getDescription());
+        }
+
+        // set current waitlist size display
+        TextView waitlistSize = view.findViewById(R.id.waitlist_count_display);
+        waitlistSize.setText(String.format("There are %d people currently on the waitlist", event.getWaitlistSize()));
+
+        // set poster if provided
+        if (event.getPoster() != null) {
+            ImageView poster = view.findViewById(R.id.event_details_poster);
+            poster.setImageBitmap(event.getPoster().decodeImage());
+        }
+    }
+
+    public String formatLocation(Event event) {
+        CommunityCentre recCenter = event.getCommunityCentre();
+        return recCenter.getCommunityCentreName() + "\n" + recCenter.getCommunityCentreLocation();
+    }
+
+    public String formatDatePeriod(long start, long end) {
+
+        // format reg start and end dates
+        String startStr = dateFormat.format(new Date(start));
+        String endStr = dateFormat.format(new Date(end));
+
+        return startStr + "-" + endStr;
     }
 }

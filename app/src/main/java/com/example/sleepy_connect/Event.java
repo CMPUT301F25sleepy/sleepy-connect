@@ -255,4 +255,8 @@ public class Event {
         this.declinedList = declinedList;
     }
 
+    public int getWaitlistSize() {
+        return waitingList.size();
+    }
+
 }
