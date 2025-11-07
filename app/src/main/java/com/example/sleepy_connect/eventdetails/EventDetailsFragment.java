@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -93,7 +94,7 @@ public class EventDetailsFragment extends Fragment {
         regPeriod.setText(formatDatePeriod(event.getRegistrationOpens(), event.getRegistrationCloses()));
 
         // set event date
-        TextView eventPeriod = view.findViewById(R.id.event_dates);
+        TextView eventPeriod = view.findViewById(R.id.details_event_dates);
         eventPeriod.setText(formatDatePeriod(event.getEventStartDate(), event.getEventEndDate()));
 
         // set time
@@ -131,7 +132,7 @@ public class EventDetailsFragment extends Fragment {
         // format reg start and end dates
         String startStr = dateFormat.format(new Date(start));
         String endStr = dateFormat.format(new Date(end));
-
+        Log.v("test", startStr + "-" + endStr);
         return startStr + "-" + endStr;
     }
 }

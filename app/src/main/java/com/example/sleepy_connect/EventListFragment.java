@@ -11,6 +11,11 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+
+import com.example.sleepy_connect.eventdetails.EditEventFragment;
+import com.example.sleepy_connect.eventdetails.EventDetailsFragment;
+import com.example.sleepy_connect.eventdetails.EventViewModel;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -74,7 +79,18 @@ public class EventListFragment extends Fragment {
         listView.setOnItemClickListener((parent, view1, position, id) -> {
             Event selectedEvent = eventList.get(position);
             Log.d("EventListFragment", "Clicked event: " + selectedEvent.getEventName());
-            // TODO: open event details here
+
+            // pass selected event to viewmodel
+            EventViewModel vmEvent = new ViewModelProvider(requireActivity()).get(EventViewModel.class);
+            vmEvent.setEvent(selectedEvent);
+
+            // open event details
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, EventDetailsFragment.class, null)
+                    .setReorderingAllowed(true)
+                    .addToBackStack(null)
+                    .commit();
         });
 
         return view;
