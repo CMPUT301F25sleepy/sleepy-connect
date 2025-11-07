@@ -255,15 +255,18 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
+            <EditText
                 android:id="@+id/edit_event_time_start_time"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:inputType="text"
                 android:fontFamily="@font/roboto_medium"
                 android:padding="10dp"
                 android:textAlignment="viewStart"
                 android:textColor="@color/text_dark"
                 android:textSize="16sp"
+                android:hint="@string/hint_time_input"
+                android:background="@android:color/transparent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -296,15 +299,18 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
+            <EditText
                 android:id="@+id/edit_event_time_end_time"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:inputType="text"
                 android:fontFamily="@font/roboto_medium"
                 android:padding="10dp"
                 android:textAlignment="viewStart"
                 android:textColor="@color/text_dark"
                 android:textSize="16sp"
+                android:hint="@string/hint_time_input"
+                android:background="@android:color/transparent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
