@@ -13,11 +13,19 @@ public class CommunityCentre {
         this.events = new ArrayList<>();
     }
 
+    public CommunityCentre() {
+        // Empty constructor for Firebase to use when retrieving stuff
+    }
+
     public void addEvent(String eventID) {
         this.events.add(eventID);
     }
 
     public String getCommunityCentreName() {
         return communityCentreName;
+    }
+
+    public String getCommunityCentreLocation() {
+        return communityCentreLocation;
     }
 }

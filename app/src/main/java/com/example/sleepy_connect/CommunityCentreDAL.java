@@ -8,6 +8,9 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CommunityCentreDAL {
     private final CollectionReference communityRef;
 
@@ -105,5 +108,30 @@ public class CommunityCentreDAL {
                         System.err.println("Error updating community centre: " + e.getMessage());
                     }
                 });
+    }
+
+    public void getCommunityCentres(OnCommunityCentresRetrievedListener listener) {
+        /* Gets all community centres from Firebase.
+         * Input: None
+         * Output: List<CommunityCentre> returned in listener */
+        communityRef.get()
+                .addOnSuccessListener(querySnapshot -> {
+                    List<CommunityCentre> centres = new ArrayList<>();
+                    for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+                        CommunityCentre centre = document.toObject(CommunityCentre.class);
+                            centres.add(centre);
+                    }
+                    listener.onCommunityCentresRetrieved(centres);                          // When the whole query is done
+                    System.out.println("got community centres.");
+                })
+                .addOnFailureListener(e -> {
+                    System.err.println("Error: " + e.getMessage());
+                    listener.onCommunityCentresRetrieved(new ArrayList<>());
+                });
+    }
+
+    // Listener for list retrieval
+    public interface OnCommunityCentresRetrievedListener {
+        void onCommunityCentresRetrieved(List<CommunityCentre> centres);
     }
 }

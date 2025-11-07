@@ -51,6 +51,12 @@ public class MainActivity extends AppCompatActivity{
 
         communityCentreDAL.addCommunityCentre(testCommunityCentre);
 
+        // Testing community centre
+        CommunityCentre testCommunityCentre1 = new CommunityCentre("All Locations", "See all events");
+
+        communityCentreDAL.addCommunityCentre(testCommunityCentre1);
+
+
         // Testing event creation
         long now = Instant.now().toEpochMilli();
 
