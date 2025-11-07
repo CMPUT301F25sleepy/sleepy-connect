@@ -132,8 +132,6 @@ public class ProfileFragment extends Fragment {
         profile_phone.setKeyListener(null);
         profile_email.setKeyListener(null);
 
-        confirm_button.setVisibility(view.GONE);
-        cancel_button.setVisibility(view.GONE);
 
 
         edit_button.setOnClickListener(new View.OnClickListener() {
