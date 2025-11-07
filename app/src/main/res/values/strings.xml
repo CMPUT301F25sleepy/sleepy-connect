@@ -39,5 +39,6 @@
    you will be able to attend the event once it begins. We ask that all people invited accept or
    decline their invitations as soon as they can to give others a chance to enroll.\n\nGood luck!\n
     </string>
+    <string name="qr_code_generator_label">QR Code Generator</string>
 
 </resources>
