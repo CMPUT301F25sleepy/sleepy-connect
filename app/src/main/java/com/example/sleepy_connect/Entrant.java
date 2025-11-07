@@ -89,4 +89,8 @@ public class Entrant {
         return android_id;
     }
 
+    public void addCreatedEvent(String eventID) {
+        this.created_event_list.add(eventID);
+    }
+
 }
