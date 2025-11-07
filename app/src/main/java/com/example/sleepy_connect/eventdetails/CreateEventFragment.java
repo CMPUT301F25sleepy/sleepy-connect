@@ -3,7 +3,6 @@ package com.example.sleepy_connect.eventdetails;
 import static androidx.core.content.res.ResourcesCompat.getDrawable;
 
 import android.app.DatePickerDialog;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -15,16 +14,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
-import android.provider.MediaStore;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -39,16 +34,11 @@ import com.example.sleepy_connect.EventDAL;
 import com.example.sleepy_connect.Image;
 import com.example.sleepy_connect.R;
 import com.example.sleepy_connect.UserViewModel;
-import com.google.firebase.firestore.auth.User;
-
-import org.w3c.dom.Text;
 
 import java.io.IOException;
-import java.net.URI;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -62,45 +52,29 @@ public class CreateEventFragment extends Fragment {
     private Uri posterUri = null;
     private ImageView ivPoster;
     private Event event;
-    SimpleDateFormat format = new SimpleDateFormat("EEE MMM d, y", Locale.getDefault());
+    private final SimpleDateFormat format = new SimpleDateFormat("EEE MMM d, y", Locale.getDefault());
 
     // Registers a photo picker activity launcher in single-select mode.
-    ActivityResultLauncher<PickVisualMediaRequest> pickMedia =
+    private final ActivityResultLauncher<PickVisualMediaRequest> pickMedia =
             registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
-                // Callback is invoked after the user selects a media item or closes the photo picker.
                 if (uri != null) {
                     Log.d("PhotoPicker", "Selected URI: " + uri);
-
-                    // record uri, load new image on imageview
                     posterUri = uri;
                     ivPoster.setImageURI(uri);
-
                 } else {
                     Log.d("PhotoPicker", "No media selected");
                 }
             });
 
-    // Required empty public constructor
     public CreateEventFragment() {}
 
-    /**
-     * Factory method to create a new instance of
-     * this fragment using the provided parameters.
-     * @return A new instance of fragment CreateEventFragment.
-     */
     public static CreateEventFragment newInstance() {
         return new CreateEventFragment();
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_edit_event, container, false);
     }
 
@@ -108,77 +82,87 @@ public class CreateEventFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // initiate view listeners
-
-        ConstraintLayout regStart = view.findViewById(R.id.edit_reg_start_button);
-        regStart.setOnClickListener(v -> updateDateTime(v, R.id.edit_reg_start_date));
-
-        ConstraintLayout regEnd = view.findViewById(R.id.edit_reg_end_button);
-        regEnd.setOnClickListener(v -> updateDateTime(v, R.id.edit_reg_end_date));
-
-        ConstraintLayout eventStart = view.findViewById(R.id.edit_event_start_button);
-        eventStart.setOnClickListener(v -> updateDateTime(v, R.id.edit_event_start_date));
-
-        ConstraintLayout eventEnd = view.findViewById(R.id.edit_event_end_button);
-        eventEnd.setOnClickListener(v -> updateDateTime(v, R.id.edit_event_end_date));
-
-        Button generateQRCodeButton = view.findViewById(R.id.generate_qr_code_button);
-        generateQRCodeButton.setOnClickListener(v -> openQRCodeFragment(v, R.id.generate_qr_code_button));
-
-
         ivPoster = view.findViewById(R.id.edit_event_poster);
-        ivPoster.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                // Launch the photo picker and let the user choose only images.
-                pickMedia.launch(new PickVisualMediaRequest.Builder()
+        ivPoster.setOnClickListener(v -> pickMedia.launch(
+                new PickVisualMediaRequest.Builder()
                         .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
-                        .build());
+                        .build()
+        ));
 
-            }
-        });
+        // Date pickers
+        view.findViewById(R.id.edit_reg_start_button).setOnClickListener(v -> updateDateTime(view, R.id.edit_reg_start_date));
+        view.findViewById(R.id.edit_reg_end_button).setOnClickListener(v -> updateDateTime(view, R.id.edit_reg_end_date));
+        view.findViewById(R.id.edit_event_start_button).setOnClickListener(v -> updateDateTime(view, R.id.edit_event_start_date));
+        view.findViewById(R.id.edit_event_end_button).setOnClickListener(v -> updateDateTime(view, R.id.edit_event_end_date));
 
+        // QR Code generator
+        Button generateQRCodeButton = view.findViewById(R.id.generate_qr_code_button);
+        generateQRCodeButton.setOnClickListener(v -> openQRCodeFragment());
+
+        // Geolocation switch
         SwitchCompat geolocationSwitch = view.findViewById(R.id.edit_geolocation_switch);
-        geolocationSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            // record state when changed
-            geolocationOn = isChecked;
-        });
+        geolocationSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> geolocationOn = isChecked);
 
+        // Save event button
         TextView saveBtn = view.findViewById(R.id.event_confirm_edit_button);
+        saveBtn.setOnClickListener(v -> saveEvent(view));
+    }
 
-        saveBtn.setOnClickListener(v -> {
-            // link views
-            EditText etTitle = view.findViewById(R.id.edit_event_title);
-            EditText etEventCapacity = view.findViewById(R.id.edit_event_capacity_value);
-            EditText etRecCenter = view.findViewById(R.id.edit_host_rec_center_text);
-            EditText etAddress = view.findViewById(R.id.edit_host_address_text);
-            EditText etEventStartTime = view.findViewById(R.id.edit_event_time_start_time);
-            EditText etEventEndTime = view.findViewById(R.id.edit_event_time_end_time);
-            TextView tvRegStartDate = view.findViewById(R.id.edit_reg_start_date);
-            TextView tvRegEndDate = view.findViewById(R.id.edit_reg_end_date);
-            TextView tvEventStartDate = view.findViewById(R.id.edit_event_start_date);
-            TextView tvEventEndDate = view.findViewById(R.id.edit_event_end_date);
+    private void saveEvent(View view) {
+        EditText etTitle = view.findViewById(R.id.edit_event_title);
+        EditText etEventCapacity = view.findViewById(R.id.edit_event_capacity_value);
+        EditText etRecCenter = view.findViewById(R.id.edit_host_rec_center_text);
+        EditText etAddress = view.findViewById(R.id.edit_host_address_text);
+        EditText etEventStartTime = view.findViewById(R.id.edit_event_time_start_time);
+        EditText etEventEndTime = view.findViewById(R.id.edit_event_time_end_time);
+        TextView tvRegStartDate = view.findViewById(R.id.edit_reg_start_date);
+        TextView tvRegEndDate = view.findViewById(R.id.edit_reg_end_date);
+        TextView tvEventStartDate = view.findViewById(R.id.edit_event_start_date);
+        TextView tvEventEndDate = view.findViewById(R.id.edit_event_end_date);
 
-            if (!mandatoryFieldsFilled(etTitle, etEventCapacity, etRecCenter, etAddress, tvRegStartDate, tvRegEndDate, tvEventStartDate)) {
-                return;
-            }
+        if (!mandatoryFieldsFilled(etTitle, etEventCapacity, etRecCenter, etAddress, tvRegStartDate, tvRegEndDate, tvEventStartDate)) {
+            return;
+        }
 
-            // Get current user
-            user = UserViewModel.getUser().getValue();
+        user = UserViewModel.getUser().getValue();
+        if (user == null) {
+            Log.e("CreateEventFragment", "User is null");
+            return;
+        }
 
-            // Get new EventID
-            EventDAL eventDal = new EventDAL();
+        EventDAL eventDal = new EventDAL();
+        eventDal.getNextID(newID -> {
+            Log.d("EventDAL", "New ID: " + newID);
 
-            eventDal.getNextID(newID -> {
-                Log.d("EventDAL", "New ID: " + newID);
+            CommunityCentreDAL communityDal = new CommunityCentreDAL();
+            String centreName = etRecCenter.getText().toString();
+            String centreAddress = etAddress.getText().toString();
 
-                // add new community centre to database //TODO: check existing community centres
-                CommunityCentre recCenter = new CommunityCentre(
-                        etRecCenter.getText().toString(),
-                        etAddress.getText().toString()
-                );
-                CommunityCentreDAL communityDal = new CommunityCentreDAL();
+            // Gets all community centres TODO: Matching doesnt actually work
+            communityDal.getCommunityCentres(centres -> {
+                CommunityCentre match = null;
+
+                // Matches all community centres
+                for (CommunityCentre c : centres) {
+                    if (c.getCommunityCentreName().equalsIgnoreCase(centreName)
+                            || c.getCommunityCentreLocation().equalsIgnoreCase(centreAddress)) {
+                        match = c;
+                        break;
+                    }
+                }
+
+                // Found a match
+                CommunityCentre recCenter = (match != null)
+                        ? match
+                        : new CommunityCentre(centreName, centreAddress);
+
+                // Didnt find a match
+                if (match == null) {
+                    communityDal.addCommunityCentre(recCenter);
+                    Log.d("CreateEventFragment", "New community centre: " + centreName);
+                } else {
+                    Log.d("CreateEventFragment", "Old community centre: " + match.getCommunityCentreName());
+                }
 
                 try {
                     event = new Event(
@@ -195,87 +179,63 @@ public class CreateEventFragment extends Fragment {
                             geolocationOn
                     );
 
-                    Log.d("CreateEventFragment", "Event created successfully with ID: " + event.getEventID());
-
-                    // set description (optional)
                     TextView description = view.findViewById(R.id.edit_event_descr_text);
-                    Log.i("CreateEventFragment", description.getText().toString());
                     if (!description.getText().toString().isEmpty()) {
                         event.setDescription(description.getText().toString());
                     }
 
-                    // set waitlist capacity (optional)
                     EditText etWaitlistCap = view.findViewById(R.id.edit_waitlist_capacity_value);
                     String waitlistCapStr = etWaitlistCap.getText().toString();
                     if (!waitlistCapStr.isEmpty()) {
                         event.setWaitlistCapacity(Integer.parseInt(waitlistCapStr));
                     }
 
-                    // set poster (optional)
                     if (posterUri != null) {
-                        try {
-                            event.setPoster(new Image(getContext(), posterUri));
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
+                        event.setPoster(new Image(getContext(), posterUri));
                     }
 
-                    // Now push rec center
+                    // Add event to this rec centre
                     recCenter.addEvent(event.getEventID());
-                    communityDal.addCommunityCentre(recCenter);
+                    communityDal.updateCommunityCentre(recCenter);
 
-                    // Update and push entrant
+                    // Add to All Locations
+                    communityDal.getCommunityCentre("All Locations", allEventsCentre -> {
+                        if (allEventsCentre != null) {
+                            allEventsCentre.addEvent(event.getEventID());
+                            communityDal.updateCommunityCentre(allEventsCentre);
+                        } else {
+                            CommunityCentre allEvents = new CommunityCentre("All Locations", "See all events");
+                            allEvents.addEvent(event.getEventID());
+                            communityDal.addCommunityCentre(allEvents);
+                        }
+                    });
+
+                    // Add event to entrant and DB
                     user.addCreatedEvent(event.getEventID());
-                    EntrantDAL entrantDal = new EntrantDAL();
-                    entrantDal.updateEntrant(user);
-
-                    // Push event
+                    new EntrantDAL().updateEntrant(user);
                     eventDal.addEvent(event);
 
-                    // Return to previous fragment
-                    if (!isAdded()) return;
-                    requireActivity().getSupportFragmentManager().popBackStack();
+                    if (isAdded()) requireActivity().getSupportFragmentManager().popBackStack();
 
-                } catch (ParseException e) {
-                    Log.e("CreateEventFragment", "Failed." + e.getMessage(), e);
-                } catch (Exception e) {
-                    Log.e("CreateEventFragment", "Failed.", e);
+                } catch (ParseException | IOException e) {
+                    Log.e("CreateEventFragment", "Error creating event", e);
                 }
-            }, e -> {
-                Log.e("EventDAL", "Failed.", e);
             });
         });
     }
 
-    public String createTimeString(EditText etEventStart, EditText etEventEnd) {
-
-        // get string values
-        String start = etEventStart.getText().toString();
-        String end = etEventEnd.getText().toString();
-
-        // return formatted concatenated time string
-        return start + "-" + end;
+    private String createTimeString(EditText etEventStart, EditText etEventEnd) {
+        return etEventStart.getText().toString() + "-" + etEventEnd.getText().toString();
     }
 
-    /**
-     *
-     * @param rootView
-     * @param dateViewId
-     */
-    public void updateDateTime(View rootView, int dateViewId) {
-
-        // open date picker
+    private void updateDateTime(View rootView, int dateViewId) {
         Calendar today = Calendar.getInstance();
         DatePickerDialog datePickerDialog = new DatePickerDialog(
                 requireContext(),
-                (view, year, month, dayOfMonth) -> {
-
-                    // get selected date
+                (DatePicker view, int year, int month, int dayOfMonth) -> {
                     Calendar date = Calendar.getInstance();
                     date.set(year, month, dayOfMonth);
                     String dateString = format.format(date.getTime());
-
-                    // update textview
                     TextView tv = rootView.findViewById(dateViewId);
                     tv.setText(dateString);
                 },
@@ -283,91 +243,50 @@ public class CreateEventFragment extends Fragment {
                 today.get(Calendar.MONTH),
                 today.get(Calendar.DAY_OF_MONTH)
         );
-
-        // show date picker dialog
         datePickerDialog.show();
     }
 
-    // open fragment showing generated QR code
-    public void openQRCodeFragment(View v, int generateQRCodeButtonID) {
-        // make sure there's an event title
+    private void openQRCodeFragment() {
         TextView eventTitle = requireView().findViewById(R.id.edit_event_title);
+        TextView errorText = requireView().findViewById(R.id.qr_code_error_text);
 
-        if(isComplete(eventTitle, true)) {
-            // event title passed to QR code fragment
+        if (isComplete(eventTitle, true)) {
+            errorText.setVisibility(View.GONE);
             QRCodeFragment qrCodeFragment = QRCodeFragment.newInstance(eventTitle.getText().toString());
-
-            // create and open fragment, passing in event title as string to encode
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, qrCodeFragment)
                     .addToBackStack(null)
                     .commit();
-        }
-
-        else {
-            TextView errorText = requireView().findViewById(R.id.qr_code_error_text);
+        } else {
             errorText.setVisibility(View.VISIBLE);
         }
-
-        // TODO: check if QR code exists in database
-        // TODO: store in database if not already in
-        // TODO: allow copying of QR code image
     }
 
-    /**
-     *
-     * @param title
-     * @param eventCapacity
-     * @param recCenter
-     * @param address
-     * @param regStartDate
-     * @param regEndDate
-     * @param eventStartDate
-     * @return
-     */
-    public boolean mandatoryFieldsFilled(EditText title, EditText eventCapacity, EditText recCenter, EditText address,
-                                     TextView regStartDate, TextView regEndDate, TextView eventStartDate) {
+    private boolean mandatoryFieldsFilled(EditText title, EditText eventCapacity, EditText recCenter, EditText address,
+                                          TextView regStartDate, TextView regEndDate, TextView eventStartDate) {
 
-        // bitwise & all the views' values' isComplete
-        boolean complete = isComplete(title, false) & isComplete(eventCapacity, true) & isComplete(recCenter, true) &
-                isComplete(address, true) & isComplete(regStartDate, true) & isComplete(eventStartDate, true);
+        boolean complete = isComplete(title, false)
+                & isComplete(eventCapacity, true)
+                & isComplete(recCenter, true)
+                & isComplete(address, true)
+                & isComplete(regStartDate, true)
+                & isComplete(eventStartDate, true)
+                & isComplete(regEndDate, true);
 
-        // link error box
-        assert getView() != null;
-        TextView errorBox = getView().findViewById(R.id.edit_event_error_box);
-
-        // show error message if not complete
-        if (!complete) {
-            errorBox.setVisibility(View.VISIBLE);
-
-        // remove error message if complete
-        } else {
-            errorBox.setVisibility(View.GONE);
-        }
+        TextView errorBox = requireView().findViewById(R.id.edit_event_error_box);
+        errorBox.setVisibility(complete ? View.GONE : View.VISIBLE);
 
         return complete;
     }
 
-    /**
-     *
-     * @param tv
-     * @return
-     */
-    public boolean isComplete(TextView tv, boolean hasViewGroup) {
-
+    private boolean isComplete(TextView tv, boolean hasViewGroup) {
         if (tv.getText().length() == 0) {
-            // highlight red if empty
             tv.setBackground(getDrawable(getResources(), R.drawable.error_text_border, null));
             return false;
-
         } else {
-            // remove highlight if view is filled
-            if (hasViewGroup) {
-                tv.setBackground(null);
-            } else {
-                tv.setBackground(getDrawable(getResources(), R.drawable.light_text_border, null));
-            }
+            tv.setBackground(hasViewGroup ? null :
+                    getDrawable(getResources(), R.drawable.light_text_border, null));
             return true;
         }
     }

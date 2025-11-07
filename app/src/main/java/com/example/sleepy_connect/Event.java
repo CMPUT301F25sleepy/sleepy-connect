@@ -29,8 +29,6 @@ public class Event {
     public ArrayList<String> declinedList;                  // Automatic. List of entrants that declines / were rejected by android ID
     public ArrayList<String> acceptedList;                  // Automatic. List of accepted entrant android IDs
 
-    public EventDAL DAL;
-
     public Event(
             String eventID,
             String eventName,
