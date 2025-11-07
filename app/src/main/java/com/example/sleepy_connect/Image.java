@@ -14,7 +14,7 @@ public class Image {
     private final Uri imageUri;
     private final String base64String;
 
-    public Image(Context context, Uri uri) throws IOException {                 // Android really really likes this IOexception stuff
+    public Image(Context context, Uri uri) throws IOException {                 // Android really really likes this IOexception
         this.imageUri = uri;
         this.base64String = encodeImage(context, uri);
     }
