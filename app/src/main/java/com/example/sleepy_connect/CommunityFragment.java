@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import androidx.fragment.app.Fragment;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,7 +51,7 @@ public class CommunityFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_location_display, container, false);
 
-        listView = view.findViewById(R.id.list_view);
+        listView =view.findViewById(R.id.list_view);
         adapter = new CommunityCentreAdapter(centreList);
         listView.setAdapter(adapter);
 
@@ -73,8 +74,23 @@ public class CommunityFragment extends Fragment {
             }
         });
 
+        listView.setOnItemClickListener((parent, view1, position, id) -> {
+            TextView locationName = view1.findViewById(R.id.alert_message);
+            String clickedLocationName = locationName.getText().toString();
+
+            EventListFragment eventListFrag = new EventListFragment(clickedLocationName);
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, EventListFragment.class, null)
+                    .setReorderingAllowed(true)
+                    .addToBackStack(null)
+                    .commit();
+        });
+
         return view;
     }
+
+
 
     // Adapter for Amelia's Fancy ListView
     private class CommunityCentreAdapter extends BaseAdapter {

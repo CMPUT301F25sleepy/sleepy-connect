@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -42,6 +42,7 @@
         app:srcCompat="@drawable/filter" />
 
     <ListView
+        android:id="@+id/event_list_view"
         android:layout_width="0dp"
         android:layout_height="695dp"
         android:divider="@android:color/transparent"
@@ -51,7 +52,7 @@
         android:clipToPadding="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/location"
         tools:listitem="@layout/event_item_layout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

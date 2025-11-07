@@ -54,7 +54,7 @@
             android:background="@drawable/event_time_background">
 
             <TextView
-                android:id="@+id/tvDay"
+                android:id="@+id/event_dayOfWeek"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Monday"
@@ -63,7 +63,7 @@
                 android:textSize="14sp" />
 
             <TextView
-                android:id="@+id/tvTime"
+                android:id="@+id/event_times"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="6:00 PM – 7:00 PM"
