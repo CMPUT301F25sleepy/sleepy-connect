@@ -52,7 +52,20 @@ dependencies {
     implementation(libs.play.services.location)
     implementation(libs.firebase.storage)
     testImplementation(libs.junit)
+    testImplementation(libs.junit.junit)
+    testImplementation(libs.junit.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
     implementation("com.google.android.material:material:1.12.0")
+
+    // ZXing for QR code generation + scanning
+    implementation("com.journeyapps:zxing-android-embedded:4.3.0")
+
+    // for decoding QR codes in local unit tests
+    testImplementation("com.google.zxing:core:3.5.3")
+    // Mockito for mocking Android framework classes in tests
+    testImplementation("org.mockito:mockito-core:5.12.0")
+
+    // For FragmentScenario to test fragments in isolation
+    debugImplementation("androidx.fragment:fragment-testing:1.6.2")
 }
