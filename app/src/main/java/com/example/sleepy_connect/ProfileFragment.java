@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
+import android.provider.Settings;
 import android.text.InputType;
 import android.text.method.BaseKeyListener;
 import android.text.method.KeyListener;
@@ -45,6 +46,8 @@ public class ProfileFragment extends Fragment {
     private KeyListener birthday_key;
     private KeyListener phone_key;
     private KeyListener email_key;
+    private Entrant user;
+    private EntrantDAL entrantDal;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -80,13 +83,25 @@ public class ProfileFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         // TODO - obtain entrant's information
+        user = UserViewModel.getUser().getValue();
+
         saved_user = "";
         saved_first = "";
         saved_last = "";
         saved_birthday = "";
         saved_phone = "";
         saved_email = "";
+        if (user.getUsername() != null) saved_user = user.getUsername();
+        if (user.getFirst_name() != null) saved_first = user.getFirst_name();
+        if (user.getLast_name() != null) saved_last = user.getLast_name();
+        if (user.getBirthday() != null) saved_birthday = user.getBirthday();
+        if (user.getEmail() != null) saved_email = user.getEmail();
+        if (user.getPhone_number() != null) saved_phone = user.getPhone_number();
+
+
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -110,6 +125,13 @@ public class ProfileFragment extends Fragment {
         Button delete_button = view.findViewById(R.id.delete_profile_button);
         Button confirm_button = view.findViewById(R.id.confirm_profile_button);
         Button cancel_button = view.findViewById(R.id.cancel_profile_button);
+
+        profile_user.setText(saved_user);
+        profile_first.setText(saved_first);
+        profile_last.setText(saved_last);
+        profile_birthday.setText(saved_birthday);
+        profile_email.setText(saved_email);
+        profile_phone.setText(saved_phone);
 
         disableText(profile_user);
         disableText(profile_first);
@@ -193,6 +215,16 @@ public class ProfileFragment extends Fragment {
                 saved_phone = profile_phone.getText().toString();
                 saved_email = profile_email.getText().toString();
                 // TODO - Update Entrant's updated information
+
+                user.setUsername(saved_user);
+                user.setFirst_name(saved_first);
+                user.setLast_name(saved_last);
+                user.setBirthday(saved_birthday);
+                user.setPhone_number(saved_phone);
+                user.setEmail(saved_email);
+
+                entrantDal = new EntrantDAL();
+                entrantDal.updateEntrant(user);
 
                 edit_button.setVisibility(view.VISIBLE);
                 delete_button.setVisibility(view.VISIBLE);
