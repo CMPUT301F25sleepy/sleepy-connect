@@ -70,7 +70,6 @@ public class EventManagerFragment extends Fragment {
         return view;
     }
 
-    //supposed to open event creator but doesnt work with CreateEventFragment()
     private void openCreateEvent() {
         requireActivity().getSupportFragmentManager()
                 .beginTransaction()

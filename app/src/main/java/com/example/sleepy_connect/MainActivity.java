@@ -41,13 +41,13 @@ public class MainActivity extends AppCompatActivity{
                 if (entrant != null) {
                     // existing user
                     user = entrant;
-                    xander_test(user);
+                    //xander_test(user);
 
                 } else {
                     // new user
                     user = new Entrant(androidID);
 
-                    xander_test(user);
+                    //xander_test(user);
                     entrantDal.addEntrant(user);
                 }
             }
@@ -92,8 +92,8 @@ public class MainActivity extends AppCompatActivity{
         startActivity(i);
     }
 
-    public void xander_test(Entrant user){
-        /* Adding notifications and user in wishlist to test functionalities of issues */
+    /*public void xander_test(Entrant user){
+        *//* Adding notifications and user in wishlist to test functionalities of issues *//*
 
         // testing notification functionality for event "7" in database
         Notification test_notif1 = new Notification("Swimming Lessons at Windermere Recreation Centre", true, false,"7");
@@ -128,6 +128,6 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
-    }
+    }*/
 
 }

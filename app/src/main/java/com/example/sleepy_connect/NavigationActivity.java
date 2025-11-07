@@ -1,6 +1,5 @@
 package com.example.sleepy_connect;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -8,9 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.sleepy_connect.databinding.ActivityMainBinding;
 import com.example.sleepy_connect.databinding.ActivityNavigationBinding;
-import com.example.sleepy_connect.eventdetails.CreateEventFragment;
 
 import java.util.ArrayList;
 
