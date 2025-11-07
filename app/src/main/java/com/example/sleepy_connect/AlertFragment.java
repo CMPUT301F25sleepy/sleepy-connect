@@ -41,7 +41,7 @@ public class AlertFragment extends Fragment {
     }
 
     // TODO: Rename and change types and number of parameters
-    public static AlertFragment newInstance(ArrayList<Notification> notif,String entrantID) {
+    public static AlertFragment newInstance(@NonNull ArrayList<Notification> notif,String entrantID) {
         AlertFragment fragment = new AlertFragment();
         Bundle args = new Bundle();
         args.putSerializable("notifs", notif);
