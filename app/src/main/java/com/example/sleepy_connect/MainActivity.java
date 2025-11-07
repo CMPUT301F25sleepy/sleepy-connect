@@ -6,6 +6,8 @@ import android.provider.Settings;
 import android.view.View;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+
 import java.time.Instant;
 
 public class MainActivity extends AppCompatActivity{
@@ -74,6 +76,7 @@ public class MainActivity extends AppCompatActivity{
     public void startPress(View view){
         // button to switch to the main app (the navigation activity)
         Intent i = new Intent(MainActivity.this, NavigationActivity.class);
+        i.putExtra("user", user);
         startActivity(i);
     }
 
