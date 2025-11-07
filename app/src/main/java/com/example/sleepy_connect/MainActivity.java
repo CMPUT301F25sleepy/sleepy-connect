@@ -46,13 +46,17 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
+        // Testing community centre
+        CommunityCentre testCommunityCentre = new CommunityCentre("Terwillegar Community Centre", "2051 Leger Rd NW, Edmonton, AB T6R 0R9");
+
+        communityCentreDAL.addCommunityCentre(testCommunityCentre);
+
         // Testing event creation
         long now = Instant.now().toEpochMilli();
 
         Event testEvent = new Event(
                 "Morning Yoga Workshop",          // eventName (Required)
-                "Riverbend Community Centre",               // communityCentre (Required)
-                "123 Riverbend Rd, Edmonton, AB",           // communityCentreLocation (Required)
+                testCommunityCentre,                        // Community centre (Required)
                 androidID,                                  // creatorID (Required) -> entrant.getAndroidID()
                 1730788800000L,                             // registrationOpens (Required) - e.g., Nov 5, 2024
                 1731393600000L,                             // registrationCloses (Required) - e.g., Nov 12, 2024
@@ -64,11 +68,6 @@ public class MainActivity extends AppCompatActivity{
         );
 
         eventDal.addEvent(testEvent);
-
-        // Testing community centre
-        CommunityCentre testCommunityCentre = new CommunityCentre("Terwillegar Community Centre", "2051 Leger Rd NW, Edmonton, AB T6R 0R9");
-
-        communityCentreDAL.addCommunityCentre(testCommunityCentre);
     }
 
 
