@@ -132,7 +132,6 @@ public class EventDetailsFragment extends Fragment {
         // format reg start and end dates
         String startStr = dateFormat.format(new Date(start));
         String endStr = dateFormat.format(new Date(end));
-        Log.v("test", startStr + "-" + endStr);
         return startStr + "-" + endStr;
     }
 }
