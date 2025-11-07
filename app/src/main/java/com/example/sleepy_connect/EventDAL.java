@@ -125,7 +125,7 @@ public class EventDAL {
                 });
     }
 
-    public void getNextID(OnSuccessListener<String> onSuccessListener, OnFailureListener onFailureListener) {
+    public void getNextID(OnSuccessListener<String> onSuccessListener) {
         /*Uses a document in firebase to get next ID for an event.
         * Outputs: String NextID. */
         counterRef.get()
@@ -139,9 +139,7 @@ public class EventDAL {
                     counterRef.update("nextID", newID)
                             .addOnSuccessListener(aVoid -> {
                                 onSuccessListener.onSuccess(finalCurrentID);
-                            })
-                            .addOnFailureListener(onFailureListener);
-                })
-                .addOnFailureListener(onFailureListener);
+                            });
+                });
     }
 }
