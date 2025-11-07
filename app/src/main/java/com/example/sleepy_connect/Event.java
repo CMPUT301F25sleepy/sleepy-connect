@@ -10,8 +10,7 @@ public class Event {
     public String eventID;                                  // Automatic
     public String eventName;                                // Required
     public String description;                              // Optional
-    public String communityCentre;                          // Required (Name of host community centre
-    public String communityCentreLocation;                  // Required (Address of host community centre as a string)
+    public CommunityCentre communityCentre;                 // Required. Create it by using the class.
     public String qrCode;                                   // TODO: Generated automatically
     public String creatorID;                                // Required. Get it by calling entrant.getAndroidID()
     public long createdDate;                                // Automatic timestamp
@@ -32,8 +31,7 @@ public class Event {
 
     public Event(
             String eventName,
-            String communityCentre,
-            String communityCentreLocation,
+            CommunityCentre communityCentre,
             String creatorID,
             long registrationOpens,
             long registrationCloses,
@@ -48,7 +46,6 @@ public class Event {
         // Required
         this.eventName = eventName;
         this.communityCentre = communityCentre;
-        this.communityCentreLocation = communityCentreLocation;
         this.creatorID = creatorID;
         this.registrationOpens = registrationOpens;
         this.registrationCloses = registrationCloses;
@@ -81,33 +78,6 @@ public class Event {
         // Empty constructor for Firebase to use when retrieving stuff
     }
 
-    @Override
-    public String toString() {
-        return "Event{" +
-                "eventID='" + eventID + '\'' +
-                ", eventName='" + eventName + '\'' +
-                ", description='" + description + '\'' +
-                ", communityCentre='" + communityCentre + '\'' +
-                ", communityCentreLocation='" + communityCentreLocation + '\'' +
-                ", qrCode='" + qrCode + '\'' +
-                ", creatorID='" + creatorID + '\'' +
-                ", createdDate=" + createdDate +
-                ", poster=" + poster +
-                ", registrationOpens=" + registrationOpens +
-                ", registrationCloses=" + registrationCloses +
-                ", eventStartDate=" + eventStartDate +
-                ", eventEndDate=" + eventEndDate +
-                ", eventTime='" + eventTime + '\'' +
-                ", eventCapacity=" + eventCapacity +
-                ", waitlistCapacity=" + waitlistCapacity +
-                ", geolocationEnabled=" + geolocationEnabled +
-                ", waitingList=" + waitingList +
-                ", pendingList=" + pendingList +
-                ", declinedList=" + declinedList +
-                ", acceptedList=" + acceptedList +
-                '}';
-    }
-
     public String getEventID() {
         return eventID;
     }
@@ -128,12 +98,8 @@ public class Event {
         this.description = description;
     }
 
-    public String getCommunityCentre() {
+    public CommunityCentre getCommunityCentre() {
         return communityCentre;
-    }
-
-    public String getCommunityCentreLocation() {
-        return communityCentreLocation;
     }
 
     public String getQrCode() {
