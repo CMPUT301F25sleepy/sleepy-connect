@@ -5,6 +5,7 @@
     <string name="hint_event_title">Event Title</string>
     <string name="hint_capacity">Leave empty for no capacity</string>
     <string name="hint_description">Enter event description</string>
+    <string name="hint_time_input">HH:MM (24 hour format)</string>
 
     <string name="label_reg_starts">Registration Start</string>
     <string name="label_reg_ends">Registration End</string>

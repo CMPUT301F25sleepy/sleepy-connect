@@ -6,6 +6,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.sleepy_connect.databinding.ActivityMainBinding;
 import com.example.sleepy_connect.databinding.ActivityNavigationBinding;
@@ -19,6 +20,7 @@ public class NavigationActivity extends AppCompatActivity {
     // Bottom Navigation View Implementation Code from https://www.youtube.com/watch?v=jOFLmKMOcK0
 
     ActivityNavigationBinding binding;
+    private Entrant user;
     public ArrayList<Notification> mock_list = new ArrayList<>();
 
     private void replaceFragment(Fragment fragment) {
@@ -35,6 +37,13 @@ public class NavigationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityNavigationBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        // get user
+        user = (Entrant) getIntent().getSerializableExtra("user");
+
+        // store user in UserViewModel
+        UserViewModel userVM = new ViewModelProvider(this).get(UserViewModel.class);
+        userVM.setUser(user);
 
         // Initialize Activity with Community fragment and set the title in top to "Community"
         TextView title = findViewById(R.id.set_title);

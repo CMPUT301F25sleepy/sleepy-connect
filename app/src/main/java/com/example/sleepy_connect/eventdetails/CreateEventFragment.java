@@ -15,8 +15,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,11 +30,19 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.sleepy_connect.Entrant;
+import com.example.sleepy_connect.EntrantDAL;
+import com.example.sleepy_connect.Event;
+import com.example.sleepy_connect.EventDAL;
+import com.example.sleepy_connect.Image;
 import com.example.sleepy_connect.R;
+import com.example.sleepy_connect.UserViewModel;
+import com.google.firebase.firestore.auth.User;
 
 import org.w3c.dom.Text;
 
 import java.net.URI;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -43,9 +53,7 @@ import java.util.Objects;
  * @author Sam Francisco
  */
 public class CreateEventFragment extends Fragment {
-
-    private static final String UID = "uid"; // to be updated
-    private int uid;
+    private Entrant user;
     private boolean geolocationOn = false;
     private Uri posterUri = null;
     private ImageView ivPoster;
@@ -73,26 +81,18 @@ public class CreateEventFragment extends Fragment {
     /**
      * Factory method to create a new instance of
      * this fragment using the provided parameters.
-     *
-     * @param uid Current user's id.
      * @return A new instance of fragment CreateEventFragment.
      */
-    public static CreateEventFragment newInstance(String uid) {
-        CreateEventFragment fragment = new CreateEventFragment();
-        Bundle args = new Bundle();
-        args.putString(UID, uid);
-        fragment.setArguments(args);
-        return fragment;
+    public static CreateEventFragment newInstance() {
+        return new CreateEventFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // retrieve parameters
-        if (getArguments() != null) {
-            uid = getArguments().getInt(UID);
-        }
+        // get current user from viewmodel
+        user = UserViewModel.getUser().getValue();
     }
 
     @Override
@@ -146,26 +146,96 @@ public class CreateEventFragment extends Fragment {
         TextView saveBtn = view.findViewById(R.id.event_confirm_edit_button);
         saveBtn.setOnClickListener(v -> {
 
-            // link views
-            EditText etTitle = view.findViewById(R.id.edit_event_title);
-            EditText etEventCapacity = view.findViewById(R.id.edit_event_capacity_value);
-            EditText etWaitlistCapacity = view.findViewById(R.id.edit_waitlist_capacity_value);
-            EditText etRecCenter = view.findViewById(R.id.edit_host_rec_center_text);
-            EditText etAddress = view.findViewById(R.id.edit_host_address_text);
-            EditText etDescription = view.findViewById(R.id.edit_event_descr_text);
-
-            TextView tvRegStartDate = view.findViewById(R.id.edit_reg_start_date);
-            TextView tvRegEndDate = view.findViewById(R.id.edit_reg_end_date);
-            TextView tvEventStartDate = view.findViewById(R.id.edit_event_start_date);
-
-            // check if mandatory fields are set and set their backgrounds if not
-            if (!mandatoryFieldsFilled(etTitle, etEventCapacity, etRecCenter, etAddress, tvRegStartDate, tvRegEndDate, tvEventStartDate)) {
+            // set mandatory values
+            Event newEvent = setMandatoryEventData(view);
+            if (newEvent == null) {
                 return;
             }
 
-            // TODO: store data in database
+            // set optional values
+            setOptionalEventData(view, newEvent);
 
+            // store event in db
+            EventDAL eventDal = new EventDAL();
+            eventDal.addEvent(newEvent);
+
+            // update entrant
+            EntrantDAL entrantDal = new EntrantDAL();
+            user.addCreatedEvent(newEvent.getEventID());
+            entrantDal.updateEntrant(user);
         });
+    }
+
+    public Event setMandatoryEventData(View root) {
+
+        // link views
+        EditText etTitle = root.findViewById(R.id.edit_event_title);
+        EditText etEventCapacity = root.findViewById(R.id.edit_event_capacity_value);
+        EditText etRecCenter = root.findViewById(R.id.edit_host_rec_center_text);
+        EditText etAddress = root.findViewById(R.id.edit_host_address_text);
+        EditText etEventStartTime = root.findViewById(R.id.edit_event_time_start_time);
+        EditText etEventEndTime = root.findViewById(R.id.edit_event_time_end_time);
+        TextView tvRegStartDate = root.findViewById(R.id.edit_reg_start_date);
+        TextView tvRegEndDate = root.findViewById(R.id.edit_reg_end_date);
+        TextView tvEventStartDate = root.findViewById(R.id.edit_event_start_date);
+        TextView tvEventEndDate = root.findViewById(R.id.edit_event_end_date);
+
+
+        // check if mandatory fields are set and set their backgrounds if not
+        if (!mandatoryFieldsFilled(etTitle, etEventCapacity, etRecCenter, etAddress, tvRegStartDate, tvRegEndDate, tvEventStartDate)) {
+            return null;
+        }
+
+        // create event object with mandatory attributes
+        Event event = null;
+        try {
+            event = new Event(
+                    etTitle.getText().toString(),
+                    etRecCenter.getText().toString(),
+                    etAddress.getText().toString(),
+                    user.getAndroid_id(),
+                    Objects.requireNonNull(format.parse((String) tvRegStartDate.getText())).getTime(),
+                    Objects.requireNonNull(format.parse((String) tvRegEndDate.getText())).getTime(),
+                    Objects.requireNonNull(format.parse((String) tvEventStartDate.getText())).getTime(),
+                    Objects.requireNonNull(format.parse((String) tvEventEndDate.getText())).getTime(),
+                    createTimeString(etEventStartTime, etEventEndTime),
+                    Integer.parseInt(etEventCapacity.getText().toString()),
+                    geolocationOn
+            );
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        return event;
+    }
+
+    public void setOptionalEventData(View root, Event newEvent) {
+
+        // set description
+        TextView description = root.findViewById(R.id.edit_event_descr_text);
+        newEvent.setDescription(description.getText().toString());
+
+        // set poster if provided by user
+        if (posterUri != null) {
+            newEvent.setPoster(new Image());
+        }
+
+        // set waitlist capacity if provided by user
+        EditText etWaitlistCap = root.findViewById(R.id.edit_waitlist_capacity_value);
+        String waitlistCapStr = etWaitlistCap.getText().toString();
+        if (!waitlistCapStr.isEmpty()) {
+            newEvent.setWaitlistCapacity(Integer.parseInt(waitlistCapStr));
+        }
+    }
+
+    public String createTimeString(EditText etEventStart, EditText etEventEnd) {
+
+        // get string values
+        String start = etEventStart.getText().toString();
+        String end = etEventEnd.getText().toString();
+
+        // return formatted concatenated time string
+        return start + "-" + end;
     }
 
     /**
@@ -241,14 +311,20 @@ public class CreateEventFragment extends Fragment {
                                      TextView regStartDate, TextView regEndDate, TextView eventStartDate) {
 
         // bitwise & all the views' values' isComplete
-        boolean complete = isComplete(title) & isComplete(eventCapacity) & isComplete(recCenter) &
-                isComplete(address) & isComplete(regStartDate) & isComplete(eventStartDate);
+        boolean complete = isComplete(title, false) & isComplete(eventCapacity, true) & isComplete(recCenter, true) &
+                isComplete(address, true) & isComplete(regStartDate, true) & isComplete(eventStartDate, true);
+
+        // link error box
+        assert getView() != null;
+        TextView errorBox = getView().findViewById(R.id.edit_event_error_box);
 
         // show error message if not complete
         if (!complete) {
-            assert getView() != null;
-            TextView errorBox = getView().findViewById(R.id.edit_event_error_box);
             errorBox.setVisibility(View.VISIBLE);
+
+        // remove error message if complete
+        } else {
+            errorBox.setVisibility(View.GONE);
         }
 
         return complete;
@@ -259,13 +335,21 @@ public class CreateEventFragment extends Fragment {
      * @param tv
      * @return
      */
-    public boolean isComplete(TextView tv) {
+    public boolean isComplete(TextView tv, boolean hasViewGroup) {
 
         if (tv.getText().length() == 0) {
             // highlight red if empty
             tv.setBackground(getDrawable(getResources(), R.drawable.error_text_border, null));
             return false;
+
+        } else {
+            // remove highlight if view is filled
+            if (hasViewGroup) {
+                tv.setBackground(null);
+            } else {
+                tv.setBackground(getDrawable(getResources(), R.drawable.light_text_border, null));
+            }
+            return true;
         }
-        return true;
     }
 }
