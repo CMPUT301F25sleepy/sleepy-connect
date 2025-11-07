@@ -14,8 +14,11 @@ import androidx.fragment.app.Fragment;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class EventListFragment extends Fragment {
     private static final String ARG_LOCNAME = "locationName";
@@ -163,7 +166,10 @@ public class EventListFragment extends Fragment {
 
             Event event = events.get(position);
             holder.name.setText(event.getEventName());
-            holder.dates.setText("-"); // TODO: this
+            SimpleDateFormat dateFormat = new SimpleDateFormat("M/d/y", Locale.getDefault());
+            String start = dateFormat.format(new Date(event.getEventStartDate()));
+            String end = dateFormat.format(new Date(event.getEventEndDate()));
+            holder.dates.setText(start + " - " + end);
             holder.dayOfWeek.setText(event.getEventDayOfWeek());
             holder.time.setText(event.getEventTime());
 
