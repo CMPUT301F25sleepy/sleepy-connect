@@ -11,8 +11,8 @@ public class EntrantDAL {
     private final CollectionReference usersRef;
 
     public EntrantDAL() {
-        // Creating the database
         /* Entrant Data Access Layer - Stores all functions that interface with the database for the entrant.*/
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         // Creating a collection for users
         usersRef = db.collection("users");

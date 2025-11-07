@@ -40,9 +40,10 @@ public class EventDAL {
                         long newID = currentID + 1;
 
                         // Update the counter in Firestore
+                        Long finalCurrentID = currentID; // Android studio wants this code so bad
                         counterRef.update("nextID", newID)
                                 .addOnSuccessListener(unused -> {
-                                    event.setEventID(String.valueOf(newID)); // assign ID to the event
+                                    event.setEventID(String.valueOf(finalCurrentID)); // assign ID to the event
                                     eventsRef.document(event.getEventID()).set(event) // Create the document
                                             // Adding listeners that tell us whether it was successful
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
