@@ -39,6 +39,8 @@ import com.example.sleepy_connect.R;
 import com.example.sleepy_connect.UserViewModel;
 import com.google.firebase.firestore.auth.User;
 
+import org.w3c.dom.Text;
+
 import java.net.URI;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -117,6 +119,10 @@ public class CreateEventFragment extends Fragment {
 
         ConstraintLayout eventEnd = view.findViewById(R.id.edit_event_end_button);
         eventEnd.setOnClickListener(v -> updateDateTime(v, R.id.edit_event_end_date));
+
+        Button generateQRCodeButton = view.findViewById(R.id.generate_qr_code_button);
+        generateQRCodeButton.setOnClickListener(v -> openQRCodeFragment(v, R.id.generate_qr_code_button));
+
 
         ivPoster = view.findViewById(R.id.edit_event_poster);
         ivPoster.setOnClickListener(new View.OnClickListener() {
@@ -261,6 +267,33 @@ public class CreateEventFragment extends Fragment {
 
         // show date picker dialog
         datePickerDialog.show();
+    }
+
+    // open fragment showing generated QR code
+    public void openQRCodeFragment(View v, int generateQRCodeButtonID) {
+        // make sure there's an event title
+        TextView eventTitle = requireView().findViewById(R.id.edit_event_title);
+
+        if(isComplete(eventTitle)) {
+            // event title passed to QR code fragment
+            QRCodeFragment qrCodeFragment = QRCodeFragment.newInstance(eventTitle.getText().toString());
+
+            // create and open fragment, passing in event title as string to encode
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, qrCodeFragment)
+                    .addToBackStack(null)
+                    .commit();
+        }
+
+        else {
+            TextView errorText = requireView().findViewById(R.id.qr_code_error_text);
+            errorText.setVisibility(View.VISIBLE);
+        }
+
+        // TODO: check if QR code exists in database
+        // TODO: store in database if not already in
+        // TODO: allow copying of QR code image
     }
 
     /**

@@ -13,6 +13,7 @@ import java.time.Instant;
 public class MainActivity extends AppCompatActivity{
     public EntrantDAL entrantDal;
     public EventDAL eventDal;
+    public CommunityCentreDAL communityCentreDAL;
     public Entrant user;
     public String androidID;
 
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity{
         // Access to Firebase
         entrantDal = new EntrantDAL();
         eventDal = new EventDAL();
+        communityCentreDAL = new CommunityCentreDAL();
 
         // Retrieve the device ID and create an entrant based on it
         androidID = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
@@ -38,25 +40,25 @@ public class MainActivity extends AppCompatActivity{
                 if (entrant != null) {
                     // existing user
                     user = entrant;
-//                    user.setAccess(30);
-//                    dal.updateEntrant(user);
                 } else {
                     // new user
                     user = new Entrant(androidID);
                     entrantDal.addEntrant(user);
-//                    user.setAccess(45);
-//                    dal.updateEntrant(user);
                 }
             }
         });
+
+        // Testing community centre
+        CommunityCentre testCommunityCentre = new CommunityCentre("Terwillegar Community Centre", "2051 Leger Rd NW, Edmonton, AB T6R 0R9");
+
+        communityCentreDAL.addCommunityCentre(testCommunityCentre);
 
         // Testing event creation
         long now = Instant.now().toEpochMilli();
 
         Event testEvent = new Event(
                 "Morning Yoga Workshop",          // eventName (Required)
-                "Riverbend Community Centre",               // communityCentre (Required)
-                "123 Riverbend Rd, Edmonton, AB",           // communityCentreLocation (Required)
+                testCommunityCentre,                        // Community centre (Required)
                 androidID,                                  // creatorID (Required) -> entrant.getAndroidID()
                 1730788800000L,                             // registrationOpens (Required) - e.g., Nov 5, 2024
                 1731393600000L,                             // registrationCloses (Required) - e.g., Nov 12, 2024

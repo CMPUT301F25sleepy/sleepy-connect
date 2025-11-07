@@ -4,11 +4,24 @@ import java.util.List;
 
 public class CancelEntrant {
     // Basically just remove the user from the InvitedList, US 02.06.04
+    // Takes in the Entrant and Event objects
+    public void removeCancelledEntrant(Entrant entrant, Event event) {
 
-    public void removeEntrant(Entrant entrant) {
-        // Need to implement code to take in the list of invited users and loop through them to remove the entrant given.
-        // After removing the entrant from the list, use the updateDatabase function to push changes to database.
-        // Waiting on Sasha for his code to finish this portion
+        // Sets the variables of the invitedList and entrantID
+        String entrantID;
+        List<String> invitedList = event.getPendingList();
+        entrantID = entrant.getAndroid_id();
+
+        // If it finds that the person is in the invitedList, remove them
+        for (int i = 0; i < invitedList.size(); i++) {
+            if (invitedList.get(i).equals(entrantID)) {
+                event.getPendingList().remove(entrantID);
+            }
+        }
+
+        // Updates the firebase, at least I hope it does Im trusting you Sasha
+        EventDAL eventDAL = new EventDAL();
+        eventDAL.updateEvent(event);
+
     }
-
 }

@@ -1,15 +1,16 @@
 package com.example.sleepy_connect;
 
 import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Locale;
 
 public class Event {
     public String eventID;                                  // Automatic
     public String eventName;                                // Required
     public String description;                              // Optional
-    public String communityCentre;                          // Required (Name of host community centre
-    public String communityCentreLocation;                  // Required (Address of host community centre as a string)
+    public CommunityCentre communityCentre;                 // Required. Create it by using the class.
     public String qrCode;                                   // TODO: Generated automatically
     public String creatorID;                                // Required. Get it by calling entrant.getAndroidID()
     public long createdDate;                                // Automatic timestamp
@@ -22,15 +23,15 @@ public class Event {
     public int eventCapacity;                               // Required
     public int waitlistCapacity;                            // Optional. Default -> No limit
     public boolean geolocationEnabled;                      // Required
-    public List<String> waitingList;                        // Automatic. List of entrant android IDs
-    public List<String> pendingList;                        // Automatic. List of invited entrant android IDs
-    public List<String> declinedList;                       // Automatic. List of entrants that declines / were rejected by android ID
-    public List<String> acceptedList;                       // Automatic. List of accepted entrant android IDs
+    public String eventDayOfWeek;                           // Automatic. Calculates string for the day of the week on which the event occurs.
+    public ArrayList<String> waitingList;                   // Automatic. List of entrant android IDs
+    public ArrayList<String> pendingList;                   // Automatic. List of invited entrant android IDs
+    public ArrayList<String> declinedList;                  // Automatic. List of entrants that declines / were rejected by android ID
+    public ArrayList<String> acceptedList;                  // Automatic. List of accepted entrant android IDs
 
     public Event(
             String eventName,
-            String communityCentre,
-            String communityCentreLocation,
+            CommunityCentre communityCentre,
             String creatorID,
             long registrationOpens,
             long registrationCloses,
@@ -45,7 +46,6 @@ public class Event {
         // Required
         this.eventName = eventName;
         this.communityCentre = communityCentre;
-        this.communityCentreLocation = communityCentreLocation;
         this.creatorID = creatorID;
         this.registrationOpens = registrationOpens;
         this.registrationCloses = registrationCloses;
@@ -56,14 +56,18 @@ public class Event {
         this.geolocationEnabled = geolocationEnabled;
 
         // Optional
-        this.description = "";
+        this.description = null;
         this.poster = null;
         this.waitlistCapacity = Integer.MAX_VALUE;
 
         // Automatic
-        this.eventID = "0";                              // DAL will overwrite when it touches it
-        this.qrCode = "";
+        this.eventID = null;
+        this.qrCode = null;
         this.createdDate = Instant.now().toEpochMilli();
+        this.eventDayOfWeek = Instant.ofEpochMilli(eventStartDate)
+                .atZone(ZoneId.systemDefault())
+                .getDayOfWeek()
+                .getDisplayName(TextStyle.FULL, Locale.ENGLISH);
         this.waitingList = new ArrayList<>();
         this.pendingList = new ArrayList<>();
         this.declinedList = new ArrayList<>();
@@ -72,33 +76,6 @@ public class Event {
 
     public Event() {
         // Empty constructor for Firebase to use when retrieving stuff
-    }
-
-    @Override
-    public String toString() {
-        return "Event{" +
-                "eventID='" + eventID + '\'' +
-                ", eventName='" + eventName + '\'' +
-                ", description='" + description + '\'' +
-                ", communityCentre='" + communityCentre + '\'' +
-                ", communityCentreLocation='" + communityCentreLocation + '\'' +
-                ", qrCode='" + qrCode + '\'' +
-                ", creatorID='" + creatorID + '\'' +
-                ", createdDate=" + createdDate +
-                ", poster=" + poster +
-                ", registrationOpens=" + registrationOpens +
-                ", registrationCloses=" + registrationCloses +
-                ", eventStartDate=" + eventStartDate +
-                ", eventEndDate=" + eventEndDate +
-                ", eventTime='" + eventTime + '\'' +
-                ", eventCapacity=" + eventCapacity +
-                ", waitlistCapacity=" + waitlistCapacity +
-                ", geolocationEnabled=" + geolocationEnabled +
-                ", waitingList=" + waitingList +
-                ", pendingList=" + pendingList +
-                ", declinedList=" + declinedList +
-                ", acceptedList=" + acceptedList +
-                '}';
     }
 
     public String getEventID() {
@@ -121,12 +98,8 @@ public class Event {
         this.description = description;
     }
 
-    public String getCommunityCentre() {
+    public CommunityCentre getCommunityCentre() {
         return communityCentre;
-    }
-
-    public String getCommunityCentreLocation() {
-        return communityCentreLocation;
     }
 
     public String getQrCode() {
@@ -181,23 +154,27 @@ public class Event {
         return geolocationEnabled;
     }
 
-    public List<String> getWaitingList() {
-        return waitingList;
+    public String getEventTime() {
+        return eventTime;
     }
 
-    public List<String> getPendingList() {
+    public ArrayList<String> getPendingList() {
         return pendingList;
     }
 
-    public List<String> getDeclinedList() {
+    public ArrayList<String> getWaitingList() {
+        return waitingList;
+    }
+
+    public ArrayList<String> getDeclinedList() {
         return declinedList;
     }
 
-    public List<String> getAcceptedList() {
+    public ArrayList<String> getAcceptedList() {
         return acceptedList;
     }
 
-    public String getEventTime() {
-        return eventTime;
+    public String getEventDayOfWeek() {
+        return eventDayOfWeek;
     }
 }
