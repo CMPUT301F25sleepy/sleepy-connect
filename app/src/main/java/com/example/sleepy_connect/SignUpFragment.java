@@ -27,7 +27,6 @@ public class SignUpFragment extends DialogFragment {
         EditText editBirthday = view.findViewById(R.id.edit_text_birthday);
         EditText editPhone = view.findViewById(R.id.edit_text_phone);
         EditText editUsername = view.findViewById(R.id.edit_text_username);
-        EditText editPassword = view.findViewById(R.id.edit_text_password);
 
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext(), R.style.CustomAlertDialog);
         return builder
@@ -40,7 +39,6 @@ public class SignUpFragment extends DialogFragment {
                     String birthday = editBirthday.getText().toString();
                     String phone = editPhone.getText().toString();
                     String username = editUsername.getText().toString();
-                    String password = editPassword.getText().toString();
                     //listener.addEntrant(new Entrant(firstName, lastName, email, birthday, phone, username, password));
                 })
                 .create();
