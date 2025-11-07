@@ -108,7 +108,10 @@ public class Entrant implements Serializable {
     }
 
     public ArrayList<Notification> getNotification_list() {
-        return notification_list;
+        if (notification_list == null){
+            notification_list = new ArrayList<>();
+        }
+        return this.notification_list;
     }
 
     public void setNotification_list(ArrayList<Notification> notification_list) {

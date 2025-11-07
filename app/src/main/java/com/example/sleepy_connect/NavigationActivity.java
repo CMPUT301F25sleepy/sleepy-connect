@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -13,6 +14,7 @@ import com.example.sleepy_connect.databinding.ActivityNavigationBinding;
 import com.example.sleepy_connect.eventdetails.CreateEventFragment;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class NavigationActivity extends AppCompatActivity {
@@ -21,7 +23,8 @@ public class NavigationActivity extends AppCompatActivity {
 
     ActivityNavigationBinding binding;
     private Entrant user;
-    public ArrayList<Notification> mock_list = new ArrayList<>();
+    public ArrayList<Notification> notification_list = new ArrayList<>();
+    String userID;
 
     private void replaceFragment(Fragment fragment) {
         // replaces current fragment with given fragment
@@ -49,6 +52,17 @@ public class NavigationActivity extends AppCompatActivity {
         replaceFragment(new CommunityFragment());
         title.setText("Community");
 
+        userVM.getUser().observe(this, entrant -> {
+            if (entrant == null) {
+                notification_list = new ArrayList<>();
+                userID = "0";
+                return;
+            }
+
+            notification_list = entrant.getNotification_list();
+            userID = entrant.getAndroid_id();
+        });
+
 
         // Sets up navigation bar to switch between fragments
         binding.bottomNavigationView.setOnItemSelectedListener(item ->{
@@ -58,7 +72,7 @@ public class NavigationActivity extends AppCompatActivity {
                 replaceFragment(new CommunityFragment());
             } else if (item.getItemId() == R.id.alert_button){
                 title.setText("Alerts");
-                replaceFragment(AlertFragment.newInstance(user.getNotification_list(),user.getAndroid_id()));
+                replaceFragment(AlertFragment.newInstance(notification_list, userID));
             } else if (item.getItemId() == R.id.create_button) {
                 title.setText("Create Event");
                 replaceFragment(new EventManagerFragment());
