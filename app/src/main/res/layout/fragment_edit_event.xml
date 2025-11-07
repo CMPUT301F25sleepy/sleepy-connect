@@ -561,6 +561,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginTop="15dp"
+            android:visibility="gone"
             app:layout_constraintEnd_toStartOf="@+id/right_guideline"
             app:layout_constraintStart_toStartOf="@+id/left_guideline"
             app:layout_constraintTop_toBottomOf="@+id/edit_event_descr_text">
