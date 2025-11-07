@@ -29,46 +29,19 @@ public class EventDAL {
          * Inputs: Event object
          */
         // Get the current nextID, increment it, and store the event
-        counterRef.get()
-                // The counter exists
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        eventsRef.document(event.getEventID()).set(event) // Create the document
+                // Adding listeners that tell us whether it was successful
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        // get the id and increment it (The id is a long in firebase, but a string in event)
-                        Long currentID = documentSnapshot.getLong("nextID");
-                        if (currentID == null) currentID = 0L; // Android Studio wants this code
-                        long newID = currentID + 1;
-
-                        // Update the counter in Firestore
-                        Long finalCurrentID = currentID; // Android studio wants this code so bad
-                        counterRef.update("nextID", newID)
-                                .addOnSuccessListener(unused -> {
-                                    event.setEventID(String.valueOf(finalCurrentID)); // assign ID to the event
-                                    eventsRef.document(event.getEventID()).set(event) // Create the document
-                                            // Adding listeners that tell us whether it was successful
-                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void unused) {
-                                                    System.out.println("Event added: " + event.getEventID());
-                                                }
-                                            })
-                                            // Adding listeners that tell us whether it was successful
-                                            .addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    System.err.println("Error with event.");
-                                                }
-                                            });
-                                })
-                                .addOnFailureListener(e ->
-                                        System.err.println("Error updating counter: " + e.getMessage()));
+                    public void onSuccess(Void unused) {
+                        System.out.println("Event added: " + event.getEventID());
                     }
                 })
-                // Problem with counter document
+                // Adding listeners that tell us whether it was successful
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        System.err.println("Someone deleted the counter again.");
+                        System.err.println("Error with event.");
                     }
                 });
     }
@@ -150,5 +123,25 @@ public class EventDAL {
                         System.err.println("Error updating event: " + e.getMessage());
                     }
                 });
+    }
+
+    public void getNextID(OnSuccessListener<String> onSuccessListener, OnFailureListener onFailureListener) {
+        /*Uses a document in firebase to get next ID for an event.
+        * Outputs: String NextID. */
+        counterRef.get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    Long currentID = documentSnapshot.getLong("nextID");
+                    if (currentID == null) currentID = 0L;
+                    long newID = currentID + 1;
+
+                    // Update counter
+                    String finalCurrentID = currentID.toString();                    // Android studio wants this code
+                    counterRef.update("nextID", newID)
+                            .addOnSuccessListener(aVoid -> {
+                                onSuccessListener.onSuccess(finalCurrentID);
+                            })
+                            .addOnFailureListener(onFailureListener);
+                })
+                .addOnFailureListener(onFailureListener);
     }
 }
