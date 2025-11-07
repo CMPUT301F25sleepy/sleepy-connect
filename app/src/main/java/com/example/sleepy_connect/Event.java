@@ -58,7 +58,7 @@ public class Event {
         this.geolocationEnabled = geolocationEnabled;
 
         // Optional
-        this.description = "";
+        this.description = null;
         this.poster = null;
         this.waitlistCapacity = Integer.MAX_VALUE;
 

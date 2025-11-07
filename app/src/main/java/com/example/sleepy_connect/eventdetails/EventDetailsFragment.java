@@ -105,12 +105,14 @@ public class EventDetailsFragment extends Fragment {
         dayOfWeek.setText(event.getEventDayOfWeek());
 
         // set description
-        TextView description = view.findViewById(R.id.event_description);
-        description.setText(event.getDescription());
+        if (event.getDescription() != null) {
+            TextView description = view.findViewById(R.id.event_description);
+            description.setText(event.getDescription());
+        }
 
         // set current waitlist size display
         TextView waitlistSize = view.findViewById(R.id.waitlist_count_display);
-        description.setText(String.format("There are %d people currently on the waitlist", event.getWaitlistSize()));
+        waitlistSize.setText(String.format("There are %d people currently on the waitlist", event.getWaitlistSize()));
 
         // set poster if provided
         if (event.getPoster() != null) {
