@@ -74,7 +74,9 @@ public class EventManagerFragment extends Fragment {
     private void openCreateEvent() {
         requireActivity().getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment_container, new CreateEventFragment())
+                .replace(R.id.fragment_container, CreateEventFragment.class, null)
+                .setReorderingAllowed(true)
+                .addToBackStack(null)
                 .commit();
     }
 }

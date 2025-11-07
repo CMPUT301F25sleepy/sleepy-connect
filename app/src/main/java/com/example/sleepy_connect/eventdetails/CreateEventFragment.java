@@ -31,6 +31,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.sleepy_connect.CommunityCentre;
+import com.example.sleepy_connect.CommunityCentreDAL;
 import com.example.sleepy_connect.Entrant;
 import com.example.sleepy_connect.EntrantDAL;
 import com.example.sleepy_connect.Event;
@@ -47,6 +48,7 @@ import java.net.URI;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -155,11 +157,11 @@ public class CreateEventFragment extends Fragment {
             }
 
             // set optional values
-            try {
+            /*try {
                 setOptionalEventData(view, newEvent);
             } catch (IOException e) {
                 throw new RuntimeException(e);
-            }
+            }*/
 
             // store event in db
             EventDAL eventDal = new EventDAL();
@@ -169,6 +171,9 @@ public class CreateEventFragment extends Fragment {
             EntrantDAL entrantDal = new EntrantDAL();
             user.addCreatedEvent(newEvent.getEventID());
             entrantDal.updateEntrant(user);
+
+            // return to previous fragment
+            requireActivity().getSupportFragmentManager().popBackStack();
         });
     }
 
@@ -192,12 +197,17 @@ public class CreateEventFragment extends Fragment {
             return null;
         }
 
+        // add new community centre to database
+        CommunityCentre recCenter = new CommunityCentre(etRecCenter.getText().toString(), etAddress.getText().toString());
+        CommunityCentreDAL dal = new CommunityCentreDAL();
+        dal.addCommunityCentre(recCenter);
+
         // create event object with mandatory attributes
         Event event = null;
         try {
             event = new Event(
                     etTitle.getText().toString(),
-                    new CommunityCentre(etRecCenter.getText().toString(), etAddress.getText().toString()),
+                    recCenter,
                     user.getAndroid_id(),
                     Objects.requireNonNull(format.parse((String) tvRegStartDate.getText())).getTime(),
                     Objects.requireNonNull(format.parse((String) tvRegEndDate.getText())).getTime(),
