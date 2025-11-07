@@ -82,6 +82,7 @@ public class CreateEventFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // set poster imageview's listener
         ivPoster = view.findViewById(R.id.edit_event_poster);
         ivPoster.setOnClickListener(v -> pickMedia.launch(
                 new PickVisualMediaRequest.Builder()
@@ -108,7 +109,12 @@ public class CreateEventFragment extends Fragment {
         saveBtn.setOnClickListener(v -> saveEvent(view));
     }
 
+    /**
+     * Saves user input in the database when required fields are complete, otherwise nothing is saved
+     * @param view The fragment's root view
+     */
     private void saveEvent(View view) {
+
         EditText etTitle = view.findViewById(R.id.edit_event_title);
         EditText etEventCapacity = view.findViewById(R.id.edit_event_capacity_value);
         EditText etRecCenter = view.findViewById(R.id.edit_host_rec_center_text);
@@ -120,16 +126,19 @@ public class CreateEventFragment extends Fragment {
         TextView tvEventStartDate = view.findViewById(R.id.edit_event_start_date);
         TextView tvEventEndDate = view.findViewById(R.id.edit_event_end_date);
 
+        // check if mandatory fields are filled
         if (!mandatoryFieldsFilled(etTitle, etEventCapacity, etRecCenter, etAddress, tvRegStartDate, tvRegEndDate, tvEventStartDate)) {
             return;
         }
 
+        // get user data from user viewmodel
         user = UserViewModel.getUser().getValue();
         if (user == null) {
             Log.e("CreateEventFragment", "User is null");
             return;
         }
 
+        // save data in the database
         EventDAL eventDal = new EventDAL();
         eventDal.getNextID(newID -> {
             Log.d("EventDAL", "New ID: " + newID);
@@ -224,10 +233,21 @@ public class CreateEventFragment extends Fragment {
         });
     }
 
+    /**
+     * Combines input from the event start and end time fields, separated by a "-"
+     * @param etEventStart edittext containing event start time input
+     * @param etEventEnd edittext containing event end time input
+     * @return String combining both time inputs
+     */
     private String createTimeString(EditText etEventStart, EditText etEventEnd) {
         return etEventStart.getText().toString() + "-" + etEventEnd.getText().toString();
     }
 
+    /**
+     * Call DatePickerDialog to update the given view's (given by id) text field
+     * @param rootView Fragment's root view
+     * @param dateViewId Date view's id to be updated
+     */
     private void updateDateTime(View rootView, int dateViewId) {
         Calendar today = Calendar.getInstance();
         DatePickerDialog datePickerDialog = new DatePickerDialog(
@@ -246,6 +266,7 @@ public class CreateEventFragment extends Fragment {
         datePickerDialog.show();
     }
 
+    // TODO: Cam pls move logic to EditEventFragment
     private void openQRCodeFragment() {
         TextView eventTitle = requireView().findViewById(R.id.edit_event_title);
         TextView errorText = requireView().findViewById(R.id.qr_code_error_text);
@@ -263,9 +284,21 @@ public class CreateEventFragment extends Fragment {
         }
     }
 
+    /**
+     * Checks passed view fields if complete
+     * @param title Title view
+     * @param eventCapacity Event capacity view
+     * @param recCenter Community centre name view
+     * @param address Community centre address view
+     * @param regStartDate Registration start date view
+     * @param regEndDate Registration end date view
+     * @param eventStartDate Registration start date view
+     * @return True if passed views are filled, false otherwise
+     */
     private boolean mandatoryFieldsFilled(EditText title, EditText eventCapacity, EditText recCenter, EditText address,
                                           TextView regStartDate, TextView regEndDate, TextView eventStartDate) {
 
+        // check each view
         boolean complete = isComplete(title, false)
                 & isComplete(eventCapacity, true)
                 & isComplete(recCenter, true)
@@ -274,16 +307,27 @@ public class CreateEventFragment extends Fragment {
                 & isComplete(eventStartDate, true)
                 & isComplete(regEndDate, true);
 
+        // set error message visibility to gone if complete, show otherwise
         TextView errorBox = requireView().findViewById(R.id.edit_event_error_box);
         errorBox.setVisibility(complete ? View.GONE : View.VISIBLE);
 
         return complete;
     }
 
+    /**
+     * Check passed view if filled
+     * @param tv Textview to check
+     * @param hasViewGroup Indicates if drawable border needs to be cleared or reset
+     * @return True if given view is filled, false otherwise
+     */
     private boolean isComplete(TextView tv, boolean hasViewGroup) {
+
+        // empty view: highlight border
         if (tv.getText().length() == 0) {
             tv.setBackground(getDrawable(getResources(), R.drawable.error_text_border, null));
             return false;
+
+        // nonempty view: restore border to light_text_border if view not within a viewgroup, clear border otherwise
         } else {
             tv.setBackground(hasViewGroup ? null :
                     getDrawable(getResources(), R.drawable.light_text_border, null));
