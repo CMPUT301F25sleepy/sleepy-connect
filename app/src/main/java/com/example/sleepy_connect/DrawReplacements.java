@@ -26,7 +26,7 @@ public class DrawReplacements {
             pendingList.add(randomEntrant);
             // Could implement a notification call here in the future
         }
-        // Else throw an error
+        // Else throw an error if no space
         else {
             Log.e("Adding Entrant To Waitlist", "No more space left in the waitlist");
         }
