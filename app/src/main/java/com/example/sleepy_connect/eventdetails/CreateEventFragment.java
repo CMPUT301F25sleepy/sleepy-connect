@@ -95,9 +95,6 @@ public class CreateEventFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // get current user from viewmodel
-        user = UserViewModel.getUser().getValue();
     }
 
     @Override
@@ -149,69 +146,85 @@ public class CreateEventFragment extends Fragment {
         });
 
         TextView saveBtn = view.findViewById(R.id.event_confirm_edit_button);
-        saveBtn.setOnClickListener(v -> {
 
-            // set mandatory values
-            Event newEvent = setMandatoryEventData(view);
+        saveBtn.setOnClickListener(v -> {
+            // link views
+            EditText etTitle = view.findViewById(R.id.edit_event_title);
+            EditText etEventCapacity = view.findViewById(R.id.edit_event_capacity_value);
+            EditText etRecCenter = view.findViewById(R.id.edit_host_rec_center_text);
+            EditText etAddress = view.findViewById(R.id.edit_host_address_text);
+            EditText etEventStartTime = view.findViewById(R.id.edit_event_time_start_time);
+            EditText etEventEndTime = view.findViewById(R.id.edit_event_time_end_time);
+            TextView tvRegStartDate = view.findViewById(R.id.edit_reg_start_date);
+            TextView tvRegEndDate = view.findViewById(R.id.edit_reg_end_date);
+            TextView tvEventStartDate = view.findViewById(R.id.edit_event_start_date);
+            TextView tvEventEndDate = view.findViewById(R.id.edit_event_end_date);
+
+            if (!mandatoryFieldsFilled(etTitle, etEventCapacity, etRecCenter, etAddress, tvRegStartDate, tvRegEndDate, tvEventStartDate)) {
+                return;
+            }
+
+            // Get current user
+            user = UserViewModel.getUser().getValue();
+
+            // Get new EventID
+            EventDAL eventDal = new EventDAL();
+
+            eventDal.getNextID(newID -> {
+                Log.d("EventDAL", "New ID: " + newID);
+
+                // add new community centre to database
+                CommunityCentre recCenter = new CommunityCentre(
+                        etRecCenter.getText().toString(),
+                        etAddress.getText().toString()
+                );
+                CommunityCentreDAL communityDal = new CommunityCentreDAL();
+
+                try {
+                    event = new Event(
+                            newID,
+                            etTitle.getText().toString(),
+                            recCenter,
+                            user.getAndroid_id(),
+                            Objects.requireNonNull(format.parse(tvRegStartDate.getText().toString())).getTime(),
+                            Objects.requireNonNull(format.parse(tvRegEndDate.getText().toString())).getTime(),
+                            Objects.requireNonNull(format.parse(tvEventStartDate.getText().toString())).getTime(),
+                            Objects.requireNonNull(format.parse(tvEventEndDate.getText().toString())).getTime(),
+                            createTimeString(etEventStartTime, etEventEndTime),
+                            Integer.parseInt(etEventCapacity.getText().toString()),
+                            geolocationOn
+                    );
+
+                    Log.d("CreateEventFragment", "Event created successfully with ID: " + event.getEventID());
+
+                    // Now push rec center
+                    recCenter.addEvent(event.getEventID());
+                    communityDal.addCommunityCentre(recCenter);
+
+                    // Update and push entrant
+                    user.addCreatedEvent(event.getEventID());
+                    EntrantDAL entrantDal = new EntrantDAL();
+                    entrantDal.updateEntrant(user);
+
+                    // Push event
+                    eventDal.addEvent(event);
+
+                    // Optionally return to previous fragment or notify user
+                    requireActivity().getSupportFragmentManager().popBackStack();
+
+                } catch (ParseException e) {
+                    Log.e("CreateEventFragment", "Failed." + e.getMessage(), e);
+                } catch (Exception e) {
+                    Log.e("CreateEventFragment", "Failed.", e);
+                }
+
+            }, e -> {
+                Log.e("EventDAL", "Failed.", e);
+            });
 
             // return to previous fragment
             requireActivity().getSupportFragmentManager().popBackStack();
         });
-    }
-
-    public Event setMandatoryEventData(View root) {
-
-        // link views
-        EditText etTitle = root.findViewById(R.id.edit_event_title);
-        EditText etEventCapacity = root.findViewById(R.id.edit_event_capacity_value);
-        EditText etRecCenter = root.findViewById(R.id.edit_host_rec_center_text);
-        EditText etAddress = root.findViewById(R.id.edit_host_address_text);
-        EditText etEventStartTime = root.findViewById(R.id.edit_event_time_start_time);
-        EditText etEventEndTime = root.findViewById(R.id.edit_event_time_end_time);
-        TextView tvRegStartDate = root.findViewById(R.id.edit_reg_start_date);
-        TextView tvRegEndDate = root.findViewById(R.id.edit_reg_end_date);
-        TextView tvEventStartDate = root.findViewById(R.id.edit_event_start_date);
-        TextView tvEventEndDate = root.findViewById(R.id.edit_event_end_date);
-
-
-        // check if mandatory fields are set and set their backgrounds if not
-        if (!mandatoryFieldsFilled(etTitle, etEventCapacity, etRecCenter, etAddress, tvRegStartDate, tvRegEndDate, tvEventStartDate)) {
-            return null;
-        }
-
-        // add new community centre to database
-        CommunityCentre recCenter = new CommunityCentre(etRecCenter.getText().toString(), etAddress.getText().toString());
-        CommunityCentreDAL communityDal = new CommunityCentreDAL();
-
-        // create event object with mandatory attributes
-        try {
-            event = new Event(
-                    etTitle.getText().toString(),
-                    recCenter,
-                    user.getAndroid_id(),
-                    Objects.requireNonNull(format.parse((String) tvRegStartDate.getText())).getTime(),
-                    Objects.requireNonNull(format.parse((String) tvRegEndDate.getText())).getTime(),
-                    Objects.requireNonNull(format.parse((String) tvEventStartDate.getText())).getTime(),
-                    Objects.requireNonNull(format.parse((String) tvEventEndDate.getText())).getTime(),
-                    createTimeString(etEventStartTime, etEventEndTime),
-                    Integer.parseInt(etEventCapacity.getText().toString()),
-                    geolocationOn
-            );
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-
-        // update and push rec center
-        recCenter.addEvent(event.getEventID());
-        communityDal.addCommunityCentre(recCenter);
-
-        // update and push entrant
-        user.addCreatedEvent(event.getEventID());
-        EntrantDAL entrantDal = new EntrantDAL();
-        entrantDal.updateEntrant(user);
-
-        // return the event
-        return event;
     }
 
     public void setOptionalEventData(View root, Event newEvent) throws IOException {
