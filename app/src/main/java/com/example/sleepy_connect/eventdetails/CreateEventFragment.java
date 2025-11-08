@@ -84,7 +84,6 @@ public class CreateEventFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
         // set poster imageview's listener
         ivPoster = view.findViewById(R.id.edit_event_poster);
         ivPoster.setOnClickListener(v -> pickMedia.launch(
