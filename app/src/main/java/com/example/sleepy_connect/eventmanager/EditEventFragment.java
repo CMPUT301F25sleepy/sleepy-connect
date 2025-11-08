@@ -1,4 +1,4 @@
-package com.example.sleepy_connect.eventdetails;
+package com.example.sleepy_connect.eventmanager;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -15,10 +15,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.sleepy_connect.CommunityCentre;
 import com.example.sleepy_connect.Event;
 import com.example.sleepy_connect.Image;
 import com.example.sleepy_connect.R;
+import com.example.sleepy_connect.EventViewModel;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

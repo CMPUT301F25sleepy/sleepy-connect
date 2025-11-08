@@ -13,11 +13,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.sleepy_connect.eventdetails.EditEventFragment;
 import com.example.sleepy_connect.eventdetails.EventDetailsFragment;
-import com.example.sleepy_connect.eventdetails.EventViewModel;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

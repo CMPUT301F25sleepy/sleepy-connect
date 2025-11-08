@@ -1,4 +1,4 @@
-package com.example.sleepy_connect.eventdetails;
+package com.example.sleepy_connect.eventmanager;
 
 import static androidx.core.content.res.ResourcesCompat.getDrawable;
 
@@ -12,7 +12,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -34,6 +33,7 @@ import com.example.sleepy_connect.EventDAL;
 import com.example.sleepy_connect.Image;
 import com.example.sleepy_connect.R;
 import com.example.sleepy_connect.UserViewModel;
+import com.example.sleepy_connect.eventdetails.QRCodeFragment;
 
 import java.io.IOException;
 import java.text.ParseException;
