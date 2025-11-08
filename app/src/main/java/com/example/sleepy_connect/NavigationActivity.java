@@ -65,13 +65,13 @@ public class NavigationActivity extends AppCompatActivity {
         binding.bottomNavigationView.setOnItemSelectedListener(item ->{
 
             if (item.getItemId() == R.id.home_button) {
-                title.setText("Home");
+                title.setText("Community");
                 replaceFragment(new CommunityFragment());
             } else if (item.getItemId() == R.id.alert_button){
                 title.setText("Alerts");
                 replaceFragment(AlertFragment.newInstance(notification_list, userID));
             } else if (item.getItemId() == R.id.create_button) {
-                title.setText("Create Event");
+                title.setText("Event Manager");
                 replaceFragment(new EventManagerFragment());
             } else if (item.getItemId() == R.id.event_button) {
                 title.setText("My Events");

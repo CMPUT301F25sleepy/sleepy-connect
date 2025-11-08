@@ -66,7 +66,9 @@ public class CreateEventFragment extends Fragment {
                 }
             });
 
-    public CreateEventFragment() {}
+    public CreateEventFragment() {
+        //empty constructor
+    }
 
     public static CreateEventFragment newInstance() {
         return new CreateEventFragment();
@@ -81,6 +83,7 @@ public class CreateEventFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
 
         // set poster imageview's listener
         ivPoster = view.findViewById(R.id.edit_event_poster);

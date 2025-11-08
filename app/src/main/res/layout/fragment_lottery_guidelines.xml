@@ -2,7 +2,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
     <TextView
         android:id="@+id/lottery_guidelines_label"
@@ -10,19 +11,26 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:fontFamily="@font/roboto_medium"
+        android:paddingHorizontal="20dp"
         android:text="Lottery Guidelines"
         android:textColor="@color/black"
         android:textSize="34sp"
+        app:layout_constraintBottom_toTopOf="@id/scrollView3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollView3"
-        android:layout_width="359dp"
-        android:layout_height="575dp"
+        android:layout_width="0dp"
+        android:layout_height="300dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:background="@drawable/black_square_border"
         android:elevation="6dp"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="10dp"
         app:layout_constraintBottom_toTopOf="@+id/guidelines_close_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -30,8 +38,8 @@
 
         <TextView
             android:id="@+id/guidelines"
-            android:layout_width="363dp"
-            android:layout_height="627dp"
+            android:layout_width="wrap_content"
+            android:layout_height="300dp"
             android:layout_marginBottom="24dp"
             android:fontFamily="@font/roboto_medium"
             android:paddingHorizontal="5dp"
@@ -44,13 +52,14 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="parent" />
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
     <Button
         android:id="@+id/guidelines_close_button"
         style="@style/Widget.Material3.Button.Icon"
         android:layout_width="229dp"
         android:layout_height="55dp"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:backgroundTint="@color/light_cyan_blue"
         android:text="Got it!"
@@ -59,6 +68,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/scrollView3"
         app:strokeColor="@color/black"
         app:strokeWidth="2dp" />
 
