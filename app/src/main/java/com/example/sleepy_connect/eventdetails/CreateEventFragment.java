@@ -327,7 +327,7 @@ public class CreateEventFragment extends Fragment {
             tv.setBackground(getDrawable(getResources(), R.drawable.error_text_border, null));
             return false;
 
-            // nonempty view: restore border to light_text_border if view not within a viewgroup, clear border otherwise
+        // nonempty view: restore border to light_text_border if view not within a viewgroup, clear border otherwise
         } else {
             tv.setBackground(hasViewGroup ? null :
                     getDrawable(getResources(), R.drawable.light_text_border, null));
