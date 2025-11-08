@@ -72,11 +72,6 @@ public class EventManagerFragment extends Fragment {
     }
 
     private void openCreateEvent() {
-
-        //set toolbar title
-        TextView title = requireActivity().findViewById(R.id.set_title);
-        title.setText("Create Event");
-
         requireActivity().getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container, CreateEventFragment.class, null)
