@@ -24,7 +24,8 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- * @author Sam
+ * Fragment class for showing event details
+ * @author Sam Francisco
  */
 public class EventDetailsFragment extends Fragment {
 
@@ -36,9 +37,7 @@ public class EventDetailsFragment extends Fragment {
     }
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
+     * Factory method for this fragment
      * @return A new instance of fragment EventDetailsFragment.
      */
     public static EventDetailsFragment newInstance(String param1, String param2) {
@@ -64,6 +63,7 @@ public class EventDetailsFragment extends Fragment {
         // receive event details from viewmodel
         event = EventViewModel.getEvent().getValue();
 
+        // set the fields from received event model
         setFields(view);
 
         // implement lottery button click showing lottery guidelines
@@ -73,11 +73,12 @@ public class EventDetailsFragment extends Fragment {
                     .replace(R.id.event_details_fragment_container, new LotteryGuidelinesFragment())
                     .commit();
         });
-
-
-
     }
 
+    /**
+     * Set each view's content depending on data received
+     * @param view Fragment's root view
+     */
     @SuppressLint("DefaultLocale")
     public void setFields(View view) {
 
@@ -87,7 +88,7 @@ public class EventDetailsFragment extends Fragment {
 
         // set location
         TextView location = view.findViewById(R.id.event_location);
-        location.setText(formatLocation(event));
+        location.setText(formatLocation());
 
         // set registration date
         TextView regPeriod = view.findViewById(R.id.reg_deadline);
@@ -122,11 +123,21 @@ public class EventDetailsFragment extends Fragment {
         }
     }
 
-    public String formatLocation(Event event) {
+    /**
+     * Formats community centre info into one string to be displayed
+     * @return Formatted community centre info string
+     */
+    public String formatLocation() {
         CommunityCentre recCenter = event.getCommunityCentre();
         return recCenter.getCommunityCentreName() + "\n" + recCenter.getCommunityCentreLocation();
     }
 
+    /**
+     * Formats a given date period string from the given start and end dates
+     * @param start Start date
+     * @param end End date
+     * @return Formatted date period string
+     */
     public String formatDatePeriod(long start, long end) {
 
         // format reg start and end dates
