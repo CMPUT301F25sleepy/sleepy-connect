@@ -81,6 +81,10 @@ public class EventListFragment extends Fragment {
             EventViewModel vmEvent = new ViewModelProvider(requireActivity()).get(EventViewModel.class);
             vmEvent.setEvent(selectedEvent);
 
+            //set toolbar title
+            TextView title = requireActivity().findViewById(R.id.set_title);
+            title.setText("Event Details");
+
             // open event details
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()

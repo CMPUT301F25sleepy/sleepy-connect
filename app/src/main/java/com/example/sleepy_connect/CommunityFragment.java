@@ -63,6 +63,9 @@ public class CommunityFragment extends Fragment {
             TextView locationName = view1.findViewById(R.id.alert_message);
             String clickedLocationName = locationName.getText().toString();
 
+            TextView title = requireActivity().findViewById(R.id.set_title);
+            title.setText("Events");
+
             EventListFragment eventListFrag = EventListFragment.newInstance(clickedLocationName);
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()
