@@ -20,6 +20,9 @@
     <string name="label_save_changes">Save Changes</string>
     <string name="label_event_time_start">Start Time</string>
     <string name="label_event_time_end">End Time</string>
+    <string name="label_event_manager_bottom_sheet">Event Management Options</string>
+    <string name="label_edit_event">Edit Event</string>
+    <string name="label_manage_entrants">Manage Entrants</string>
 
     <string name="error_create_event">Error: Highlighted fields must be filled</string>
 

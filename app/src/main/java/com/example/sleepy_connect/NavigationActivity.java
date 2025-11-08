@@ -3,15 +3,14 @@ package com.example.sleepy_connect;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.sleepy_connect.databinding.ActivityNavigationBinding;
+import com.example.sleepy_connect.eventmanager.EventManagerFragment;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class NavigationActivity extends AppCompatActivity {

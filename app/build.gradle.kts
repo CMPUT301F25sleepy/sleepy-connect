@@ -51,6 +51,8 @@ dependencies {
     implementation("androidx.cardview:cardview:1.0.0")
     implementation(libs.play.services.location)
     implementation(libs.firebase.storage)
+    implementation(libs.legacy.support.v4)
+    implementation(libs.recyclerview)
     testImplementation(libs.junit)
     testImplementation(libs.junit.junit)
     testImplementation(libs.junit.junit)
