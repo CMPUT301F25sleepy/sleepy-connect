@@ -20,7 +20,6 @@ import com.example.sleepy_connect.Event;
 import com.example.sleepy_connect.R;
 import com.example.sleepy_connect.UserViewModel;
 import com.example.sleepy_connect.eventdetails.CreateEventFragment;
-import com.example.sleepy_connect.eventdetails.EventManagerBottomSheet;
 import com.example.sleepy_connect.eventdetails.EventViewModel;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;

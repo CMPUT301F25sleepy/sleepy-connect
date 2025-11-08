@@ -1,4 +1,4 @@
-package com.example.sleepy_connect.eventdetails;
+package com.example.sleepy_connect.eventmanager;
 
 import android.os.Bundle;
 
