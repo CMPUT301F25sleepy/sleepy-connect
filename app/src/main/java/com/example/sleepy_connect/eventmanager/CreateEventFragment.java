@@ -82,6 +82,10 @@ public class CreateEventFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        //change toolbar title
+        TextView title = requireActivity().findViewById(R.id.set_title);
+        title.setText("Create Event");
+
         // set poster imageview's listener
         ivPoster = view.findViewById(R.id.edit_event_poster);
         ivPoster.setOnClickListener(v -> pickMedia.launch(

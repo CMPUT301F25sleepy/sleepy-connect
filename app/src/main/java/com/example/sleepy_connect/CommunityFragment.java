@@ -63,6 +63,7 @@ public class CommunityFragment extends Fragment {
             TextView locationName = view1.findViewById(R.id.alert_message);
             String clickedLocationName = locationName.getText().toString();
 
+            //change toolbar title
             TextView title = requireActivity().findViewById(R.id.set_title);
             title.setText("Events");
 
