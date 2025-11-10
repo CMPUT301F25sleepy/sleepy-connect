@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import com.example.sleepy_connect.R;
 
 /**
+ * UNIMPLEMENTED
+ * Fragment for the waitlist accessed through the event manager
  * A simple {@link Fragment} subclass.
  * Use the {@link WaitlistFragment#newInstance} factory method to
  * create an instance of this fragment.

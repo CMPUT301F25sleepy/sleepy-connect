@@ -12,6 +12,9 @@ import androidx.fragment.app.Fragment;
 
 import com.example.sleepy_connect.R;
 
+/**
+ * Fragment class that displays lottery guidelines accessed through the event details
+ */
 public class LotteryGuidelinesFragment extends Fragment {
 
     @Nullable
@@ -26,7 +29,9 @@ public class LotteryGuidelinesFragment extends Fragment {
         return view;
     }
 
-    //closes the lottery guidelines once the user clicks the "Got it!" button
+    /**
+     * Closes the fragment after user clicks "Got it!"
+     */
     private void closeFragment() {
         requireParentFragment().getChildFragmentManager()
             .beginTransaction()

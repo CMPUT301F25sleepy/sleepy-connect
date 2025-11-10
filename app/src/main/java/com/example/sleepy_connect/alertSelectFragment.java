@@ -19,12 +19,20 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
 
-
+/**
+ * Fragment to display notification details. Accessed by clicking on a notification
+ */
 public class alertSelectFragment extends DialogFragment {
     /* fragment for when a user clicks on notification */
     public String eventID;
     public String entrantID;
 
+    /**
+     * Factory method to instantiate a fragment
+     * @param notif the notification it is showing the details for
+     * @param entrantID the user identification
+     * @return an instance of the fragment
+     */
     static alertSelectFragment newInstance(Notification notif, String entrantID){
 
         // creates a new fragment with selected notification as it's argument and return it
