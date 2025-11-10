@@ -11,9 +11,15 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * class for the Data Access Layer for the community centre objects to the database
+ */
 public class CommunityCentreDAL {
     private final CollectionReference communityRef;
 
+    /**
+     * Stores all functions that interface with the database for the community centre.
+     */
     public CommunityCentreDAL() {
         /* Community Centre Data Access Layer - Stores all functions that interface with the database for the community centre. */
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -21,9 +27,11 @@ public class CommunityCentreDAL {
         communityRef = db.collection("community centres");
     }
 
+    /**
+     * adds a community centre to the collection
+     * @param communityCentre object to be added
+     */
     public void addCommunityCentre(CommunityCentre communityCentre) {
-        /* Adding a community centre to their collection.
-         * Inputs: A community centre object to add to the collection. */
         communityRef.document(communityCentre.getCommunityCentreName()).set(communityCentre)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -39,9 +47,11 @@ public class CommunityCentreDAL {
                 });
     }
 
+    /**
+     * Remove a community centre from the collection
+     * @param communityCentre object to be removed
+     */
     public void removeCommunityCentre(CommunityCentre communityCentre) {
-        /* Removing a community centre from the collection.
-         * Inputs: A community centre object to be removed. */
         communityRef.document(communityCentre.getCommunityCentreName()).delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -57,11 +67,13 @@ public class CommunityCentreDAL {
                 });
     }
 
+    /**
+     * retrieves a community centre from the database
+     * @param communityCentreName String centreID of a community centre
+     * @param listener CommunityCentre object from database corresponding to the centreID
+     */
     public void getCommunityCentre(String communityCentreName, OnCommunityCentreRetrievedListener listener) {
-        /* Retrieves a community centre from the database.
-         * Input: String centreID of a community centre
-         * Output: CommunityCentre object from database corresponding to the centreID
-         * Uses a listener to access the data. Please implement the interface (OnCommunityCentreRetrievedListener) when using this. */
+         //Uses a listener to access the data. Please implement the interface (OnCommunityCentreRetrievedListener) when using this.
         communityRef.document(communityCentreName).get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
@@ -85,16 +97,20 @@ public class CommunityCentreDAL {
                 });
     }
 
+    /**
+     * Interface for the callback from getCommunityCentre
+     */
     public interface OnCommunityCentreRetrievedListener {
-        // Interface for the callback from getCommunityCentre -> UI layer should use this in calls
+        //UI layer should use this in calls
         void onCommunityCentreRetrieved(CommunityCentre communityCentre);
     }
 
+    /**
+     * Updates the corresponding community centre object in Firebase.
+     * @param communityCentre CommunityCentre object that was changed in the app
+     */
     public void updateCommunityCentre(CommunityCentre communityCentre) {
-        /* Updates the corresponding community centre object in Firebase.
-         * When you make changes locally, it doesn't sync to Firebase unless you call this after.
-         * Input: CommunityCentre object that was changed in the app
-         * Output: Nothing. Updates the community centre in Firebase. */
+        // When you make changes locally, it doesn't sync to Firebase unless you call this after.
         communityRef.document(communityCentre.getCommunityCentreName()).set(communityCentre)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -110,10 +126,12 @@ public class CommunityCentreDAL {
                 });
     }
 
+    /**
+     * Gets all community centres from Firebase.
+     * @param listener for list retrieval
+     */
     public void getCommunityCentres(OnCommunityCentresRetrievedListener listener) {
-        /* Gets all community centres from Firebase.
-         * Input: None
-         * Output: List<CommunityCentre> returned in listener */
+         //Output: List<CommunityCentre> returned in listener
         communityRef.get()
                 .addOnSuccessListener(querySnapshot -> {
                     List<CommunityCentre> centres = new ArrayList<>();
@@ -130,7 +148,9 @@ public class CommunityCentreDAL {
                 });
     }
 
-    // Listener for list retrieval
+    /**
+     * Listener for list retrieval
+     */
     public interface OnCommunityCentresRetrievedListener {
         void onCommunityCentresRetrieved(List<CommunityCentre> centres);
     }

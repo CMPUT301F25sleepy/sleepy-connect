@@ -2,6 +2,9 @@ package com.example.sleepy_connect;
 
 import java.util.ArrayList;
 
+/**
+ * Object class for the community centres listed on the first screen
+ */
 public class CommunityCentre {
     public String communityCentreName;                      // Required
     public String communityCentreLocation;                  // Required

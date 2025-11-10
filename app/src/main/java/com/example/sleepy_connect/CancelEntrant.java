@@ -2,6 +2,9 @@ package com.example.sleepy_connect;
 
 import java.util.List;
 
+/**
+ * Class which allows an event creator to manually remove a user from the list of invited entrants for a particular event
+ */
 public class CancelEntrant {
     // Basically just remove the user from the InvitedList, US 02.06.04
     // Takes in the Entrant and Event objects
