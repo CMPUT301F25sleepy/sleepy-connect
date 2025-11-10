@@ -20,6 +20,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
+ * Fragment for the alert page accessed from the bottom nav bar
  * A simple {@link Fragment} subclass.
  * Use the {@link AlertFragment#newInstance} factory method to
  * create an instance of this fragment.

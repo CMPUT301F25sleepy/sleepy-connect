@@ -94,6 +94,9 @@ public class EventManagerFragment extends Fragment {
         });
     }
 
+    /**
+     * method to open the fragment to create a new event
+     */
     private void openCreateEvent() {
         requireActivity().getSupportFragmentManager()
                 .beginTransaction()
@@ -103,6 +106,9 @@ public class EventManagerFragment extends Fragment {
                 .commit();
     }
 
+    /**
+     * access the database to get the events which the user has created in the past
+     */
     public void fetchEventsCreated() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -122,6 +128,9 @@ public class EventManagerFragment extends Fragment {
                 });
     }
 
+    /**
+     * a class of a custom list adapter for the custom listview
+     */
     private class EventManagerListAdapter extends BaseAdapter {
         private final List<Event> events;
 
@@ -171,6 +180,9 @@ public class EventManagerFragment extends Fragment {
             return convertView;
         }
 
+        /**
+         * a class for the information used by the holder
+         */
         class ViewHolder {
             TextView name;
             TextView dates;

@@ -7,7 +7,9 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
-// class for generating QR codes
+/**
+ * class for generating QR codes
+ */
 public class QRCodeGenerator {
     Bitmap bitmap;
     BarcodeEncoder barcodeEncoder;
@@ -25,7 +27,11 @@ public class QRCodeGenerator {
         this.barcodeEncoder = barcodeEncoder;
     }
 
-    // give the QR code a string to encode and the image view to display the generated code.
+    /**
+     * give the QR code a string to encode and the image view to display the generated code.
+     * @param text string to be converted to a QR code
+     * @param qrCodeIV the image view which the QR code will be displayed
+     */
     public void generateQRCode(String text, ImageView qrCodeIV) {
         try {
 
@@ -42,6 +48,10 @@ public class QRCodeGenerator {
         }
     }
 
+    /**
+     * get the generated bitmap
+     * @return the bitmap
+     */
     // get the generated bitmap
     public Bitmap getBitmap(){
         return this.bitmap;

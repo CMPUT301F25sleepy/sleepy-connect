@@ -11,9 +11,11 @@ import android.view.ViewGroup;
 import com.example.sleepy_connect.R;
 
 /**
+ * UNIMPLEMENTED
  * A simple {@link Fragment} subclass.
  * Use the {@link InvitedListFragment#newInstance} factory method to
  * create an instance of this fragment.
+ * Will display the list of invited entrants for a specific event
  */
 public class InvitedListFragment extends Fragment {
 
