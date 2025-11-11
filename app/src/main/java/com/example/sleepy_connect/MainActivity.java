@@ -18,6 +18,10 @@ import org.w3c.dom.Text;
 import java.time.Instant;
 import java.util.ArrayList;
 
+/**
+ * main activity
+ * opens the first screen and instantiates DALs
+ */
 public class MainActivity extends AppCompatActivity{
     public EntrantDAL entrantDal;
     public EventDAL eventDal;
@@ -92,6 +96,11 @@ public class MainActivity extends AppCompatActivity{
 
     // TODO - Make the user go straight to the navigation
     //  page once their android id has been added to the database
+
+    /**
+     * starts the app by switching to the home screen with the navigation
+     * @param view current view
+     */
     public void startPress(View view){
         // button to switch to the main app (the navigation activity)
         Intent i = new Intent(MainActivity.this, NavigationActivity.class);

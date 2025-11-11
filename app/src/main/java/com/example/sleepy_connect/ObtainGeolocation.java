@@ -13,6 +13,9 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+/**
+ * class to get the geolocation of a user
+ */
 public class ObtainGeolocation extends AppCompatActivity {
 
     // Declare variables
@@ -36,7 +39,9 @@ public class ObtainGeolocation extends AppCompatActivity {
         getLocationBtn.setOnClickListener(v -> getCurrentLocation());
     }
 
-    // Function to get the current location
+    /**
+     * Function to get the current location
+     */
     private void getCurrentLocation() {
         // Check if location permission is granted
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -45,8 +50,11 @@ public class ObtainGeolocation extends AppCompatActivity {
             return;
         }
 
-        // Fetch the last known location
         locationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+            /**
+             *Function to get the current location
+             * @param location location to be displayed
+             */
             @Override
             public void onSuccess(Location location) {
                 if (location != null) {
@@ -64,7 +72,15 @@ public class ObtainGeolocation extends AppCompatActivity {
         });
     }
 
-    // Handle the result of the permission request
+    /**
+     * Handle the result of the permission request
+     * @param requestCode The request code passed in future class to request permissions
+     * @param permissions The requested permissions. Never null.
+     * @param grantResults The grant results for the corresponding permissions
+     *     which is either {@link android.content.pm.PackageManager#PERMISSION_GRANTED}
+     *     or {@link android.content.pm.PackageManager#PERMISSION_DENIED}. Never null.
+     *
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);

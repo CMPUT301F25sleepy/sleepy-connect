@@ -17,6 +17,7 @@ import android.widget.EditText;
 //we should move edit and read-only changes into methods since they have multiple uses
 
 /**
+ * fragment to display and change the user profile
  * A simple {@link Fragment} subclass.
  * Use the {@link ProfileFragment#newInstance} factory method to
  * create an instance of this fragment.
@@ -159,6 +160,10 @@ public class ProfileFragment extends Fragment {
 
 
         edit_button.setOnClickListener(new View.OnClickListener() {
+            /**
+             * switches screen aspects to make them editable
+             * @param view The view that was clicked.
+             */
             @Override
             public void onClick(View view) {
 
@@ -195,6 +200,10 @@ public class ProfileFragment extends Fragment {
         });
 
         confirm_button.setOnClickListener(new View.OnClickListener() {
+            /**
+             * switches screen aspects to make them uneditable
+             * @param view The view that was clicked.
+             */
             @Override
             public void onClick(View view) {
 
@@ -241,6 +250,10 @@ public class ProfileFragment extends Fragment {
         });
 
         cancel_button.setOnClickListener(new View.OnClickListener() {
+            /**
+             * switches screen aspects to make them uneditable
+             * @param view The view that was clicked.
+             */
             @Override
             public void onClick(View view) {
                 //changes profile back to read only
@@ -273,7 +286,10 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    //read-only editTexts
+    /**
+     * makes editTexts read-only
+     * @param t editText to be changed
+     */
     private void disableText(EditText t){
         t.setFocusable(false);
         t.setFocusableInTouchMode(false);
@@ -281,7 +297,10 @@ public class ProfileFragment extends Fragment {
         t.setClickable(false);
     }
 
-    //editable editTexts
+    /**
+     * makes editTexts editable
+     * @param t editText to be changed
+     */
     private void enableText(EditText t){
         t.setFocusable(true);
         t.setFocusableInTouchMode(true);

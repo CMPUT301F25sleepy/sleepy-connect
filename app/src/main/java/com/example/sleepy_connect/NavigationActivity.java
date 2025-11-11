@@ -12,7 +12,11 @@ import com.example.sleepy_connect.eventmanager.EventManagerFragment;
 
 import java.util.ArrayList;
 
-
+/**
+ * Activity for the bottom nav bar and toolbar
+ * Switches between all of the main screens accessed through the nav bar
+ * Has a container to hold all of the screen fragments
+ */
 public class NavigationActivity extends AppCompatActivity {
     /* Handles Navigation between fragments of the app */
     // Bottom Navigation View Implementation Code from https://www.youtube.com/watch?v=jOFLmKMOcK0
@@ -22,8 +26,11 @@ public class NavigationActivity extends AppCompatActivity {
     public ArrayList<Notification> notification_list = new ArrayList<>();
     String userID;
 
+    /**
+     *  replaces current fragment with given fragment
+     * @param fragment fragment to be switched to
+     */
     private void replaceFragment(Fragment fragment) {
-        // replaces current fragment with given fragment
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container, fragment)

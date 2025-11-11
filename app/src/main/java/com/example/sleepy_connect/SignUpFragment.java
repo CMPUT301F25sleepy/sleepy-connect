@@ -17,6 +17,10 @@ import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+/**
+ * @deprecated now automatically gives user an id and empty profile instead
+ */
+
 public class SignUpFragment extends DialogFragment {
 
     @NonNull
