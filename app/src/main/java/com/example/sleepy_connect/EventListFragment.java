@@ -22,6 +22,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Fragment that displays the list of events for a particular location
+ */
 public class EventListFragment extends Fragment {
     private static final String ARG_LOCNAME = "locationName";
 
@@ -36,6 +39,11 @@ public class EventListFragment extends Fragment {
         // Required empty public constructor
     }
 
+    /**
+     * Factory method for a new instance of the fragment
+     * @param locationName location who's events are meant to be displayed
+     * @return a new instance of the fragment
+     */
     public static EventListFragment newInstance(String locationName) {
         EventListFragment fragment = new EventListFragment();
         Bundle args = new Bundle();
@@ -97,6 +105,10 @@ public class EventListFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Accesses the database to get all valid events
+     * @param locationName string of name which is searched for in events
+     */
     private void fetchEventsForLocation(String locationName) {
         /*Gets all events for a rec centre if you give the name*/
         if (locationName == null || locationName.isEmpty()) {
@@ -144,6 +156,9 @@ public class EventListFragment extends Fragment {
                         Log.e("EventListFragment", "Something broke"));
     }
 
+    /**
+     * Custom adapter for the custom listview of events
+     */
     private class EventListAdapter extends BaseAdapter {
         private final List<Event> events;
 
@@ -193,6 +208,9 @@ public class EventListFragment extends Fragment {
             return convertView;
         }
 
+        /**
+         * class for the attributes changed by the holder
+         */
         class ViewHolder {
             TextView name;
             TextView dates;

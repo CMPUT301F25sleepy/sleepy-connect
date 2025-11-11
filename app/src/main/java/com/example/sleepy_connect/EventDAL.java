@@ -9,14 +9,19 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+/**
+ * Data access layer for the event objects to the database
+ */
 public class EventDAL {
     private final CollectionReference eventsRef;
     private final DocumentReference counterRef;
     // For events, make a collection metadata with document eventCounter and field nextID set to 0
 
+    /**
+     * Event Data Access Layer - Stores all functions that interface with the database for events
+     */
     public EventDAL() {
         // Creating the database
-        /* Event Data Access Layer - Stores all functions that interface with the database for events.*/
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         // Creating a collection for events
         eventsRef = db.collection("events");
@@ -24,10 +29,11 @@ public class EventDAL {
         counterRef = db.collection("metadata").document("eventCounter");
     }
 
+    /**
+     * Adds an event object to the database. Generates an event ID by using a document in Firebase
+     * @param event event object
+     */
     public void addEvent(Event event) {
-        /* Adds an event object to the database. Generates an event ID by using a document in Firebase
-         * Inputs: Event object
-         */
         // Get the current nextID, increment it, and store the event
         eventsRef.document(event.getEventID()).set(event) // Create the document
                 // Adding listeners that tell us whether it was successful
@@ -46,9 +52,11 @@ public class EventDAL {
                 });
     }
 
+    /**
+     * Removing an event from the event collection
+     * @param event event object to be removed
+     */
     public void removeEvent(Event event) {
-        /*Removing an event from the event collection
-         * Inputs: An event object to be removed.*/
         eventsRef.document(event.getEventID()).delete()
                 // Adding listeners that tell us whether it was successful
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -66,10 +74,13 @@ public class EventDAL {
                 });
     }
 
+    /**
+     * Retrieves an event given a string ID.
+     * @param eventID string reference to user
+     * @param listener Interface for the callback from getEvent
+     */
     public void getEvent(String eventID, EventDAL.OnEventRetrievedListener listener) {
-        /*Retrieves an event given a string ID.
-         * Inputs: eventID -> String
-         * Outputs: Event object */
+        //Outputs: Event object
         eventsRef.document(eventID).get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     // Get a document back
@@ -98,15 +109,20 @@ public class EventDAL {
                 });
     }
 
+    /**
+     * Interface for the callback from getEvent
+     */
     public interface OnEventRetrievedListener {
-        // Interface for the callback from getEvent -> UI people, use this in your calls
+        //UI people, use this in your calls
         void onEventRetrieved(Event event);
     }
 
+    /**
+     * Updates the corresponding event object in the firebase.
+     * @param event Event object that was changed in the app
+     */
     public void updateEvent(Event event) {
-        /*Updates the corresponding event object in the firebase. When you make changes locally,
-         * It doesn't sync to firebase unless you call this after.
-         * Input: Event object that was changed in the app
+        /* When you make changes locally, it doesn't sync to firebase unless you call this after.
          * Output: Nothing. Updates the entrant in the Firebase.*/
         eventsRef.document(event.getEventID()).set(event)
                 // Adding listeners that tell us whether it was successful
@@ -125,9 +141,11 @@ public class EventDAL {
                 });
     }
 
+    /**
+     * Uses a document in firebase to get next ID for an event.
+     * @param onSuccessListener listener to track updates
+     */
     public void getNextID(OnSuccessListener<String> onSuccessListener) {
-        /*Uses a document in firebase to get next ID for an event.
-        * Outputs: String NextID. */
         counterRef.get()
                 .addOnSuccessListener(documentSnapshot -> {
                     Long currentID = documentSnapshot.getLong("nextID");

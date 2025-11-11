@@ -8,9 +8,18 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * class to export the final list of enrolled entrants is a CSV format
+ */
 public class ExportCSV {
-     // This function makes the CSV file once it is called, basically a fancy spreadsheet
-     public void exportCSVFile(Context context, Event event, String fileName){
+
+    /**
+     * creates the csv file
+     * @param context context
+     * @param event event object for the event lists to be exported
+     * @param fileName file to push the csv to
+     */
+    public void exportCSVFile(Context context, Event event, String fileName){
          List<String> acceptedList = event.getAcceptedList();
          // Makes a new File object for the CSV
          File csvFile = new File(context.getExternalFilesDir(null), fileName);

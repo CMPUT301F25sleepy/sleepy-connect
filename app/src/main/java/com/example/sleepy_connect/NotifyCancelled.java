@@ -12,6 +12,9 @@ import android.widget.TextView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+/**
+ * class to send a notification if the user's invitation has been revoked
+ */
 // Making use of the alertSelectFragment as the functions are similar
 // Actually just deprecate this a whole class for such a small function is not worth it
 public class NotifyCancelled extends alertSelectFragment {
@@ -40,6 +43,10 @@ public class NotifyCancelled extends alertSelectFragment {
         builder.setView(view);
         Dialog dialog = builder.create();
         positive_button.setOnClickListener(new View.OnClickListener() {
+            /**
+             * unimplemented
+             * @param view The view that was clicked.
+             */
             @Override
             public void onClick(View view) {
                 // TODO - Implement Accepting Selection
@@ -48,6 +55,10 @@ public class NotifyCancelled extends alertSelectFragment {
         });
 
         negative_button.setOnClickListener(new View.OnClickListener() {
+            /**
+             * unimplemented
+             * @param view The view that was clicked.
+             */
             @Override
             public void onClick(View view) {
                 // TODO - Implement Declining Selection and Removing from waitlist
