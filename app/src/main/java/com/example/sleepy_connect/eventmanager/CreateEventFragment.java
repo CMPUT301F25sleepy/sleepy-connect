@@ -253,11 +253,16 @@ public class CreateEventFragment extends Fragment {
         DatePickerDialog datePickerDialog = new DatePickerDialog(
                 requireContext(),
                 (DatePicker view, int year, int month, int dayOfMonth) -> {
+
+                    // create new date
                     Calendar date = Calendar.getInstance();
                     date.set(year, month, dayOfMonth);
+
+                    // set text in view
                     String dateString = format.format(date.getTime());
                     TextView tv = rootView.findViewById(dateViewId);
                     tv.setText(dateString);
+
                 },
                 today.get(Calendar.YEAR),
                 today.get(Calendar.MONTH),
