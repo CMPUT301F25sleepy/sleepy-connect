@@ -159,7 +159,7 @@ public class EventListFragment extends Fragment {
     /**
      * Custom adapter for the custom listview of events
      */
-    private class EventListAdapter extends BaseAdapter {
+    public class EventListAdapter extends BaseAdapter {
         private final List<Event> events;
 
         public EventListAdapter(List<Event> events) {
