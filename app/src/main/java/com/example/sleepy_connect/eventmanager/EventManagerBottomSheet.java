@@ -11,10 +11,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.sleepy_connect.R;
+import com.example.sleepy_connect.entrantmanagement.EntrantManagerFragment;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 /**
- *
+ * Dialog fragment class for showing event management options
+ * @author Sam Francisco
  */
 public class EventManagerBottomSheet extends BottomSheetDialogFragment {
 
@@ -30,13 +32,29 @@ public class EventManagerBottomSheet extends BottomSheetDialogFragment {
 
         // Set click listener for edit event
         tvEditEvent.setOnClickListener(v -> {
-            // TODO: call edit event
+
+            // open edit event screen
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, EditEventFragment.class, null)
+                    .setReorderingAllowed(true)
+                    .addToBackStack(null)
+                    .commit();
+
             dismiss(); // Close the bottom sheet
         });
 
         // Set click listener for manage entrants
         tvManageEntrants.setOnClickListener(v -> {
-            // TODO: call manage entrants
+
+            // open entrant manager screen
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, EntrantManagerFragment.class, null)
+                    .setReorderingAllowed(true)
+                    .addToBackStack(null)
+                    .commit();
+
             dismiss(); // Close the bottom sheet
         });
 
