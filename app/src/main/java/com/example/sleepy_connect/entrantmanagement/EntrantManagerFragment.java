@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.sleepy_connect.R;
-import com.example.sleepy_connect.waitlist.WaitlistFragment;
 
 /**
  * Fragment class for navigating between an event's different entrant lists.

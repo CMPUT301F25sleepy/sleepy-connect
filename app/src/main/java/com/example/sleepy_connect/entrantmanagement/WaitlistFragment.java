@@ -1,4 +1,4 @@
-package com.example.sleepy_connect.invitedlist;
+package com.example.sleepy_connect.entrantmanagement;
 
 import android.os.Bundle;
 
@@ -12,12 +12,12 @@ import com.example.sleepy_connect.R;
 
 /**
  * UNIMPLEMENTED
+ * Fragment for the waitlist accessed through the event manager
  * A simple {@link Fragment} subclass.
- * Use the {@link InvitedListFragment#newInstance} factory method to
+ * Use the {@link WaitlistFragment#newInstance} factory method to
  * create an instance of this fragment.
- * Will display the list of invited entrants for a specific event
  */
-public class InvitedListFragment extends Fragment {
+public class WaitlistFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -28,7 +28,7 @@ public class InvitedListFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public InvitedListFragment() {
+    public WaitlistFragment() {
         // Required empty public constructor
     }
 
@@ -38,11 +38,11 @@ public class InvitedListFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment InvitedListFragment.
+     * @return A new instance of fragment WaitlistFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static InvitedListFragment newInstance(String param1, String param2) {
-        InvitedListFragment fragment = new InvitedListFragment();
+    public static WaitlistFragment newInstance(String param1, String param2) {
+        WaitlistFragment fragment = new WaitlistFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -63,6 +63,6 @@ public class InvitedListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_invited_list, container, false);
+        return inflater.inflate(R.layout.fragment_waitlist, container, false);
     }
 }

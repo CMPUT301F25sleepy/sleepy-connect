@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.sleepy_connect.R;
-import com.example.sleepy_connect.waitlist.WaitlistFragment;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 /**
