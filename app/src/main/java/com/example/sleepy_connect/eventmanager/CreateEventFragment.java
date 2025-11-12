@@ -100,10 +100,6 @@ public class CreateEventFragment extends Fragment {
         view.findViewById(R.id.edit_event_start_button).setOnClickListener(v -> updateDateTime(view, R.id.edit_event_start_date));
         view.findViewById(R.id.edit_event_end_button).setOnClickListener(v -> updateDateTime(view, R.id.edit_event_end_date));
 
-        // QR Code generator
-        Button generateQRCodeButton = view.findViewById(R.id.generate_qr_code_button);
-        generateQRCodeButton.setOnClickListener(v -> openQRCodeFragment());
-
         // Geolocation switch
         SwitchCompat geolocationSwitch = view.findViewById(R.id.edit_geolocation_switch);
         geolocationSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> geolocationOn = isChecked);
@@ -257,35 +253,22 @@ public class CreateEventFragment extends Fragment {
         DatePickerDialog datePickerDialog = new DatePickerDialog(
                 requireContext(),
                 (DatePicker view, int year, int month, int dayOfMonth) -> {
+
+                    // create new date
                     Calendar date = Calendar.getInstance();
                     date.set(year, month, dayOfMonth);
+
+                    // set text in view
                     String dateString = format.format(date.getTime());
                     TextView tv = rootView.findViewById(dateViewId);
                     tv.setText(dateString);
+
                 },
                 today.get(Calendar.YEAR),
                 today.get(Calendar.MONTH),
                 today.get(Calendar.DAY_OF_MONTH)
         );
         datePickerDialog.show();
-    }
-
-    // TODO: Cam pls move logic to EditEventFragment
-    private void openQRCodeFragment() {
-        TextView eventTitle = requireView().findViewById(R.id.edit_event_title);
-        TextView errorText = requireView().findViewById(R.id.qr_code_error_text);
-
-        if (isComplete(eventTitle, true)) {
-            errorText.setVisibility(View.GONE);
-            QRCodeFragment qrCodeFragment = QRCodeFragment.newInstance(eventTitle.getText().toString());
-            requireActivity().getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment_container, qrCodeFragment)
-                    .addToBackStack(null)
-                    .commit();
-        } else {
-            errorText.setVisibility(View.VISIBLE);
-        }
     }
 
     /**
