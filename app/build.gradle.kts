@@ -53,6 +53,7 @@ dependencies {
     implementation(libs.firebase.storage)
     implementation(libs.legacy.support.v4)
     implementation(libs.recyclerview)
+    implementation(libs.fragment)
     testImplementation(libs.junit)
     testImplementation(libs.junit.junit)
     testImplementation(libs.junit.junit)
