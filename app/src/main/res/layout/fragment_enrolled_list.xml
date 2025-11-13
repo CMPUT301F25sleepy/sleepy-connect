@@ -16,30 +16,6 @@
 
     </FrameLayout>
 
-    <TextView
-        android:id="@+id/enrolled_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:fontFamily="@font/roboto_medium"
-        android:text="Enrolled"
-        android:textColor="@color/black"
-        android:textSize="28sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:id="@+id/enrolled_line"
-        android:layout_width="0dp"
-        android:layout_height="2dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:background="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/enrolled_label" />
-
     <ListView
         android:id="@+id/enrolled_entrant_list"
         android:layout_width="0dp"
@@ -53,7 +29,7 @@
         app:layout_constraintBottom_toTopOf="@+id/enrolled_export_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/enrolled_line"
+        app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/entrant_list_layout" />
 
 
