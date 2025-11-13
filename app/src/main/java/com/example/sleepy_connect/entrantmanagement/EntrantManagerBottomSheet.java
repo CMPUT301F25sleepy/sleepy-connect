@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.example.sleepy_connect.R;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -31,54 +32,36 @@ public class EntrantManagerBottomSheet extends BottomSheetDialogFragment {
         TextView tvCancelled = view.findViewById(R.id.bs_entrant_manager_tv_cancelled);
         TextView tvEnrolled = view.findViewById(R.id.bs_entrant_manager_tv_enrolled);
 
+        // initialize variable for parent fragment's list label
+        TextView listLabel = requireParentFragment().requireView().findViewById(R.id.entrant_manager_tv_list_label);
+
         // Set click listener for waitlist option
-        tvWaitlist.setOnClickListener(v -> {
-
-            // add waitlist fragment
-            getParentFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.entrant_manager_fragment_container, WaitlistFragment.class, null)
-                    .commit();
-
-            dismiss(); // Close the bottom sheet
-        });
+        tvWaitlist.setOnClickListener(v ->  startListFragment(listLabel, "Waitlist", WaitlistFragment.class));
 
         // Set click listener for invited list option
-        tvInvited.setOnClickListener(v -> {
-
-            // add invited list fragment
-            getParentFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.entrant_manager_fragment_container, InvitedListFragment.class, null)
-                    .commit();
-
-            dismiss(); // Close the bottom sheet
-        });
+        tvInvited.setOnClickListener(v ->  startListFragment(listLabel, "Invited", InvitedListFragment.class));
 
         // Set click listener for cancelled list option
-        tvCancelled.setOnClickListener(v -> {
-
-            // add cancelled list fragment
-            getParentFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.entrant_manager_fragment_container, CancelledListFragment.class, null)
-                    .commit();
-
-            dismiss(); // Close the bottom sheet
-        });
+        tvCancelled.setOnClickListener(v ->  startListFragment(listLabel, "Cancelled", CancelledListFragment.class));
 
         // Set click listener for enrolled list option
-        tvEnrolled.setOnClickListener(v -> {
-
-            // add enrolled list fragment
-            getParentFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.entrant_manager_fragment_container, EnrolledListFragment.class, null)
-                    .commit();
-
-            dismiss(); // Close the bottom sheet
-        });
+        tvEnrolled.setOnClickListener(v ->  startListFragment(listLabel, "Enrolled", EnrolledListFragment.class));
 
         return view;
+    }
+
+    void startListFragment(TextView listLabel, String newLabel, Class<? extends Fragment> fragmentClass) {
+
+        // set list label
+        listLabel.setText(newLabel);
+
+        // add enrolled list fragment
+        getParentFragmentManager()
+                .beginTransaction()
+                .replace(R.id.entrant_manager_fragment_container, fragmentClass, null)
+                .commit();
+
+        // Close the bottom sheet
+        dismiss();
     }
 }
