@@ -34,7 +34,7 @@ public class EntrantManagerBottomSheet extends BottomSheetDialogFragment {
         // Set click listener for waitlist option
         tvWaitlist.setOnClickListener(v -> {
 
-            // open waitlist screen
+            // add waitlist fragment
             getParentFragmentManager()
                     .beginTransaction()
                     .replace(R.id.entrant_manager_fragment_container, WaitlistFragment.class, null)
@@ -46,7 +46,11 @@ public class EntrantManagerBottomSheet extends BottomSheetDialogFragment {
         // Set click listener for invited list option
         tvInvited.setOnClickListener(v -> {
 
-            // TODO: open invited list screen
+            // add invited list fragment
+            getParentFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.entrant_manager_fragment_container, InvitedListFragment.class, null)
+                    .commit();
 
             dismiss(); // Close the bottom sheet
         });
@@ -54,7 +58,11 @@ public class EntrantManagerBottomSheet extends BottomSheetDialogFragment {
         // Set click listener for cancelled list option
         tvCancelled.setOnClickListener(v -> {
 
-            // TODO: open cancelled list screen
+            // add cancelled list fragment
+            getParentFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.entrant_manager_fragment_container, CancelledListFragment.class, null)
+                    .commit();
 
             dismiss(); // Close the bottom sheet
         });
@@ -62,7 +70,11 @@ public class EntrantManagerBottomSheet extends BottomSheetDialogFragment {
         // Set click listener for enrolled list option
         tvEnrolled.setOnClickListener(v -> {
 
-            // TODO: open enrolled list screen
+            // add enrolled list fragment
+            getParentFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.entrant_manager_fragment_container, EnrolledListFragment.class, null)
+                    .commit();
 
             dismiss(); // Close the bottom sheet
         });
