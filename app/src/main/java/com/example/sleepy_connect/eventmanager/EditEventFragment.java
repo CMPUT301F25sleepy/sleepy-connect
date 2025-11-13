@@ -25,24 +25,18 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.sleepy_connect.CommunityCentre;
-import com.example.sleepy_connect.CommunityCentreDAL;
-import com.example.sleepy_connect.EntrantDAL;
 import com.example.sleepy_connect.Event;
 import com.example.sleepy_connect.EventDAL;
 import com.example.sleepy_connect.Image;
 import com.example.sleepy_connect.R;
 import com.example.sleepy_connect.EventViewModel;
-import com.example.sleepy_connect.UserViewModel;
 import com.example.sleepy_connect.eventdetails.QRCodeFragment;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Objects;
 
 /**
  * Fragment class for editing existing events.
@@ -117,7 +111,7 @@ public class EditEventFragment extends Fragment {
 
         // set the fields from received event model
         initViewReferences(view);
-        setFields(view);
+        setFields();
 
         // set poster imageview's listener
         ivPoster = view.findViewById(R.id.edit_event_poster);
@@ -169,10 +163,9 @@ public class EditEventFragment extends Fragment {
 
     /**
      * Set fields to initial event data
-     * @param view Fragment's root view
      */
     @SuppressLint("DefaultLocale")
-    public void setFields(View view) {
+    public void setFields() {
 
         etTitle.setText(event.getEventName());
         tvRegStartDate.setText(dateFormat.format(new Date(event.getRegistrationOpens())));
@@ -341,6 +334,10 @@ public class EditEventFragment extends Fragment {
         // update database
         EventDAL dal = new EventDAL();
         dal.updateEvent(event);
+
+        // pop fragment from backstack (return)
+        requireActivity().getSupportFragmentManager()
+                .popBackStack();
 
     }
 }
