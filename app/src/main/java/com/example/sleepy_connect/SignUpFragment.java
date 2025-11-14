@@ -18,6 +18,8 @@ import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import java.util.Objects;
+
 /**
  * @deprecated now automatically gives user an id and empty profile instead
  */
@@ -63,15 +65,15 @@ public class SignUpFragment extends DialogFragment {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext(), R.style.CustomAlertDialog);
         String tag = this.getTag();
 
-        if (tag == "success") {
+        if (Objects.equals(tag, "success")) {
             main.setText("Sucess!");
-            sub.setText("You have sign up for the event");
+            sub.setText("You have signed up for the event");
 
             return builder
                     .setView(view)
                     .setNegativeButton("Return", null)
                     .create();
-        } else {
+        } else if (Objects.equals(tag, "failure")) {
             return builder
                     .setView(view)
                     .setNegativeButton("Back", null)
@@ -80,11 +82,14 @@ public class SignUpFragment extends DialogFragment {
                         listener.goToProfile();
                     })
                     .create();
-            }
+        } else if (Objects.equals(tag, "already applied")) {
+            main.setText("Sorry,");
+            sub.setText("You have already signed up for the event");
+            return builder
+                    .setView(view)
+                    .setNegativeButton("Return", null)
+                    .create();
         }
-
-
-
-
-
+        return null;
+    }
 }

@@ -95,16 +95,6 @@ public class EventDetailsFragment extends Fragment{
         Button joinButton = view.findViewById(R.id.waitlist_join_button);
         joinButton.setOnClickListener(v -> {
 
-            if (eventID == null){
-                Log.e("DEBUG", "entrantID is null – not calling DAL.getEntrant");
-                return;
-            }
-
-            if (entrantID == null) {
-                Log.e("DEBUG", "entrantID is null – not calling DAL.getEntrant");
-                return; // or show an error
-            }
-
             // check if user has filled out all details
             EntrantDAL DAL = new EntrantDAL();
             DAL.getEntrant(entrantID, new EntrantDAL.OnEntrantRetrievedListener() {
@@ -130,8 +120,14 @@ public class EventDetailsFragment extends Fragment{
                                 @Override
                                 public void onEventRetrieved(Event event){
                                     if (event != null){
-                                        event.addToWaitlist(entrantID);
-                                        eDAL.updateEvent(event);
+                                        ArrayList<String> list = event.getWaitingList();
+                                        if (list.contains(entrantID)){
+                                            SignFragment.show(getParentFragmentManager(), "already applied");
+                                        } else {
+                                            event.addToWaitlist(entrantID);
+                                            eDAL.updateEvent(event);
+                                            SignFragment.show(getParentFragmentManager(), "success");
+                                        }
                                     } else {
                                         System.err.println("No event found with ID: " + eventID);
                                     }
@@ -139,7 +135,7 @@ public class EventDetailsFragment extends Fragment{
                             });
                             entrant.addToAllEventList(eventID);
                             DAL.updateEntrant(entrant);
-                            SignFragment.show(getParentFragmentManager(), "success");
+
                         }
                     } else {
                         System.err.println("No entrant found with ID: " + entrantID);
