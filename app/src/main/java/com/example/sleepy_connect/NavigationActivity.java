@@ -3,18 +3,22 @@ package com.example.sleepy_connect;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.sleepy_connect.databinding.ActivityNavigationBinding;
+import com.example.sleepy_connect.eventmanager.EventManagerFragment;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
+/**
+ * Activity for the bottom nav bar and toolbar
+ * Switches between all of the main screens accessed through the nav bar
+ * Has a container to hold all of the screen fragments
+ */
 public class NavigationActivity extends AppCompatActivity implements SignUpFragment.DialogFragmentListener{
     /* Handles Navigation between fragments of the app */
     // Bottom Navigation View Implementation Code from https://www.youtube.com/watch?v=jOFLmKMOcK0
@@ -26,8 +30,11 @@ public class NavigationActivity extends AppCompatActivity implements SignUpFragm
     TextView title;
 
 
+    /**
+     *  replaces current fragment with given fragment
+     * @param fragment fragment to be switched to
+     */
     private void replaceFragment(Fragment fragment) {
-        // replaces current fragment with given fragment
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container, fragment)
@@ -68,13 +75,13 @@ public class NavigationActivity extends AppCompatActivity implements SignUpFragm
         binding.bottomNavigationView.setOnItemSelectedListener(item ->{
 
             if (item.getItemId() == R.id.home_button) {
-                title.setText("Home");
+                title.setText("Community");
                 replaceFragment(CommunityFragment.newInstance(user.getAndroid_id()));
             } else if (item.getItemId() == R.id.alert_button){
                 title.setText("Alerts");
                 replaceFragment(AlertFragment.newInstance(notification_list, userID));
             } else if (item.getItemId() == R.id.create_button) {
-                title.setText("Create Event");
+                title.setText("Event Manager");
                 replaceFragment(new EventManagerFragment());
             } else if (item.getItemId() == R.id.event_button) {
                 title.setText("My Events");

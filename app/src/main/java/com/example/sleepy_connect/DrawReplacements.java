@@ -5,6 +5,9 @@ import android.util.Log;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Class which draws new entrants from the waitlist when an invited entrant declines their invitation or the event creator cancels their invitation
+ */
 public class DrawReplacements {
     public void drawReplacementApp(Event event) {
         // Should take in the waiting list and when called, pick a person at random from the waiting list

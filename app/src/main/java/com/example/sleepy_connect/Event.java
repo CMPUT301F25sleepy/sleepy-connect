@@ -6,6 +6,10 @@ import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Locale;
 
+/**
+ * Object class for events
+ */
+
 public class Event {
     public String eventID;                                  // Automatic
     public String eventName;                                // Required
@@ -191,6 +195,10 @@ public class Event {
         this.pendingList = pendingList;
     }
 
+    /**
+     * add an entrant to the waitlist for a particular event
+     * @param entrantID Entrant to be added
+     */
     public void addToWaitlist(String entrantID){
         if (this.waitingList == null){
             this.waitingList = new ArrayList<>();
@@ -198,6 +206,10 @@ public class Event {
         this.waitingList.add(entrantID);
     }
 
+    /**
+     * add an entrant to the declined list for a particular event after they decline their invitation
+     * @param entrantID Entrant to be added
+     */
     public void addToDeclinelist(String entrantID){
         if (this.declinedList == null){
             this.declinedList = new ArrayList<>();
@@ -212,6 +224,10 @@ public class Event {
         this.waitingList.add(entrantID);
     }
 
+    /**
+     * remove an entrant from the waitlist for a particular event
+     * @param entrantID Entrant to be removed
+     */
     public void removeFromWaitlist(String entrantID){
         if (this.waitingList.contains(entrantID)){
             this.waitingList.remove(entrantID);
@@ -220,6 +236,10 @@ public class Event {
         }
     }
 
+    /**
+     * remove an entrant from the accepted list for a particular event after they have accepted the invitation/are enrolled
+     * @param entrantID Entrant to be removed
+     */
     public void removeFromAcceptedList(String entrantID){
         if (this.acceptedList.contains(entrantID)){
             this.acceptedList.remove(entrantID);
@@ -228,14 +248,22 @@ public class Event {
         }
     }
 
+    /**
+     * remove an entrant from the declined list for a particular event
+     * @param entrantID Entrant to be removed
+     */
     public void removeFromDeclinedList(String entrantID){
         if (this.declinedList.contains(entrantID)){
             this.declinedList.remove(entrantID);
         } else {
-            System.err.println("Error entrantID is not in accepted list");
+            System.err.println("Error entrantID is not in declined list");
         }
     }
 
+    /**
+     * remove an entrant form the pending list for a particular event after they accept or decline or to revoke their invitation
+     * @param entrantID Entrant to be removed
+     */
     public void removeFromPendingList(String entrantID){
         if (this.pendingList.contains(entrantID)){
             this.pendingList.remove(entrantID);
@@ -244,6 +272,10 @@ public class Event {
         }
     }
 
+    /**
+     * add an entrant to the accepted list for a particular event after they accept their invitation
+     * @param entrantID Entrant to be added
+     */
     public void addToAcceptedList(String entrantID){
         if (this.acceptedList == null){
             this.acceptedList = new ArrayList<>();

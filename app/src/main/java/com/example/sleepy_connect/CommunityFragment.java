@@ -13,6 +13,10 @@ import androidx.fragment.app.Fragment;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * class for the fragment that displays the list of community centres
+ */
+
 public class CommunityFragment extends Fragment {
 
     private ListView listView;
@@ -82,6 +86,11 @@ public class CommunityFragment extends Fragment {
                 return; // or show an error
             }
 
+            
+            //change toolbar title
+            TextView title = requireActivity().findViewById(R.id.set_title);
+            title.setText("Events");
+
             EventListFragment eventListFrag = EventListFragment.newInstance(clickedLocationName,entrantID);
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()
@@ -95,7 +104,9 @@ public class CommunityFragment extends Fragment {
     }
 
 
-
+    /**
+     * Custom array adapter for the custom listview
+     */
     // Adapter for Amelia's Fancy ListView
     private class CommunityCentreAdapter extends BaseAdapter {
 
@@ -140,6 +151,9 @@ public class CommunityFragment extends Fragment {
             return convertView;
         }
 
+        /**
+         * class for the items in the holder
+         */
         class ViewHolder {
             TextView name;
             TextView address;

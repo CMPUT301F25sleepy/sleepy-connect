@@ -8,7 +8,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +22,7 @@ import com.example.sleepy_connect.EntrantDAL;
 import com.example.sleepy_connect.Event;
 import com.example.sleepy_connect.EventDAL;
 import com.example.sleepy_connect.Notification;
+import com.example.sleepy_connect.EventViewModel;
 import com.example.sleepy_connect.R;
 import com.example.sleepy_connect.SignUpFragment;
 import com.example.sleepy_connect.alertSelectFragment;
@@ -33,7 +33,8 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- * @author Sam
+ * Fragment class for showing event details
+ * @author Sam Francisco
  */
 public class EventDetailsFragment extends Fragment{
 
@@ -45,9 +46,7 @@ public class EventDetailsFragment extends Fragment{
     }
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
+     * Factory method for this fragment
      * @return A new instance of fragment EventDetailsFragment.
      */
     public static EventDetailsFragment newInstance(String entrantID, String eventID) {
@@ -78,6 +77,7 @@ public class EventDetailsFragment extends Fragment{
         // receive event details from viewmodel
         event = EventViewModel.getEvent().getValue();
 
+        // set the fields from received event model
         setFields(view);
 
         // implement lottery button click showing lottery guidelines
@@ -150,6 +150,10 @@ public class EventDetailsFragment extends Fragment{
 
     }
 
+    /**
+     * Set each view's content depending on data received
+     * @param view Fragment's root view
+     */
     @SuppressLint("DefaultLocale")
     public void setFields(View view) {
 
@@ -159,7 +163,7 @@ public class EventDetailsFragment extends Fragment{
 
         // set location
         TextView location = view.findViewById(R.id.event_location);
-        location.setText(formatLocation(event));
+        location.setText(formatLocation());
 
         // set registration date
         TextView regPeriod = view.findViewById(R.id.reg_deadline);
@@ -194,11 +198,21 @@ public class EventDetailsFragment extends Fragment{
         }
     }
 
-    public String formatLocation(Event event) {
+    /**
+     * Formats community centre info into one string to be displayed
+     * @return Formatted community centre info string
+     */
+    public String formatLocation() {
         CommunityCentre recCenter = event.getCommunityCentre();
         return recCenter.getCommunityCentreName() + "\n" + recCenter.getCommunityCentreLocation();
     }
 
+    /**
+     * Formats a given date period string from the given start and end dates
+     * @param start Start date
+     * @param end End date
+     * @return Formatted date period string
+     */
     public String formatDatePeriod(long start, long end) {
 
         // format reg start and end dates

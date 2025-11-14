@@ -16,7 +16,7 @@ Make title of toolbar "My Event Manager" -->
         android:id="@+id/new_event_button"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="273dp"
-        android:layout_height="53dp"
+        android:layout_height="70dp"
         android:layout_marginTop="16dp"
         android:backgroundTint="@color/light_cyan_blue"
         android:text="+ New Event"
@@ -56,6 +56,7 @@ Make title of toolbar "My Event Manager" -->
 
 
     <ListView
+        android:id="@+id/event_manager_lv_events"
         android:layout_width="0dp"
         android:layout_height="610dp"
         android:layout_marginTop="5dp"

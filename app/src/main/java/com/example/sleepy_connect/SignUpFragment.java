@@ -1,5 +1,7 @@
 package com.example.sleepy_connect;
 
+//NOT USED
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -15,6 +17,10 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
+/**
+ * @deprecated now automatically gives user an id and empty profile instead
+ */
 
 public class SignUpFragment extends DialogFragment {
 

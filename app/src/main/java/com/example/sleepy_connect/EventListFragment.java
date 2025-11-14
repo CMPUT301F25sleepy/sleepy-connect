@@ -13,11 +13,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.sleepy_connect.eventdetails.EditEventFragment;
 import com.example.sleepy_connect.eventdetails.EventDetailsFragment;
-import com.example.sleepy_connect.eventdetails.EventViewModel;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -25,6 +22,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Fragment that displays the list of events for a particular location
+ */
 public class EventListFragment extends Fragment {
     private static final String ARG_LOCNAME = "locationName";
 
@@ -88,6 +88,10 @@ public class EventListFragment extends Fragment {
             EventViewModel vmEvent = new ViewModelProvider(requireActivity()).get(EventViewModel.class);
             vmEvent.setEvent(selectedEvent);
 
+            //set toolbar title
+            TextView title = requireActivity().findViewById(R.id.set_title);
+            title.setText("Event Details");
+
             // open event details
             EventDetailsFragment fragment = EventDetailsFragment.newInstance(entrantID, selectedEvent.getEventID());
 
@@ -102,6 +106,10 @@ public class EventListFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Accesses the database to get all valid events
+     * @param locationName string of name which is searched for in events
+     */
     private void fetchEventsForLocation(String locationName) {
         /*Gets all events for a rec centre if you give the name*/
         if (locationName == null || locationName.isEmpty()) {
@@ -149,7 +157,10 @@ public class EventListFragment extends Fragment {
                         Log.e("EventListFragment", "Something broke"));
     }
 
-    private class EventListAdapter extends BaseAdapter {
+    /**
+     * Custom adapter for the custom listview of events
+     */
+    public class EventListAdapter extends BaseAdapter {
         private final List<Event> events;
 
         public EventListAdapter(List<Event> events) {
@@ -198,6 +209,9 @@ public class EventListFragment extends Fragment {
             return convertView;
         }
 
+        /**
+         * class for the attributes changed by the holder
+         */
         class ViewHolder {
             TextView name;
             TextView dates;
