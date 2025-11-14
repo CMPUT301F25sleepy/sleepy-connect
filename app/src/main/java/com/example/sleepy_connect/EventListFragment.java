@@ -39,10 +39,11 @@ public class EventListFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static EventListFragment newInstance(String locationName) {
+    public static EventListFragment newInstance(String locationName,String entrantID) {
         EventListFragment fragment = new EventListFragment();
         Bundle args = new Bundle();
         args.putString(ARG_LOCNAME, locationName);
+        args.putString("entrant", entrantID);
         fragment.setArguments(args);
         return fragment;
     }
@@ -66,6 +67,9 @@ public class EventListFragment extends Fragment {
         adapter = new EventListAdapter(eventList);
         listView.setAdapter(adapter);
 
+        Bundle args = getArguments();
+        String entrantID = args.getString("entrant");
+
         TextView eventLocation = view.findViewById(R.id.location);
         if (locationName != null) {
             eventLocation.setText(locationName);
@@ -85,9 +89,11 @@ public class EventListFragment extends Fragment {
             vmEvent.setEvent(selectedEvent);
 
             // open event details
+            EventDetailsFragment fragment = EventDetailsFragment.newInstance(entrantID, selectedEvent.getEventID());
+
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragment_container, EventDetailsFragment.class, null)
+                    .replace(R.id.fragment_container, fragment)
                     .setReorderingAllowed(true)
                     .addToBackStack(null)
                     .commit();

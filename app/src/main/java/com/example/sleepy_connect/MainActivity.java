@@ -3,6 +3,7 @@ package com.example.sleepy_connect;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -94,6 +95,10 @@ public class MainActivity extends AppCompatActivity{
     //  page once their android id has been added to the database
     public void startPress(View view){
         // button to switch to the main app (the navigation activity)
+        if (user == null) {
+            Log.e("DEBUG", "user not loaded in");
+            return;
+        }
         Intent i = new Intent(MainActivity.this, NavigationActivity.class);
         i.putExtra("user", user);
         startActivity(i);

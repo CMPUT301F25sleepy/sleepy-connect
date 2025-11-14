@@ -5,6 +5,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class NavigationActivity extends AppCompatActivity {
+public class NavigationActivity extends AppCompatActivity implements SignUpFragment.DialogFragmentListener{
     /* Handles Navigation between fragments of the app */
     // Bottom Navigation View Implementation Code from https://www.youtube.com/watch?v=jOFLmKMOcK0
 
@@ -22,6 +23,8 @@ public class NavigationActivity extends AppCompatActivity {
     private Entrant user;
     public ArrayList<Notification> notification_list = new ArrayList<>();
     String userID;
+    TextView title;
+
 
     private void replaceFragment(Fragment fragment) {
         // replaces current fragment with given fragment
@@ -45,7 +48,7 @@ public class NavigationActivity extends AppCompatActivity {
         userVM.setUser(user);
 
         // Initialize Activity with Community fragment and set the title in top to "Community"
-        TextView title = findViewById(R.id.set_title);
+        title = findViewById(R.id.set_title);
         replaceFragment(new CommunityFragment());
         title.setText("Community");
 
@@ -66,7 +69,7 @@ public class NavigationActivity extends AppCompatActivity {
 
             if (item.getItemId() == R.id.home_button) {
                 title.setText("Home");
-                replaceFragment(new CommunityFragment());
+                replaceFragment(CommunityFragment.newInstance(user.getAndroid_id()));
             } else if (item.getItemId() == R.id.alert_button){
                 title.setText("Alerts");
                 replaceFragment(AlertFragment.newInstance(notification_list, userID));
@@ -85,5 +88,14 @@ public class NavigationActivity extends AppCompatActivity {
 
         });
 
+
+
+
+    }
+
+    @Override
+    public void goToProfile() {
+        title.setText("Profile");
+        replaceFragment(new ProfileFragment());
     }
 }

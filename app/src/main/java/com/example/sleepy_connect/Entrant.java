@@ -117,4 +117,8 @@ public class Entrant implements Serializable {
     public void setNotification_list(ArrayList<Notification> notification_list) {
         this.notification_list = notification_list;
     }
+
+    public void addToAllEventList(String eventID){
+        (this.all_event_list).add(eventID);
+    }
 }
