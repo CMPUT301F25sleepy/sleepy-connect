@@ -39,15 +39,11 @@ public class EventListFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Factory method for a new instance of the fragment
-     * @param locationName location who's events are meant to be displayed
-     * @return a new instance of the fragment
-     */
-    public static EventListFragment newInstance(String locationName) {
+    public static EventListFragment newInstance(String locationName,String entrantID) {
         EventListFragment fragment = new EventListFragment();
         Bundle args = new Bundle();
         args.putString(ARG_LOCNAME, locationName);
+        args.putString("entrant", entrantID);
         fragment.setArguments(args);
         return fragment;
     }
@@ -70,6 +66,9 @@ public class EventListFragment extends Fragment {
         listView = view.findViewById(R.id.event_list_view);
         adapter = new EventListAdapter(eventList);
         listView.setAdapter(adapter);
+
+        Bundle args = getArguments();
+        String entrantID = args.getString("entrant");
 
         TextView eventLocation = view.findViewById(R.id.location);
         if (locationName != null) {
@@ -94,9 +93,11 @@ public class EventListFragment extends Fragment {
             title.setText("Event Details");
 
             // open event details
+            EventDetailsFragment fragment = EventDetailsFragment.newInstance(entrantID, selectedEvent.getEventID());
+
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragment_container, EventDetailsFragment.class, null)
+                    .replace(R.id.fragment_container, fragment)
                     .setReorderingAllowed(true)
                     .addToBackStack(null)
                     .commit();

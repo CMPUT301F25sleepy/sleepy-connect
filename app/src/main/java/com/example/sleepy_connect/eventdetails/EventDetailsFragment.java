@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -14,12 +15,20 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.sleepy_connect.AlertFragment;
 import com.example.sleepy_connect.CommunityCentre;
+import com.example.sleepy_connect.Entrant;
+import com.example.sleepy_connect.EntrantDAL;
 import com.example.sleepy_connect.Event;
+import com.example.sleepy_connect.EventDAL;
+import com.example.sleepy_connect.Notification;
 import com.example.sleepy_connect.EventViewModel;
 import com.example.sleepy_connect.R;
+import com.example.sleepy_connect.SignUpFragment;
+import com.example.sleepy_connect.alertSelectFragment;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
@@ -27,7 +36,7 @@ import java.util.Locale;
  * Fragment class for showing event details
  * @author Sam Francisco
  */
-public class EventDetailsFragment extends Fragment {
+public class EventDetailsFragment extends Fragment{
 
     Event event;
     SimpleDateFormat dateFormat = new SimpleDateFormat("M/d/y", Locale.getDefault());
@@ -40,8 +49,13 @@ public class EventDetailsFragment extends Fragment {
      * Factory method for this fragment
      * @return A new instance of fragment EventDetailsFragment.
      */
-    public static EventDetailsFragment newInstance(String param1, String param2) {
-        return new EventDetailsFragment();
+    public static EventDetailsFragment newInstance(String entrantID, String eventID) {
+        EventDetailsFragment fragment = new EventDetailsFragment();
+        Bundle args = new Bundle();
+        args.putString("entrant",entrantID);
+        args.putString("event",eventID);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
@@ -73,6 +87,67 @@ public class EventDetailsFragment extends Fragment {
                     .replace(R.id.event_details_fragment_container, new LotteryGuidelinesFragment())
                     .commit();
         });
+
+        // implement join lottery click
+        Bundle args = getArguments();
+        String entrantID = args.getString("entrant");
+        String eventID = args.getString("event");
+        Button joinButton = view.findViewById(R.id.waitlist_join_button);
+        joinButton.setOnClickListener(v -> {
+
+            if (eventID == null){
+                Log.e("DEBUG", "entrantID is null – not calling DAL.getEntrant");
+                return;
+            }
+
+            if (entrantID == null) {
+                Log.e("DEBUG", "entrantID is null – not calling DAL.getEntrant");
+                return; // or show an error
+            }
+
+            // check if user has filled out all details
+            EntrantDAL DAL = new EntrantDAL();
+            DAL.getEntrant(entrantID, new EntrantDAL.OnEntrantRetrievedListener() {
+                @Override
+                public void onEntrantRetrieved(Entrant entrant) {
+                    if (entrant != null) {
+                        // obtain all info from user
+                        String user = entrant.getUsername();
+                        String first = entrant.getFirst_name();
+                        String last = entrant.getLast_name();
+                        String birthday = entrant.getBirthday();
+                        String phone = entrant.getPhone_number();
+                        String email = entrant.getEmail();
+                        DialogFragment SignFragment = SignUpFragment.newInstance();
+
+                        if (user == null || first == null || last == null || birthday == null || phone == null || email == null || user == "" || first == "" || last == "" || birthday == "" || phone == "" || email == "") {
+                            // if any information is missing, pop up a sign up fragment to fill details
+                            SignFragment.show(getParentFragmentManager(), "failure");
+                        } else {
+                            // If user has everything filled out, sign user to waitlist
+                            EventDAL eDAL = new EventDAL();
+                            eDAL.getEvent(eventID, new EventDAL.OnEventRetrievedListener() {
+                                @Override
+                                public void onEventRetrieved(Event event){
+                                    if (event != null){
+                                        event.addToWaitlist(entrantID);
+                                        eDAL.updateEvent(event);
+                                    } else {
+                                        System.err.println("No event found with ID: " + eventID);
+                                    }
+                                }
+                            });
+                            entrant.addToAllEventList(eventID);
+                            DAL.updateEntrant(entrant);
+                            SignFragment.show(getParentFragmentManager(), "success");
+                        }
+                    } else {
+                        System.err.println("No entrant found with ID: " + entrantID);
+                    }
+                }
+            });
+        });
+
     }
 
     /**

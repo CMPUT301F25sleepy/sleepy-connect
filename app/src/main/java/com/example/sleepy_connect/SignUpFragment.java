@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,32 +24,66 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class SignUpFragment extends DialogFragment {
 
+    public interface DialogFragmentListener{
+        void goToProfile();
+    }
+
+    DialogFragmentListener listener;
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof DialogFragmentListener) {
+            listener = (DialogFragmentListener) context;
+        } else {
+            throw new RuntimeException(context + " must implement DialogFragmentListener");
+        }
+    }
+
+
+    public static SignUpFragment newInstance(){
+
+        // creates a new fragment with selected notification as it's argument and return it
+        Bundle args =  new Bundle();
+        SignUpFragment fragment = new SignUpFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.sign_up_fragment, null);
-        EditText editFirstName = view.findViewById(R.id.edit_text_first_name);
-        EditText editLastName = view.findViewById(R.id.edit_text_last_name);
-        EditText editEmail = view.findViewById(R.id.edit_text_email);
-        EditText editBirthday = view.findViewById(R.id.edit_text_birthday);
-        EditText editPhone = view.findViewById(R.id.edit_text_phone);
-        EditText editUsername = view.findViewById(R.id.edit_text_username);
 
+        //get all arguments
+        Bundle args = getArguments();
+
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.sign_up_fragment, null);
+        TextView main = view.findViewById(R.id.main_text);
+        TextView sub = view.findViewById(R.id.sub_text);
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext(), R.style.CustomAlertDialog);
-        return builder
-                .setView(view)
-                .setNegativeButton("Cancel", null)
-                .setPositiveButton("Confirm", (dialog, which) -> {
-                    String firstName = editFirstName.getText().toString();
-                    String lastName = editLastName.getText().toString();
-                    String email = editEmail.getText().toString();
-                    String birthday = editBirthday.getText().toString();
-                    String phone = editPhone.getText().toString();
-                    String username = editUsername.getText().toString();
-                    //listener.addEntrant(new Entrant(firstName, lastName, email, birthday, phone, username, password));
-                })
-                .create();
+        String tag = this.getTag();
+
+        if (tag == "success") {
+            main.setText("Sucess!");
+            sub.setText("You have sign up for the event");
+
+            return builder
+                    .setView(view)
+                    .setNegativeButton("Return", null)
+                    .create();
+        } else {
+            return builder
+                    .setView(view)
+                    .setNegativeButton("Back", null)
+                    .setPositiveButton("Profile", (dialog, which) -> {
+                        // replaces current fragment with given fragment
+                        listener.goToProfile();
+                    })
+                    .create();
+            }
         }
+
+
 
 
 

@@ -1,6 +1,7 @@
 package com.example.sleepy_connect;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,17 +22,18 @@ public class CommunityFragment extends Fragment {
     private ListView listView;
     private CommunityCentreAdapter adapter;
     private final List<CommunityCentre> centreList = new ArrayList<>();
+    private String entrantID;
 
     public CommunityFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Factory method for instantiation
-     * @return new instance of the fragment
-     */
-    public static CommunityFragment newInstance() {
-        return new CommunityFragment();
+    public static CommunityFragment newInstance(String entrantID) {
+        CommunityFragment fragment = new CommunityFragment();
+        Bundle args = new Bundle();
+        args.putString("entrant", entrantID);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
@@ -47,6 +49,14 @@ public class CommunityFragment extends Fragment {
         listView =view.findViewById(R.id.list_view);
         adapter = new CommunityCentreAdapter(centreList);
         listView.setAdapter(adapter);
+
+        Bundle args = getArguments();
+
+        if (args != null) {
+            entrantID = args.getString("entrant");
+        } else {
+            Log.e("DEBUG", "args is null");
+        }
 
         // Fetch data from Firestore
         CommunityCentreDAL dal = new CommunityCentreDAL();
@@ -71,11 +81,17 @@ public class CommunityFragment extends Fragment {
             TextView locationName = view1.findViewById(R.id.alert_message);
             String clickedLocationName = locationName.getText().toString();
 
+            if (args == null) {
+                Log.e("DEBUG", "args is null – not calling DAL.getEntrant");
+                return; // or show an error
+            }
+
+            
             //change toolbar title
             TextView title = requireActivity().findViewById(R.id.set_title);
             title.setText("Events");
 
-            EventListFragment eventListFrag = EventListFragment.newInstance(clickedLocationName);
+            EventListFragment eventListFrag = EventListFragment.newInstance(clickedLocationName,entrantID);
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, eventListFrag)
