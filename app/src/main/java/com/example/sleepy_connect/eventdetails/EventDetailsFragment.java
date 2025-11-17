@@ -42,7 +42,7 @@ public class EventDetailsFragment extends Fragment{
     Event event;
     SimpleDateFormat dateFormat = new SimpleDateFormat("M/d/y", Locale.getDefault());
 
-    Boolean inInvited;
+    Boolean inInvited = false;
     Button viewStatusButton;
     Button joinButton;
 
@@ -78,6 +78,7 @@ public class EventDetailsFragment extends Fragment{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
 
         joinButton = view.findViewById(R.id.waitlist_join_button);
         viewStatusButton = view.findViewById(R.id.view_status_button);
