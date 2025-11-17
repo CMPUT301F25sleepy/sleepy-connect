@@ -21,6 +21,7 @@ import com.example.sleepy_connect.Entrant;
 import com.example.sleepy_connect.EntrantDAL;
 import com.example.sleepy_connect.Event;
 import com.example.sleepy_connect.EventDAL;
+import com.example.sleepy_connect.InviteFromDetailsFragment;
 import com.example.sleepy_connect.Notification;
 import com.example.sleepy_connect.EventViewModel;
 import com.example.sleepy_connect.R;
@@ -40,6 +41,10 @@ public class EventDetailsFragment extends Fragment{
 
     Event event;
     SimpleDateFormat dateFormat = new SimpleDateFormat("M/d/y", Locale.getDefault());
+
+    Boolean inInvited;
+    Button viewStatusButton;
+    Button joinButton;
 
     public EventDetailsFragment() {
         // Required empty public constructor
@@ -74,6 +79,21 @@ public class EventDetailsFragment extends Fragment{
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        joinButton = view.findViewById(R.id.waitlist_join_button);
+        viewStatusButton = view.findViewById(R.id.view_status_button);
+        Bundle args = getArguments();
+        String entrantID = args.getString("entrant");
+        String eventID = args.getString("event");
+
+        //TODO - check if user is in the invited list
+
+        //if the user is on the invited list for that event
+        if (inInvited) {
+            joinButton.setVisibility(View.GONE);
+            viewStatusButton.setVisibility(View.VISIBLE);
+
+        }
+
         // receive event details from viewmodel
         event = EventViewModel.getEvent().getValue();
 
@@ -88,11 +108,16 @@ public class EventDetailsFragment extends Fragment{
                     .commit();
         });
 
+        //opens fragment to accept or decline if they click the button to view their invitation
+        viewStatusButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment invitedFragment = com.example.sleepy_connect.InviteFromDetailsFragment.newInstance(eventID, entrantID);
+                invitedFragment.show(getParentFragmentManager(), "invited");
+            }
+        });
+
         // implement join lottery click
-        Bundle args = getArguments();
-        String entrantID = args.getString("entrant");
-        String eventID = args.getString("event");
-        Button joinButton = view.findViewById(R.id.waitlist_join_button);
         joinButton.setOnClickListener(v -> {
 
             // check if user has filled out all details
