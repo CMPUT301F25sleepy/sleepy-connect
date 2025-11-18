@@ -32,6 +32,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * Fragment class for showing event details
@@ -43,8 +44,13 @@ public class EventDetailsFragment extends Fragment{
     SimpleDateFormat dateFormat = new SimpleDateFormat("M/d/y", Locale.getDefault());
 
     Boolean inInvited = false;
+    Boolean inWaitlist = false;
     Button viewStatusButton;
     Button joinButton;
+    Button leaveButton;
+    public ArrayList<String> pendingList;
+    public ArrayList<String> acceptedList;
+    public ArrayList<String> waitList;
 
     public EventDetailsFragment() {
         // Required empty public constructor
@@ -79,24 +85,59 @@ public class EventDetailsFragment extends Fragment{
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
         joinButton = view.findViewById(R.id.waitlist_join_button);
         viewStatusButton = view.findViewById(R.id.view_status_button);
+        leaveButton = view.findViewById(R.id.leave_waitlist_button);
         Bundle args = getArguments();
         String entrantID = args.getString("entrant");
         String eventID = args.getString("event");
 
-        //TODO - check if user is in the invited list
+        // receive event details from viewmodel
+        event = EventViewModel.getEvent().getValue();
+
+        //checks if user is in the waitlist and sets bool
+        if (event.getWaitingList() != null) {
+            waitList = event.getWaitingList();
+            for (String entrant : waitList) {
+                if (Objects.equals(entrant, entrantID)) {
+                    inWaitlist = true;
+                    break;
+                }
+            }
+        }
+
+        //checks if entrant has a withstanding invite for that event and sets bool
+        if (event.getPendingList() != null) {
+            pendingList = event.getPendingList();
+            for (String entrant : pendingList) {
+                if (Objects.equals(entrant, entrantID)) {
+                    inInvited = true;
+                    break;
+                }
+            }
+        }
+
+        //if the user is already enrolled, they will see no button other than lottery guidelines
+        if (event.getAcceptedList() != null) {
+            acceptedList = event.getAcceptedList();
+            for (String entrant : acceptedList) {
+                if (Objects.equals(entrant, entrantID)) {
+                    joinButton.setVisibility(View.GONE);
+                }
+            }
+        }
 
         //if the user is on the invited list for that event
         if (inInvited) {
             joinButton.setVisibility(View.GONE);
             viewStatusButton.setVisibility(View.VISIBLE);
-
         }
 
-        // receive event details from viewmodel
-        event = EventViewModel.getEvent().getValue();
+        //if the entrant is already in the waitlist, it gives them the option to leave rather than join
+        if(inWaitlist) {
+            joinButton.setVisibility(View.GONE);
+            leaveButton.setVisibility(View.VISIBLE);
+        }
 
         // set the fields from received event model
         setFields(view);
@@ -107,6 +148,14 @@ public class EventDetailsFragment extends Fragment{
             getChildFragmentManager().beginTransaction()
                     .replace(R.id.event_details_fragment_container, new LotteryGuidelinesFragment())
                     .commit();
+        });
+
+        //allows entrant to leave the waitlist
+        leaveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO - set button to remove the entrant from the waitlist
+            }
         });
 
         //opens fragment to accept or decline if they click the button to view their invitation
