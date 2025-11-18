@@ -3,6 +3,7 @@ package com.example.sleepy_connect.entrantmanagement;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,9 +44,9 @@ public class InvitedListFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_invited_list, container, false);
-
+        ListViewModel vm = new ViewModelProvider(requireActivity()).get(ListViewModel.class);
         listView = view.findViewById(R.id.invited_entrant_list);
-        entrantList = new ArrayList<>();
+        entrantList = vm.getPendingList().getValue();
         adapter = new EntrantListAdapter(entrantList, getContext());
         listView.setAdapter(adapter);
 
