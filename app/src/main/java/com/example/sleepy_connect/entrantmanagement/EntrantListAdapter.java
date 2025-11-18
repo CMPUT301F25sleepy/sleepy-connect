@@ -22,6 +22,7 @@ public class EntrantListAdapter extends BaseAdapter {
 
     public EntrantListAdapter(List<Entrant> entrants, Context context) {
         this.entrants = entrants;
+        this.inflater = LayoutInflater.from(context);
         this.context = context;
     }
 

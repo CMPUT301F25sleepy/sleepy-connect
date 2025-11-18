@@ -2,20 +2,26 @@ package com.example.sleepy_connect.entrantmanagement;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 
-import com.example.sleepy_connect.DrawReplacements;
+import com.example.sleepy_connect.CommunityFragment;
 import com.example.sleepy_connect.Entrant;
 import com.example.sleepy_connect.Event;
 import com.example.sleepy_connect.EventViewModel;
+import com.example.sleepy_connect.DrawReplacements;
 import com.example.sleepy_connect.ObtainGeolocation;
 import com.example.sleepy_connect.R;
+import com.example.sleepy_connect.eventmanager.EventManagerBottomSheet;
 
 import java.util.ArrayList;
 
@@ -39,18 +45,18 @@ public class WaitlistFragment extends Fragment {
      *
      * @return A new instance of fragment WaitlistFragment.
      */
-    public static WaitlistFragment newInstance() {
-        return new WaitlistFragment();
-    }
+    public static WaitlistFragment newInstance() { return new WaitlistFragment(); }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_waitlist, container, false);
 
+        // Inflate the layout for this fragment
+        // Get the shared ViewModel instance
+        ListViewModel vm = new ViewModelProvider(requireActivity()).get(ListViewModel.class);
+        View view = inflater.inflate(R.layout.fragment_waitlist, container, false);
         listView = view.findViewById(R.id.waitlist_entrant_list);
-        entrantList = new ArrayList<>();
+        entrantList = vm.getWaitingList().getValue();
         adapter = new EntrantListAdapter(entrantList, getContext());
         listView.setAdapter(adapter);
 
@@ -78,5 +84,21 @@ public class WaitlistFragment extends Fragment {
         });
 
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        listView = view.findViewById(R.id.waitlist_entrant_list);
+        listView.setOnItemClickListener((parent, view1, position, id) -> {
+            // TODO - add option to remove entrant to ALL lists
+
+
+            // open bottom sheet
+            EntrantManagerSelectedBottomSheet bottomSheet = new EntrantManagerSelectedBottomSheet();
+            bottomSheet.show(requireActivity().getSupportFragmentManager(), "ModalBottomSheet");
+        });
+
     }
 }

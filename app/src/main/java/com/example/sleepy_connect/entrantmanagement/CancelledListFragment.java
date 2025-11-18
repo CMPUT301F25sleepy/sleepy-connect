@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.sleepy_connect.Entrant;
 import com.example.sleepy_connect.R;
@@ -42,9 +43,9 @@ public class CancelledListFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_cancelled_list, container, false);
-
+        ListViewModel vm = new ViewModelProvider(requireActivity()).get(ListViewModel.class);
         listView = view.findViewById(R.id.cancelled_entrant_list);
-        entrantList = new ArrayList<>();
+        entrantList = vm.getDeclinedList().getValue();
         adapter = new EntrantListAdapter(entrantList, getContext());
         listView.setAdapter(adapter);
 
