@@ -228,6 +228,7 @@ In the java code, check whether the user is joined in the waitlist already and i
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Export"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toTopOf="@+id/event_location"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.87"

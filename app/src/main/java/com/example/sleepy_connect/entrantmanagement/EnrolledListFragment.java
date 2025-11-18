@@ -4,11 +4,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
 
 import com.example.sleepy_connect.Entrant;
+import com.example.sleepy_connect.Event;
+import com.example.sleepy_connect.EventViewModel;
+import com.example.sleepy_connect.ExportCSV;
 import com.example.sleepy_connect.R;
 
 import java.util.ArrayList;
@@ -47,6 +51,17 @@ public class EnrolledListFragment extends Fragment {
         entrantList = new ArrayList<>();
         adapter = new EntrantListAdapter(entrantList, getContext());
         listView.setAdapter(adapter);
+
+        // Calls the current event for use in ExportCSV
+        Event event = EventViewModel.getEvent().getValue();
+        
+        // For the export CSV button
+        Button exportCSV = view.findViewById(R.id.enrolled_export_button);
+
+        exportCSV.setOnClickListener(v -> {
+            ExportCSV exporter = new ExportCSV();
+            exporter.exportCSVFile(requireContext(), event, "accepted_users.csv");
+        });
 
         return view;
     }
