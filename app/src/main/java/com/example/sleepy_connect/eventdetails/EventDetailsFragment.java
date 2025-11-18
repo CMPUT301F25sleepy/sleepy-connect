@@ -169,19 +169,6 @@ public class EventDetailsFragment extends Fragment{
             }
         });
 
-        // For the view locations button
-        Button viewLocationList = view.findViewById(R.id.geolocation_list_view);
-
-        viewLocationList.setOnClickListener(v -> {
-            ObtainGeolocation fragment = new ObtainGeolocation();
-
-            requireActivity().getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment_container, fragment)
-                    .addToBackStack(null)
-                    .commit();
-        });
-
         // For the export CSV button
         Button exportCSV = view.findViewById(R.id.export_csv);
 
