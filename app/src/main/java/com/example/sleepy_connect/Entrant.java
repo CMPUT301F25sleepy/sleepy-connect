@@ -20,6 +20,15 @@ public class Entrant implements Serializable {
     public String last_name;
     public String first_name;
     public ArrayList<Notification> notification_list;
+
+    public ArrayList<String> getCreated_event_list() {
+        return created_event_list;
+    }
+
+    public ArrayList<String> getAll_event_list() {
+        return all_event_list;
+    }
+
     public ArrayList<String> all_event_list;                // List of all events that entrant is affiliated with
     public ArrayList<String> created_event_list;            // List of all events that entrant may have created (organizer)
 
@@ -113,4 +122,5 @@ public class Entrant implements Serializable {
     public void addToAllEventList(String eventID){
         (this.all_event_list).add(eventID);
     }
+
 }
