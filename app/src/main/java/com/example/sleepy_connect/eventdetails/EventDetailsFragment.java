@@ -169,13 +169,7 @@ public class EventDetailsFragment extends Fragment{
             }
         });
 
-        // For the export CSV button
-        Button exportCSV = view.findViewById(R.id.export_csv);
 
-        exportCSV.setOnClickListener(v -> {
-            ExportCSV exporter = new ExportCSV();
-            exporter.exportCSVFile(requireContext(), event, "accepted_users.csv");
-        });
 
         // implement join lottery click
         joinButton.setOnClickListener(v -> {
