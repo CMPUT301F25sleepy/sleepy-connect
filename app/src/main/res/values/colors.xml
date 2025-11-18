@@ -17,5 +17,6 @@
 
     <color name="box_fill">#F0F0F0</color>
     <color name="button">#3972C7</color>
+    <color name="green_button">#B8E99F</color>
 
 </resources>

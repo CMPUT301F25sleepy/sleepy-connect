@@ -28,7 +28,7 @@ public class NavigationActivity extends AppCompatActivity implements SignUpFragm
     public ArrayList<Notification> notification_list = new ArrayList<>();
     String userID;
     TextView title;
-
+    TextView back;
 
     /**
      *  replaces current fragment with given fragment
@@ -95,8 +95,11 @@ public class NavigationActivity extends AppCompatActivity implements SignUpFragm
 
         });
 
-
-
+        // initialize back button listener
+        back = findViewById(R.id.app_bar_back);
+        back.setOnClickListener(v -> {
+            getSupportFragmentManager().popBackStack();
+        });
 
     }
 
