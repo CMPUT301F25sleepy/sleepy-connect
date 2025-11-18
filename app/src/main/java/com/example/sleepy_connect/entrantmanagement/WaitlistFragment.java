@@ -5,7 +5,9 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +17,10 @@ import android.widget.ListView;
 import com.example.sleepy_connect.DrawReplacements;
 import com.example.sleepy_connect.Event;
 import com.example.sleepy_connect.EventViewModel;
+import com.example.sleepy_connect.DrawReplacements;
 import com.example.sleepy_connect.ObtainGeolocation;
 import com.example.sleepy_connect.R;
+import com.example.sleepy_connect.eventmanager.EventManagerBottomSheet;
 
 import java.util.ArrayList;
 
@@ -42,7 +46,6 @@ public class WaitlistFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_waitlist, container, false);
-
         listView = view.findViewById(R.id.waitlist_entrant_list);
 
         // Initialize empty list, adapter loads Entrants with DAL
@@ -103,5 +106,21 @@ public class WaitlistFragment extends Fragment {
             DrawReplacements replace = new DrawReplacements();
             replace.drawReplacementApp(event);
         });
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        listView = view.findViewById(R.id.waitlist_entrant_list);
+        listView.setOnItemClickListener((parent, view1, position, id) -> {
+            // TODO - add option to remove entrant to ALL lists
+
+
+            // open bottom sheet
+            EntrantManagerSelectedBottomSheet bottomSheet = new EntrantManagerSelectedBottomSheet();
+            bottomSheet.show(requireActivity().getSupportFragmentManager(), "ModalBottomSheet");
+        });
+
     }
 }

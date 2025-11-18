@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.sleepy_connect.Event;
 import com.example.sleepy_connect.R;
 import com.example.sleepy_connect.entrantmanagement.EntrantManagerFragment;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -20,6 +21,14 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
  */
 public class EventManagerBottomSheet extends BottomSheetDialogFragment {
 
+    public static EventManagerBottomSheet newInstance(Event event) {
+        EventManagerBottomSheet fragment = new EventManagerBottomSheet();
+        Bundle args = new Bundle();
+        args.putSerializable("event", event);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -27,8 +36,8 @@ public class EventManagerBottomSheet extends BottomSheetDialogFragment {
         View view = inflater.inflate(R.layout.fragment_event_manager_bottom_sheet, container, false);
 
         // Find buttons from the layout
-        TextView tvEditEvent = view.findViewById(R.id.bs_event_manager_tv_edit_event);
-        TextView tvManageEntrants = view.findViewById(R.id.bs_event_manager_tv_manage_entrants);
+        TextView tvEditEvent = view.findViewById(R.id.bs_entrant_manager_selected_delete_entrant);
+        TextView tvManageEntrants = view.findViewById(R.id.bs_entrant_manager_selected_send_notification);
 
         // Set click listener for edit event
         tvEditEvent.setOnClickListener(v -> {
@@ -46,11 +55,15 @@ public class EventManagerBottomSheet extends BottomSheetDialogFragment {
 
         // Set click listener for manage entrants
         tvManageEntrants.setOnClickListener(v -> {
+            Bundle args = getArguments();
 
+            Event event = (Event) args.getSerializable("event");
+
+            EntrantManagerFragment fragment = EntrantManagerFragment.newInstance(event);
             // open entrant manager screen
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragment_container, EntrantManagerFragment.class, null)
+                    .replace(R.id.fragment_container, fragment, null)
                     .setReorderingAllowed(true)
                     .addToBackStack(null)
                     .commit();

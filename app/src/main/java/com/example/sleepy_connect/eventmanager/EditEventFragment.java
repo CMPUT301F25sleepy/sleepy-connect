@@ -13,6 +13,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -31,6 +32,7 @@ import com.example.sleepy_connect.Image;
 import com.example.sleepy_connect.R;
 import com.example.sleepy_connect.EventViewModel;
 import com.example.sleepy_connect.eventdetails.QRCodeFragment;
+import com.google.zxing.qrcode.encoder.QRCode;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -131,9 +133,11 @@ public class EditEventFragment extends Fragment {
         SwitchCompat geolocationSwitch = view.findViewById(R.id.edit_geolocation_switch);
         geolocationSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> geolocationOn = isChecked);
 
-        // initialize QR Code generator
+        // initialize QR Code generator, set visibility of QR code views
         Button generateQRCodeButton = view.findViewById(R.id.generate_qr_code_button);
         generateQRCodeButton.setOnClickListener(v -> openQRCodeFragment());
+        ConstraintLayout QRCodeLayout = view.findViewById(R.id.generate_qr_code_layout);
+        QRCodeLayout.setVisibility(view.VISIBLE);
 
         // Save event button
         TextView saveBtn = view.findViewById(R.id.event_confirm_edit_button);
@@ -203,18 +207,22 @@ public class EditEventFragment extends Fragment {
 
     // TODO: update encoded info in QR
     protected void openQRCodeFragment() {
-        TextView eventTitle = requireView().findViewById(R.id.edit_event_title);
         TextView errorText = requireView().findViewById(R.id.qr_code_error_text);
 
-        if (!eventTitle.getText().toString().isEmpty()) {
+        String eventID = "sleepyEventApp/".concat(event.getEventID());
+        // checks event id is not null(default string value)
+        if (eventID != null) {
+            // generates QR code, opens up fragment with code
             errorText.setVisibility(View.GONE);
-            QRCodeFragment qrCodeFragment = QRCodeFragment.newInstance(eventTitle.getText().toString());
+            QRCodeFragment qrCodeFragment = QRCodeFragment.newInstance(eventID);
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, qrCodeFragment)
                     .addToBackStack(null)
                     .commit();
-        } else {
+        }
+
+        else {
             errorText.setVisibility(View.VISIBLE);
         }
     }

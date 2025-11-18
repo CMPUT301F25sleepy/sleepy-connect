@@ -9,6 +9,7 @@ import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.sleepy_connect.Event;
 import com.example.sleepy_connect.EventViewModel;
@@ -39,6 +40,7 @@ public class EnrolledListFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_enrolled_list, container, false);
+        ListViewModel vm = new ViewModelProvider(requireActivity()).get(ListViewModel.class);
 
         listView = view.findViewById(R.id.enrolled_entrant_list);
 

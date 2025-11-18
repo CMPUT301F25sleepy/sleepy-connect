@@ -9,15 +9,23 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.example.sleepy_connect.CommunityFragment;
+import com.example.sleepy_connect.Entrant;
+import com.example.sleepy_connect.Event;
 import com.example.sleepy_connect.R;
+import com.example.sleepy_connect.eventmanager.EventManagerBottomSheet;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+
+import java.util.ArrayList;
 
 /**
  * Dialog fragment class for opening entrant lists
  * @author Sam Francisco
  */
 public class EntrantManagerBottomSheet extends BottomSheetDialogFragment {
+
 
     @Nullable
     @Override
@@ -51,6 +59,7 @@ public class EntrantManagerBottomSheet extends BottomSheetDialogFragment {
     }
 
     void startListFragment(TextView listLabel, String newLabel, Class<? extends Fragment> fragmentClass) {
+
 
         // set list label
         listLabel.setText(newLabel);

@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="40dp"
         android:layout_marginEnd="100dp"
         android:fontFamily="@font/roboto_medium"
         android:text="QR Code Generated for your Event:"
@@ -49,5 +49,19 @@
         app:layout_constraintTop_toBottomOf="@+id/qr_code_label"
         app:layout_constraintVertical_bias="0.003"
         app:srcCompat="@drawable/black_square_border" />
+
+    <TextView
+        android:id="@+id/qr_description_text_view"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="80dp"
+        android:text="Add this code to your event poster. Scanning it will take you to your details page!"
+        android:textAlignment="center"
+        android:textSize="18dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/qr_code_image" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
