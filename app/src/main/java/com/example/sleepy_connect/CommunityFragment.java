@@ -51,12 +51,7 @@ public class CommunityFragment extends Fragment {
         listView.setAdapter(adapter);
 
         Bundle args = getArguments();
-
-        if (args != null) {
-            entrantID = args.getString("entrant");
-        } else {
-            Log.e("DEBUG", "args is null");
-        }
+        entrantID = args.getString("entrant");
 
         // Fetch data from Firestore
         CommunityCentreDAL dal = new CommunityCentreDAL();

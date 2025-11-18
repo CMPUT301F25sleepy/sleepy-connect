@@ -14,12 +14,13 @@ import androidx.annotation.Nullable;
 
 import com.google.android.material.card.MaterialCardView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Custom array adapter for the notifications from events
  */
-public class AlertAdapter extends ArrayAdapter<Notification> {
+public class AlertAdapter extends ArrayAdapter<Notification> implements Serializable {
     /* Sets up notification in the list for the list view */
 
     public AlertAdapter(@NonNull Context context, ArrayList<Notification> array) {

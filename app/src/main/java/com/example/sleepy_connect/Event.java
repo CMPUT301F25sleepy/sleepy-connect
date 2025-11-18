@@ -1,5 +1,6 @@
 package com.example.sleepy_connect;
 
+import java.io.Serializable;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.TextStyle;
@@ -10,7 +11,7 @@ import java.util.Locale;
  * Object class for events
  */
 
-public class Event {
+public class Event implements Serializable {
     public String eventID;                                  // Automatic
     public String eventName;                                // Required
     public String description;                              // Optional
