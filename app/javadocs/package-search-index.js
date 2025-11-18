@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.example.sleepy_connect"},{"l":"com.example.sleepy_connect.eventdetails"},{"l":"com.example.sleepy_connect.invitedlist"},{"l":"com.example.sleepy_connect.qrcodeUtil"},{"l":"com.example.sleepy_connect.waitlist"}];updateSearchResults();

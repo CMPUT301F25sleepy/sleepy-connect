@@ -6,6 +6,10 @@ import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Locale;
 
+/**
+ * Object class for events
+ */
+
 public class Event {
     public String eventID;                                  // Automatic
     public String eventName;                                // Required
@@ -30,6 +34,7 @@ public class Event {
     public ArrayList<String> acceptedList;                  // Automatic. List of accepted entrant android IDs
 
     public Event(
+            String eventID,
             String eventName,
             CommunityCentre communityCentre,
             String creatorID,
@@ -44,6 +49,7 @@ public class Event {
     /* You need to set the optional fields manually after creating the event using setters. */
     {
         // Required
+        this.eventID = eventID;
         this.eventName = eventName;
         this.communityCentre = communityCentre;
         this.creatorID = creatorID;
@@ -61,7 +67,6 @@ public class Event {
         this.waitlistCapacity = Integer.MAX_VALUE;
 
         // Automatic
-        this.eventID = null;
         this.qrCode = null;
         this.createdDate = Instant.now().toEpochMilli();
         this.eventDayOfWeek = Instant.ofEpochMilli(eventStartDate)
@@ -177,4 +182,113 @@ public class Event {
     public String getEventDayOfWeek() {
         return eventDayOfWeek;
     }
+
+    public void setWaitingList(ArrayList<String> waitingList) {
+        this.waitingList = waitingList;
+    }
+
+    public void setAcceptedList(ArrayList<String> acceptedList) {
+        this.acceptedList = acceptedList;
+    }
+
+    public void setPendingList(ArrayList<String> pendingList) {
+        this.pendingList = pendingList;
+    }
+
+    /**
+     * add an entrant to the waitlist for a particular event
+     * @param entrantID Entrant to be added
+     */
+    public void addToWaitlist(String entrantID){
+        if (this.waitingList == null){
+            this.waitingList = new ArrayList<>();
+        }
+        this.waitingList.add(entrantID);
+    }
+
+    /**
+     * add an entrant to the declined list for a particular event after they decline their invitation
+     * @param entrantID Entrant to be added
+     */
+    public void addToDeclinelist(String entrantID){
+        if (this.declinedList == null){
+            this.declinedList = new ArrayList<>();
+        }
+        this.declinedList.add(entrantID);
+    }
+
+    public void addTolist(String entrantID){
+        if (this.waitingList == null){
+            this.waitingList = new ArrayList<>();
+        }
+        this.waitingList.add(entrantID);
+    }
+
+    /**
+     * remove an entrant from the waitlist for a particular event
+     * @param entrantID Entrant to be removed
+     */
+    public void removeFromWaitlist(String entrantID){
+        if (this.waitingList.contains(entrantID)){
+            this.waitingList.remove(entrantID);
+        } else {
+            System.err.println("Error entrantID is not in waiting list");
+        }
+    }
+
+    /**
+     * remove an entrant from the accepted list for a particular event after they have accepted the invitation/are enrolled
+     * @param entrantID Entrant to be removed
+     */
+    public void removeFromAcceptedList(String entrantID){
+        if (this.acceptedList.contains(entrantID)){
+            this.acceptedList.remove(entrantID);
+        } else {
+            System.err.println("Error entrantID is not in accepted list");
+        }
+    }
+
+    /**
+     * remove an entrant from the declined list for a particular event
+     * @param entrantID Entrant to be removed
+     */
+    public void removeFromDeclinedList(String entrantID){
+        if (this.declinedList.contains(entrantID)){
+            this.declinedList.remove(entrantID);
+        } else {
+            System.err.println("Error entrantID is not in declined list");
+        }
+    }
+
+    /**
+     * remove an entrant form the pending list for a particular event after they accept or decline or to revoke their invitation
+     * @param entrantID Entrant to be removed
+     */
+    public void removeFromPendingList(String entrantID){
+        if (this.pendingList.contains(entrantID)){
+            this.pendingList.remove(entrantID);
+        } else {
+            System.err.println("Error entrantID is not in accepted list");
+        }
+    }
+
+    /**
+     * add an entrant to the accepted list for a particular event after they accept their invitation
+     * @param entrantID Entrant to be added
+     */
+    public void addToAcceptedList(String entrantID){
+        if (this.acceptedList == null){
+            this.acceptedList = new ArrayList<>();
+        }
+        this.acceptedList.add(entrantID);
+    }
+
+    public void setDeclinedList(ArrayList<String> declinedList) {
+        this.declinedList = declinedList;
+    }
+
+    public int getWaitlistSize() {
+        return waitingList.size();
+    }
+
 }

@@ -1,19 +1,11 @@
 package com.example.sleepy_connect;
 
-import android.util.Base64;
-
-import java.io.Serial;
 import java.io.Serializable;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.KeySpec;
 import java.util.ArrayList;
 
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
-
-import java.util.ArrayList;
+/**
+ * object class for entrants
+ */
 
 public class Entrant implements Serializable {
     /* Creates an entrant object:
@@ -30,6 +22,7 @@ public class Entrant implements Serializable {
     public ArrayList<Notification> notification_list;
     public ArrayList<String> all_event_list;                // List of all events that entrant is affiliated with
     public ArrayList<String> created_event_list;            // List of all events that entrant may have created (organizer)
+
 
     public Entrant(String android_id) {
         this.android_id = android_id;
@@ -106,4 +99,18 @@ public class Entrant implements Serializable {
         this.created_event_list.add(eventID);
     }
 
+    public ArrayList<Notification> getNotification_list() {
+        if (notification_list == null){
+            notification_list = new ArrayList<>();
+        }
+        return this.notification_list;
+    }
+
+    public void setNotification_list(ArrayList<Notification> notification_list) {
+        this.notification_list = notification_list;
+    }
+
+    public void addToAllEventList(String eventID){
+        (this.all_event_list).add(eventID);
+    }
 }

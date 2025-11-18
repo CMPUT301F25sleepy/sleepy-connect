@@ -14,13 +14,20 @@ import androidx.fragment.app.Fragment;
 import com.example.sleepy_connect.R;
 import com.example.sleepy_connect.qrcodeUtil.QRCodeGenerator;
 
-// fragment for displaying QR code to user
+/**
+ * Fragment for displaying QR code to user
+ */
 public class QRCodeFragment extends Fragment {
     // in case data wasn't passed in correctly, use default string
     // later, could raise error message, but fragment should protect from this
     private static final String stringARG = "defaultString";
     private String data;
 
+    /**
+     * Factory method for the fragment
+     * @param stringToEncode variable for what the QR code will represent
+     * @return new instance of the fragment
+     */
     public static QRCodeFragment newInstance(String stringToEncode) {
         QRCodeFragment fragment = new QRCodeFragment();
         // retrieve data from bundle
@@ -50,7 +57,9 @@ public class QRCodeFragment extends Fragment {
         return view;
     }
 
-    // closes from fragment after hitting back button
+    /**
+     * closes fragment after hitting back button
+     */
     private void closeFragment() {
         getParentFragmentManager().popBackStack();
     }

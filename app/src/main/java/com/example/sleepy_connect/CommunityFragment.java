@@ -1,6 +1,7 @@
 package com.example.sleepy_connect;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,30 +9,29 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import androidx.fragment.app.Fragment;
+
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * class for the fragment that displays the list of community centres
+ */
+
 public class CommunityFragment extends Fragment {
-
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    private String mParam1;
-    private String mParam2;
 
     private ListView listView;
     private CommunityCentreAdapter adapter;
     private final List<CommunityCentre> centreList = new ArrayList<>();
+    private String entrantID;
 
     public CommunityFragment() {
         // Required empty public constructor
     }
 
-    public static CommunityFragment newInstance(String param1, String param2) {
+    public static CommunityFragment newInstance(String entrantID) {
         CommunityFragment fragment = new CommunityFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString("entrant", entrantID);
         fragment.setArguments(args);
         return fragment;
     }
@@ -39,10 +39,6 @@ public class CommunityFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -50,9 +46,17 @@ public class CommunityFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_location_display, container, false);
 
-        listView = view.findViewById(R.id.list_view);
+        listView =view.findViewById(R.id.list_view);
         adapter = new CommunityCentreAdapter(centreList);
         listView.setAdapter(adapter);
+
+        Bundle args = getArguments();
+
+        if (args != null) {
+            entrantID = args.getString("entrant");
+        } else {
+            Log.e("DEBUG", "args is null");
+        }
 
         // Fetch data from Firestore
         CommunityCentreDAL dal = new CommunityCentreDAL();
@@ -73,9 +77,36 @@ public class CommunityFragment extends Fragment {
             }
         });
 
+        listView.setOnItemClickListener((parent, view1, position, id) -> {
+            TextView locationName = view1.findViewById(R.id.alert_message);
+            String clickedLocationName = locationName.getText().toString();
+
+            if (args == null) {
+                Log.e("DEBUG", "args is null – not calling DAL.getEntrant");
+                return; // or show an error
+            }
+
+            
+            //change toolbar title
+            TextView title = requireActivity().findViewById(R.id.set_title);
+            title.setText("Events");
+
+            EventListFragment eventListFrag = EventListFragment.newInstance(clickedLocationName,entrantID);
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, eventListFrag)
+                    .setReorderingAllowed(true)
+                    .addToBackStack(null)
+                    .commit();
+        });
+
         return view;
     }
 
+
+    /**
+     * Custom array adapter for the custom listview
+     */
     // Adapter for Amelia's Fancy ListView
     private class CommunityCentreAdapter extends BaseAdapter {
 
@@ -120,6 +151,9 @@ public class CommunityFragment extends Fragment {
             return convertView;
         }
 
+        /**
+         * class for the items in the holder
+         */
         class ViewHolder {
             TextView name;
             TextView address;
