@@ -1,5 +1,6 @@
 package com.example.sleepy_connect;
 
+import android.os.Bundle;
 import android.util.Log;
 
 import java.util.List;
@@ -18,37 +19,47 @@ public class DrawReplacements {
 
         Random random = new Random();
 
-        // How many new entrants do we need?
         int slotsToFill = eventCapacity - pendingList.size();
 
-        // Safety check
         if (slotsToFill <= 0) {
             Log.i("DrawReplacements", "Pending list is already full.");
             return;
         }
 
-        // Loop and fill pendingList until full
         for (int i = 0; i < slotsToFill; i++) {
 
-            // If waiting list is empty, stop early
             if (waitingList.isEmpty()) {
                 Log.e("DrawReplacements", "No more users in waiting list.");
                 break;
             }
 
-            // Pick a random person from waiting list
             String randomEntrant = waitingList.get(random.nextInt(waitingList.size()));
 
-            // Add them to pending list
             pendingList.add(randomEntrant);
-
-            // Remove them from waitingList so they aren't picked again
             waitingList.remove(randomEntrant);
+
+            sendSelectedNotification(randomEntrant, event);
         }
 
         // Push updates to Firestore
         EventDAL eventDAL = new EventDAL();
         eventDAL.updateEvent(event);
+    }
+
+    /**
+     * Creates a Notification object and sends it to the selected entrant.
+     */
+    private void sendSelectedNotification(String userID, Event event) {
+
+        Notification notif = new Notification(
+                event.getEventName(),   // event name
+                true,               // selected = true
+                false,              // cancelled = false
+                event.getEventID()  // event ID
+        );
+
+        // Save to entrant’s notification list in Firestore
+        notif.sendNotification(userID);
     }
 }
 
