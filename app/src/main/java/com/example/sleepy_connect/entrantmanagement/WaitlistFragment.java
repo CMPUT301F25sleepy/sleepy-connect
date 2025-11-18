@@ -11,12 +11,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.sleepy_connect.CommunityFragment;
 import com.example.sleepy_connect.Entrant;
 import com.example.sleepy_connect.Event;
 import com.example.sleepy_connect.EventViewModel;
+import com.example.sleepy_connect.DrawReplacements;
+import com.example.sleepy_connect.ObtainGeolocation;
 import com.example.sleepy_connect.R;
 import com.example.sleepy_connect.eventmanager.EventManagerBottomSheet;
 
@@ -56,6 +59,30 @@ public class WaitlistFragment extends Fragment {
         entrantList = vm.getWaitingList().getValue();
         adapter = new EntrantListAdapter(entrantList, getContext());
         listView.setAdapter(adapter);
+
+        // For the view locations button
+        Button viewLocationList = view.findViewById(R.id.waitlist_map_button);
+
+        viewLocationList.setOnClickListener(v -> {
+            ObtainGeolocation fragment = new ObtainGeolocation();
+
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, fragment)
+                    .addToBackStack(null)
+                    .commit();
+        });
+
+        // Calls the current event for use in ExportCSV
+        Event event = EventViewModel.getEvent().getValue();
+
+        Button inviteEntrants = view.findViewById(R.id.waitlist_invite_button);
+        inviteEntrants.setOnClickListener(v -> {
+            DrawReplacements replace = new DrawReplacements();
+            assert event != null;
+            replace.drawReplacementApp(event);
+        });
+
         return view;
     }
 

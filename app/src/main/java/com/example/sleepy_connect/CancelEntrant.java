@@ -4,6 +4,7 @@ import java.util.List;
 
 /**
  * Class which allows an event creator to manually remove a user from the list of invited entrants for a particular event
+ * @deprecated No longer needed as functionality was implemented into alertSelectFragment and Notification classes, resulting in cleaner code.
  */
 public class CancelEntrant {
     // Basically just remove the user from the InvitedList, US 02.06.04

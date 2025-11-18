@@ -25,4 +25,11 @@
         android:layout_height="wrap_content"
         android:text="Get Current Location" />
 
+    <Button
+        android:id="@+id/showMapBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show Map"
+        android:layout_marginTop="10dp"/>
+
 </LinearLayout>

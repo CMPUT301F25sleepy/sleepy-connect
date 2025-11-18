@@ -13,6 +13,11 @@ In the java code, check whether the user is joined in the waitlist already and i
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <ScrollView
         android:id="@+id/event_detail_scroll"
         android:layout_width="0dp"
@@ -203,6 +208,33 @@ In the java code, check whether the user is joined in the waitlist already and i
 
             </FrameLayout>
 
+            <Button
+                android:id="@+id/geolocation_list_view"
+                style="@style/Widget.Material3.ExtendedFloatingActionButton.Primary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="View"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toTopOf="@+id/details_event_dates"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.87"
+                app:layout_constraintStart_toEndOf="@+id/event_title_display"
+                app:layout_constraintTop_toBottomOf="@+id/event_title_display"
+                app:layout_constraintVertical_bias="0.45" />
+
+            <Button
+                android:id="@+id/export_csv"
+                style="@style/Widget.Material3.ExtendedFloatingActionButton.Primary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Export"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toTopOf="@+id/event_location"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.87"
+                app:layout_constraintStart_toEndOf="@+id/event_title_display"
+                app:layout_constraintTop_toBottomOf="@+id/dayOfWeek_label" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
@@ -225,12 +257,13 @@ In the java code, check whether the user is joined in the waitlist already and i
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="5dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
+            android:layout_gravity="center"
             android:backgroundTint="@color/hint"
             android:text="Lottery Guidelines"
             android:textColor="@color/black"
-            android:textSize="16sp"
+            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -242,15 +275,16 @@ In the java code, check whether the user is joined in the waitlist already and i
             android:visibility="visible"
             android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginStart="5dp"
             android:layout_marginEnd="10dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
+            android:layout_gravity="center"
             android:backgroundTint="@color/light_cyan_blue"
             android:text="Join the Lottery!"
             android:textColor="@color/black"
-            android:textSize="16sp"
+            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -262,15 +296,16 @@ In the java code, check whether the user is joined in the waitlist already and i
             android:visibility="gone"
             android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginStart="5dp"
             android:layout_marginEnd="10dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
+            android:layout_gravity="center"
             android:backgroundTint="#B8E99F"
             android:text="View Status"
             android:textColor="@color/black"
-            android:textSize="16sp"
+            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -285,12 +320,13 @@ In the java code, check whether the user is joined in the waitlist already and i
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:layout_marginEnd="10dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
+            android:layout_gravity="center"
             android:backgroundTint="@color/error_border"
             android:text="Leave Waitlist"
             android:textColor="@color/black"
-            android:textSize="16sp"
+            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
