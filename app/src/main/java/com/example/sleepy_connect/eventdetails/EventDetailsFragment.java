@@ -21,9 +21,11 @@ import com.example.sleepy_connect.Entrant;
 import com.example.sleepy_connect.EntrantDAL;
 import com.example.sleepy_connect.Event;
 import com.example.sleepy_connect.EventDAL;
+import com.example.sleepy_connect.ExportCSV;
 import com.example.sleepy_connect.InviteFromDetailsFragment;
 import com.example.sleepy_connect.Notification;
 import com.example.sleepy_connect.EventViewModel;
+import com.example.sleepy_connect.ObtainGeolocation;
 import com.example.sleepy_connect.R;
 import com.example.sleepy_connect.SignUpFragment;
 import com.example.sleepy_connect.alertSelectFragment;
@@ -165,6 +167,27 @@ public class EventDetailsFragment extends Fragment{
                 DialogFragment invitedFragment = com.example.sleepy_connect.InviteFromDetailsFragment.newInstance(eventID, entrantID);
                 invitedFragment.show(getParentFragmentManager(), "invited");
             }
+        });
+
+        // For the view locations button
+        Button viewLocationList = view.findViewById(R.id.geolocation_list_view);
+
+        viewLocationList.setOnClickListener(v -> {
+            ObtainGeolocation fragment = new ObtainGeolocation();
+
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, fragment)
+                    .addToBackStack(null)
+                    .commit();
+        });
+
+        // For the export CSV button
+        Button exportCSV = view.findViewById(R.id.export_csv);
+
+        exportCSV.setOnClickListener(v -> {
+            ExportCSV exporter = new ExportCSV();
+            exporter.exportCSVFile(requireContext(), event, "accepted_users.csv");
         });
 
         // implement join lottery click

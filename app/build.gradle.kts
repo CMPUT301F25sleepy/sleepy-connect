@@ -54,6 +54,7 @@ dependencies {
     implementation(libs.legacy.support.v4)
     implementation(libs.recyclerview)
     implementation(libs.fragment)
+    implementation(libs.play.services.maps)
     testImplementation(libs.junit)
     testImplementation(libs.junit.junit)
     testImplementation(libs.junit.junit)
