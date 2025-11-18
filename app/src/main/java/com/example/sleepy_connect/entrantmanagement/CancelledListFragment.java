@@ -4,16 +4,24 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
 
+import com.example.sleepy_connect.Entrant;
 import com.example.sleepy_connect.R;
+
+import java.util.ArrayList;
 
 /**
  * UNIMPLEMENTED
  * Will display the list of cancelled entrants for a specific event
  */
 public class CancelledListFragment extends Fragment {
+
+    private ListView listView;
+    private ArrayList<Entrant> entrantList;
+    private EntrantListAdapter adapter;
 
     public CancelledListFragment() {
         // Required empty public constructor
@@ -33,6 +41,13 @@ public class CancelledListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_cancelled_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_cancelled_list, container, false);
+
+        listView = view.findViewById(R.id.cancelled_entrant_list);
+        entrantList = new ArrayList<>();
+        adapter = new EntrantListAdapter(entrantList, getContext());
+        listView.setAdapter(adapter);
+
+        return view;
     }
 }
