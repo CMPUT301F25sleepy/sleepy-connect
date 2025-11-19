@@ -83,7 +83,7 @@ public class AlertFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View itemView, int position, long id) {
                 Notification selectedNotif = (Notification) parent.getItemAtPosition(position);
-                DialogFragment alertFragment = alertSelectFragment.newInstance(selectedNotif,entrantID);
+                DialogFragment alertFragment = alertSelectFragment.newInstance(selectedNotif,entrantID,array,adapter,position);
                 alertFragment.show(getParentFragmentManager(), "notification");
             }
         });

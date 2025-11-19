@@ -33,12 +33,16 @@ public class alertSelectFragment extends DialogFragment {
      * @param entrantID the user identification
      * @return an instance of the fragment
      */
-    static alertSelectFragment newInstance(Notification notif, String entrantID){
+    static alertSelectFragment newInstance(Notification notif, String entrantID,ArrayList<Notification> array, AlertAdapter adapter, Integer position){
+        // TODO - remove notification from list once user has dealt with it
 
         // creates a new fragment with selected notification as it's argument and return it
         Bundle args =  new Bundle();
         args.putSerializable("notification", notif);
         args.putString("entrantID", entrantID);
+        args.putSerializable("array", array);
+        args.putSerializable("adapter", adapter);
+        args.putInt("position",position);
         alertSelectFragment fragment = new alertSelectFragment();
         fragment.setArguments(args);
         return fragment;
@@ -52,6 +56,9 @@ public class alertSelectFragment extends DialogFragment {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_alert_popup, null);
         Bundle args = getArguments();
         Notification notif = (Notification) args.getSerializable("notification");
+        ArrayList<Notification> notif_list = (ArrayList<Notification>) args.getSerializable("array");
+        AlertAdapter adapter = (AlertAdapter) args.getSerializable("adapter");
+        Integer position = args.getInt("position");
         entrantID = args.getString("entrantID");
         eventID = notif.getEventID();
         TextView alert_text = view.findViewById(R.id.alert_text);
@@ -93,6 +100,8 @@ public class alertSelectFragment extends DialogFragment {
                             if (positive_button.getText() == "Accept") {
                                 event.addToAcceptedList(entrantID);
                                 event.removeFromPendingList(entrantID);
+                                notif_list.remove(position);
+                                adapter.notifyDataSetChanged();
                                 DAL.updateEvent(event);
                             }
                         } else {
@@ -100,6 +109,7 @@ public class alertSelectFragment extends DialogFragment {
                         }
                     }
                 });
+
                 dialog.dismiss();
             }
         });
@@ -107,7 +117,6 @@ public class alertSelectFragment extends DialogFragment {
         negative_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO - Implement Declining Selection and Removing from waitlist
                 // When User declines, User will be removed from waiting list
                 EventDAL DAL = new EventDAL();
                 DAL.getEvent(eventID, new EventDAL.OnEventRetrievedListener() {
@@ -117,11 +126,10 @@ public class alertSelectFragment extends DialogFragment {
                             if (negative_button.getText() == "Decline"){
                                 event.removeFromPendingList(entrantID);
                                 event.addToDeclinelist(entrantID);
-                            } else {
-                                event.removeFromWaitlist(entrantID);
                             }
-
                             DAL.updateEvent(event);
+                            notif_list.remove(position);
+                            adapter.notifyDataSetChanged();
                         } else {
                             System.err.println("Remove from Waitlist Failed");
                         }

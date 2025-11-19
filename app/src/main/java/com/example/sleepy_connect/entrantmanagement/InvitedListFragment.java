@@ -2,53 +2,71 @@ package com.example.sleepy_connect.entrantmanagement;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.example.sleepy_connect.Entrant;
+import com.example.sleepy_connect.Event;
+import com.example.sleepy_connect.EventViewModel;
 import com.example.sleepy_connect.R;
 
 import java.util.ArrayList;
 
 /**
- * UNIMPLEMENTED
- * Will display the list of invited entrants for a specific event
+ * Displays the list of invited entrants for a specific event
  */
 public class InvitedListFragment extends Fragment {
 
     private ListView listView;
-    private ArrayList<Entrant> entrantList;
+    private ArrayList<String> entrantList;
     private EntrantListAdapter adapter;
 
     public InvitedListFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment InvitedListFragment.
-     */
     public static InvitedListFragment newInstance() {
         return new InvitedListFragment();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_invited_list, container, false);
 
+        View view = inflater.inflate(R.layout.fragment_invited_list, container, false);
+        ListViewModel vm = new ViewModelProvider(requireActivity()).get(ListViewModel.class);
         listView = view.findViewById(R.id.invited_entrant_list);
+
         entrantList = new ArrayList<>();
-        adapter = new EntrantListAdapter(entrantList, getContext());
+        adapter = new EntrantListAdapter(entrantList, requireContext());
         listView.setAdapter(adapter);
 
+        loadInvitedEntrants();
+
         return view;
+    }
+
+    /**
+     * Loads invited entrant IDs from the EventViewModel and fills the adapter list.
+     */
+    private void loadInvitedEntrants() {
+        Event event = EventViewModel.getEvent().getValue();
+        if (event == null) return;
+
+        ArrayList<String> invited = event.getPendingList();
+
+        if (invited != null) {
+            entrantList.clear();
+            entrantList.addAll(invited);
+
+            // Rebuild adapter to trigger DAL
+            adapter = new EntrantListAdapter(entrantList, requireContext());
+            listView.setAdapter(adapter);
+        }
     }
 }
