@@ -15,14 +15,16 @@ public class DrawReplacements {
 
         List<String> waitingList = event.getWaitingList();
         List<String> pendingList = event.getPendingList();
+        List<String> enrolledList = event.getAcceptedList();
         int eventCapacity = event.eventCapacity;
 
         Random random = new Random();
 
-        int slotsToFill = eventCapacity - pendingList.size();
+        // Changed logic to capacity - (enrolled + pending)
+        int slotsToFill = eventCapacity - (enrolledList.size() + pendingList.size());
 
         if (slotsToFill <= 0) {
-            Log.i("DrawReplacements", "Pending list is already full.");
+            Log.i("DrawReplacements", "Event already has enough enrolled + invited participants.");
             return;
         }
 
