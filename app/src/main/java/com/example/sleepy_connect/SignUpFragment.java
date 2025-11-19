@@ -21,7 +21,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import java.util.Objects;
 
 /**
- * @deprecated now automatically gives user an id and empty profile instead
+ * fragment to respond to profile state when joining a waitlist
  */
 
 public class SignUpFragment extends DialogFragment {
