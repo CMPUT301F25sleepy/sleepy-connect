@@ -21,6 +21,7 @@ public class DrawReplacements {
         Random random = new Random();
 
         // Changed logic to capacity - (enrolled + pending)
+        // Shouldnt alter any properties of the event capacity
         int slotsToFill = eventCapacity - (enrolledList.size() + pendingList.size());
 
         if (slotsToFill <= 0) {
