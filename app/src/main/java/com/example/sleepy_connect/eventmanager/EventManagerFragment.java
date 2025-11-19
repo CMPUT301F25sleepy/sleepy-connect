@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.sleepy_connect.Entrant;
@@ -281,12 +282,16 @@ public class EventManagerFragment extends Fragment {
         public View getView(int position, View convertView, ViewGroup parent) {
             EventManagerFragment.EventManagerListAdapter.ViewHolder holder;
             if (convertView == null) {
-                convertView = getLayoutInflater().inflate(R.layout.event_item_layout, parent, false);
+                convertView = getLayoutInflater().inflate(R.layout.organizer_event_item_layout, parent, false);
                 holder = new EventManagerFragment.EventManagerListAdapter.ViewHolder();
                 holder.name = convertView.findViewById(R.id.event_title);
                 holder.dates = convertView.findViewById(R.id.event_dates);
                 holder.dayOfWeek = convertView.findViewById(R.id.event_dayOfWeek);
                 holder.time = convertView.findViewById(R.id.event_times);
+                holder.capacityProgress = convertView.findViewById(R.id.capacity_progress);
+                holder.capacityProgressBar = convertView.findViewById(R.id.capacity_progress_bar);
+                holder.inviteProgress = convertView.findViewById(R.id.invite_progress);
+                holder.inviteProgressBar = convertView.findViewById(R.id.invite_progress_bar);
                 convertView.setTag(holder);
             } else {
                 holder = (EventManagerFragment.EventManagerListAdapter.ViewHolder) convertView.getTag();
@@ -301,6 +306,18 @@ public class EventManagerFragment extends Fragment {
             holder.dayOfWeek.setText(event.getEventDayOfWeek());
             holder.time.setText(event.getEventTime());
 
+            int eventCapacity = event.getEventCapacity();
+            int filledSpots = event.getAcceptedList().toArray().length;
+            int capacityPercent = (int) (((double)filledSpots/eventCapacity)*100);
+            holder.capacityProgress.setText(filledSpots + "/" + eventCapacity);
+            holder.capacityProgressBar.setProgress(capacityPercent);
+
+            int invitedNum = event.getPendingList().toArray().length;
+            int inviteTotal = eventCapacity - filledSpots;
+            int invitePercent = (int )(((double)invitedNum/inviteTotal)*100);
+            holder.inviteProgress.setText(invitedNum + "/" + inviteTotal);
+            holder.inviteProgressBar.setProgress(invitePercent);
+
             return convertView;
         }
 
@@ -312,6 +329,10 @@ public class EventManagerFragment extends Fragment {
             TextView dates;
             TextView dayOfWeek;
             TextView time;
+            TextView capacityProgress;
+            ProgressBar capacityProgressBar;
+            TextView inviteProgress;
+            ProgressBar inviteProgressBar;
         }
     }
 }

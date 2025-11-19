@@ -58,7 +58,7 @@ Make title of toolbar "My Event Manager" -->
     <ListView
         android:id="@+id/event_manager_lv_events"
         android:layout_width="0dp"
-        android:layout_height="610dp"
+        android:layout_height="0dp"
         android:layout_marginTop="5dp"
         android:clipToPadding="false"
         android:divider="@android:color/transparent"
@@ -69,5 +69,5 @@ Make title of toolbar "My Event Manager" -->
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view"
-        tools:listitem="@layout/event_item_layout" />
+        tools:listitem="@layout/organizer_event_item_layout" />
 </androidx.constraintlayout.widget.ConstraintLayout>
