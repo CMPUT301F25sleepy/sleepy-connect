@@ -7,10 +7,15 @@
     tools:context=".admin.profilemanagement.AdminProfileListFragment" >
 
     <ListView
+        android:id="@+id/admin_list_lv"
         android:layout_width="409dp"
         android:layout_height="729dp"
+        android:clipToPadding="false"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="12dp"
+        android:paddingHorizontal="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
