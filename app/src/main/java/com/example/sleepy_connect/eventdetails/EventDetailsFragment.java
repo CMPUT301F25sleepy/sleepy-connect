@@ -107,7 +107,7 @@ public class EventDetailsFragment extends Fragment{
         if (event.getWaitingList() != null) {
             waitList = event.getWaitingList();
             for (String entrant : waitList) {
-                if (Objects.equals(entrant, entrantID)) {
+                if (Objects.equals(entrant, entrantID) && currentDate < event.eventStartDate) {
                     inWaitlist = true;
                     break;
                 }
@@ -118,7 +118,7 @@ public class EventDetailsFragment extends Fragment{
         if (event.getPendingList() != null) {
             pendingList = event.getPendingList();
             for (String entrant : pendingList) {
-                if (Objects.equals(entrant, entrantID)) {
+                if (Objects.equals(entrant, entrantID) && currentDate < event.eventStartDate) {
                     inInvited = true;
                     break;
                 }
