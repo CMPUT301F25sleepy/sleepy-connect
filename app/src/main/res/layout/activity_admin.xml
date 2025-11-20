@@ -81,7 +81,7 @@
         android:layout_marginTop="15dp"
         android:fontFamily="@font/roboto_medium"
         android:padding="5dp"
-        android:text="@string/label_profiles"
+        android:text="@string/label_dropdown_profiles"
         android:textColor="@color/text_dark"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -91,7 +91,6 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/admin_container"
-        android:name="com.example.sleepy_connect.AlertFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
