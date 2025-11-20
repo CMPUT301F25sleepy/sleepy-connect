@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.sleepy_connect.databinding.ActivityNavigationBinding;
+import com.example.sleepy_connect.entrantmanagement.EntrantManagerSelectedBottomSheet;
 import com.example.sleepy_connect.eventmanager.EventManagerFragment;
 
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ import java.util.ArrayList;
  * Switches between all of the main screens accessed through the nav bar
  * Has a container to hold all of the screen fragments
  */
-public class NavigationActivity extends AppCompatActivity implements SignUpFragment.DialogFragmentListener{
+public class NavigationActivity extends AppCompatActivity implements SignUpFragment.DialogFragmentListener, EntrantManagerSelectedBottomSheet.EntrantManagerSelectedBottomSheetListener{
     /* Handles Navigation between fragments of the app */
     // Bottom Navigation View Implementation Code from https://www.youtube.com/watch?v=jOFLmKMOcK0
 
@@ -106,5 +107,10 @@ public class NavigationActivity extends AppCompatActivity implements SignUpFragm
     public void goToProfile() {
         title.setText("Profile");
         replaceFragment(new ProfileFragment());
+    }
+
+    @Override
+    public void EntrantManagerSelectedBottomSheetClosed(boolean bsClosed) {
+
     }
 }

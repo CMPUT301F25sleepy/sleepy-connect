@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
+import com.example.sleepy_connect.eventdetails.EventDetailsFragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.Objects;
@@ -85,6 +86,13 @@ public class SignUpFragment extends DialogFragment {
         } else if (Objects.equals(tag, "already applied")) {
             main.setText("Sorry,");
             sub.setText("You have already signed up for the event");
+            return builder
+                    .setView(view)
+                    .setNegativeButton("Return", null)
+                    .create();
+        } else if (Objects.equals(tag, "leave")) {
+            main.setText("Success!");
+            sub.setText("You have leave the waitlist for this event");
             return builder
                     .setView(view)
                     .setNegativeButton("Return", null)

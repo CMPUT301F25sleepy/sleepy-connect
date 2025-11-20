@@ -7,6 +7,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +31,7 @@ import com.example.sleepy_connect.EventViewModel;
 import com.example.sleepy_connect.ObtainGeolocation;
 import com.example.sleepy_connect.R;
 import com.example.sleepy_connect.SignUpFragment;
+import com.example.sleepy_connect.UserViewModel;
 import com.example.sleepy_connect.alertSelectFragment;
 
 import java.text.SimpleDateFormat;
@@ -44,6 +48,7 @@ public class EventDetailsFragment extends Fragment{
 
     Event event;
     SimpleDateFormat dateFormat = new SimpleDateFormat("M/d/y", Locale.getDefault());
+    Entrant entrant;
 
     Boolean inInvited = false;
     Boolean inWaitlist = false;
@@ -96,6 +101,7 @@ public class EventDetailsFragment extends Fragment{
 
         // receive event details from viewmodel
         event = EventViewModel.getEvent().getValue();
+        entrant = UserViewModel.getUser().getValue();
 
         //checks if user is in the waitlist and sets bool
         if (event.getWaitingList() != null) {
@@ -156,7 +162,25 @@ public class EventDetailsFragment extends Fragment{
         leaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO - set button to remove the entrant from the waitlist
+                String entrantID = entrant.getAndroid_id();
+                if (waitList.contains(entrantID)) {
+                    waitList.remove(entrantID);
+                }
+                event.setWaitingList(waitList);
+
+                DialogFragment SignFragment = SignUpFragment.newInstance();
+                SignFragment.show(getParentFragmentManager(), "leave");
+
+                // update vm model
+                EventViewModel vmEvent = new ViewModelProvider(requireActivity()).get(EventViewModel.class);
+                vmEvent.setEvent(event);
+
+                // update database
+                EventDAL db = new EventDAL();
+                db.updateEvent(event);
+
+                //restart fragment
+                restartFragment();
             }
         });
 
@@ -206,14 +230,22 @@ public class EventDetailsFragment extends Fragment{
                                             event.addToWaitlist(entrantID);
                                             eDAL.updateEvent(event);
                                             SignFragment.show(getParentFragmentManager(), "success");
+                                            EventViewModel vmEvent = new ViewModelProvider(requireActivity()).get(EventViewModel.class);
+                                            vmEvent.setEvent(event);
+
+                                            //update necessary models and database
+                                            entrant.addToAllEventList(eventID);
+                                            DAL.updateEntrant(entrant);
+                                            UserViewModel vmEntrant = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+                                            vmEntrant.setUser(entrant);
+
+                                            restartFragment();
                                         }
                                     } else {
                                         System.err.println("No event found with ID: " + eventID);
                                     }
                                 }
                             });
-                            entrant.addToAllEventList(eventID);
-                            DAL.updateEntrant(entrant);
 
                         }
                     } else {
@@ -294,5 +326,18 @@ public class EventDetailsFragment extends Fragment{
         String startStr = dateFormat.format(new Date(start));
         String endStr = dateFormat.format(new Date(end));
         return startStr + "-" + endStr;
+    }
+
+    public void restartFragment(){
+        FragmentManager fm = requireActivity().getSupportFragmentManager();
+
+        EventDetailsFragment fragment =
+                EventDetailsFragment.newInstance(entrant.getAndroid_id(), event.getEventID());
+
+        fm.beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .setReorderingAllowed(true)
+                .addToBackStack(null)
+                .commit();
     }
 }
