@@ -37,10 +37,15 @@
 
     <string name="label_reg_period">Registration Period</string>
 
-    <string name="label_profiles">Profiles ▾</string>
-    <string name="label_events">Events ▾</string>
-    <string name="label_posters">Posters ▾</string>
-    <string name="label_notifications">Notifications ▾</string>
+    <string name="label_dropdown_profiles">Profiles ▾</string>
+    <string name="label_dropdown_events">Events ▾</string>
+    <string name="label_dropdown_posters">Posters ▾</string>
+    <string name="label_dropdown_notifications">Notifications ▾</string>
+
+    <string name="label_profiles">Profiles</string>
+    <string name="label_events">Events</string>
+    <string name="label_posters">Posters</string>
+    <string name="label_notifications">Notifications</string>
 
     <string name="label_username">Username</string>
     <string name="label_first_name">First Name</string>
