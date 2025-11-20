@@ -47,6 +47,7 @@ public class EventDetailsFragment extends Fragment{
 
     Boolean inInvited = false;
     Boolean inWaitlist = false;
+    Boolean eventOpen = false;
     Button viewStatusButton;
     Button joinButton;
     Button leaveButton;
@@ -97,6 +98,11 @@ public class EventDetailsFragment extends Fragment{
         // receive event details from viewmodel
         event = EventViewModel.getEvent().getValue();
 
+        long currentDate = System.currentTimeMillis();
+        if (currentDate > event.registrationOpens && currentDate < event.registrationCloses) {
+            eventOpen = true;
+        }
+
         //checks if user is in the waitlist and sets bool
         if (event.getWaitingList() != null) {
             waitList = event.getWaitingList();
@@ -123,7 +129,7 @@ public class EventDetailsFragment extends Fragment{
         if (event.getAcceptedList() != null) {
             acceptedList = event.getAcceptedList();
             for (String entrant : acceptedList) {
-                if (Objects.equals(entrant, entrantID)) {
+                if (Objects.equals(entrant, entrantID) || !eventOpen) {
                     joinButton.setVisibility(View.GONE);
                 }
             }
