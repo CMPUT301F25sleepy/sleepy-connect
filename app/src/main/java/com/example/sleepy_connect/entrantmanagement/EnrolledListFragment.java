@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -26,18 +27,24 @@ public class EnrolledListFragment extends Fragment {
     private ListView listView;
     private ArrayList<String> entrantList;
     private EntrantListAdapter adapter;
+    private Event event;
 
     public EnrolledListFragment() {
         // Required empty constructor
     }
 
-    public static EnrolledListFragment newInstance() {
-        return new EnrolledListFragment();
+    public static EnrolledListFragment newInstance(Event event) {
+        EnrolledListFragment fragment = new EnrolledListFragment();
+        Bundle args = new Bundle();
+        args.putSerializable("event",event);
+        return fragment;
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        event = EventViewModel.getEvent().getValue();
 
         View view = inflater.inflate(R.layout.fragment_enrolled_list, container, false);
         ListViewModel vm = new ViewModelProvider(requireActivity()).get(ListViewModel.class);
@@ -90,5 +97,22 @@ public class EnrolledListFragment extends Fragment {
             ExportCSV exporter = new ExportCSV();
             exporter.exportCSVFile(requireContext(), event, "accepted_users.csv");
         });
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        listView = view.findViewById(R.id.enrolled_entrant_list);
+        listView.setOnItemClickListener((parent, view1, position, id) -> {
+
+            // retrieve entrant from list
+            String selectedEntrant = entrantList.get(position);
+
+            // open bottom sheet
+            EntrantManagerSelectedBottomSheet bottomSheet = EntrantManagerSelectedBottomSheet.newInstance("Enrolled");
+            bottomSheet.show(getParentFragmentManager()  , "ModalBottomSheet");
+        });
+
     }
 }

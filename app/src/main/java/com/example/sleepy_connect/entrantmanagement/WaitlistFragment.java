@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.sleepy_connect.DrawReplacements;
+import com.example.sleepy_connect.Entrant;
 import com.example.sleepy_connect.Event;
 import com.example.sleepy_connect.EventViewModel;
 import com.example.sleepy_connect.DrawReplacements;
@@ -32,18 +33,24 @@ public class WaitlistFragment extends Fragment {
     private ListView listView;
     private ArrayList<String> entrantList;
     private EntrantListAdapter adapter;
+    private Event event;
 
     public WaitlistFragment() {
         // Required empty public constructor
     }
 
-    public static WaitlistFragment newInstance() {
-        return new WaitlistFragment();
+    public static WaitlistFragment newInstance(Event event) {
+        WaitlistFragment fragment = new WaitlistFragment();
+        Bundle args = new Bundle();
+        args.putSerializable("event",event);
+        return fragment;
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        event = EventViewModel.getEvent().getValue();
 
         View view = inflater.inflate(R.layout.fragment_waitlist, container, false);
         listView = view.findViewById(R.id.waitlist_entrant_list);
@@ -114,13 +121,15 @@ public class WaitlistFragment extends Fragment {
 
         listView = view.findViewById(R.id.waitlist_entrant_list);
         listView.setOnItemClickListener((parent, view1, position, id) -> {
-            // TODO - add option to remove entrant to ALL lists
 
+            // retrieve entrant from list
+            String selectedEntrant = entrantList.get(position);
 
             // open bottom sheet
-            EntrantManagerSelectedBottomSheet bottomSheet = new EntrantManagerSelectedBottomSheet();
-            bottomSheet.show(requireActivity().getSupportFragmentManager(), "ModalBottomSheet");
+            EntrantManagerSelectedBottomSheet bottomSheet = EntrantManagerSelectedBottomSheet.newInstance("Waiting");
+            bottomSheet.show(getParentFragmentManager()  , "ModalBottomSheet");
         });
-
     }
+
+
 }

@@ -26,10 +26,22 @@ import java.util.ArrayList;
  */
 public class EntrantManagerBottomSheet extends BottomSheetDialogFragment {
 
+    private Event event;
+
+    public static EntrantManagerBottomSheet newInstance(Event event) {
+        EntrantManagerBottomSheet fragment = new EntrantManagerBottomSheet();
+        Bundle args = new Bundle();
+        args.putSerializable("event", event);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        Bundle args = getArguments();
+        event = (Event) args.getSerializable("event");
 
         // Inflate the bottom sheet layout
         View view = inflater.inflate(R.layout.bottom_sheet_entrant_manager, container, false);
@@ -44,31 +56,46 @@ public class EntrantManagerBottomSheet extends BottomSheetDialogFragment {
         TextView listLabel = requireParentFragment().requireView().findViewById(R.id.entrant_manager_tv_list_label);
 
         // Set click listener for waitlist option
-        tvWaitlist.setOnClickListener(v ->  startListFragment(listLabel, "Waitlist", WaitlistFragment.class));
+        tvWaitlist.setOnClickListener(v ->  startListFragment(listLabel, "Waitlist"));
 
         // Set click listener for invited list option
-        tvInvited.setOnClickListener(v ->  startListFragment(listLabel, "Invited", InvitedListFragment.class));
+        tvInvited.setOnClickListener(v ->  startListFragment(listLabel, "Invited"));
 
         // Set click listener for cancelled list option
-        tvCancelled.setOnClickListener(v ->  startListFragment(listLabel, "Cancelled", CancelledListFragment.class));
+        tvCancelled.setOnClickListener(v ->  startListFragment(listLabel, "Cancelled"));
 
         // Set click listener for enrolled list option
-        tvEnrolled.setOnClickListener(v ->  startListFragment(listLabel, "Enrolled", EnrolledListFragment.class));
+        tvEnrolled.setOnClickListener(v ->  startListFragment(listLabel, "Enrolled"));
 
         return view;
     }
 
-    void startListFragment(TextView listLabel, String newLabel, Class<? extends Fragment> fragmentClass) {
-
+    void startListFragment(TextView listLabel, String newLabel) {
 
         // set list label
         listLabel.setText(newLabel);
 
+        // determine which fragment is called
+        Fragment fragment = null;
+        if (newLabel == "Waitlist"){
+            fragment = WaitlistFragment.newInstance(event);
+        } else if (newLabel == "Invited") {
+            fragment = InvitedListFragment.newInstance(event);
+        } else if (newLabel == "Cancelled") {
+            fragment = CancelledListFragment.newInstance(event);
+        } else if (newLabel == "Enrolled") {
+            fragment = EnrolledListFragment.newInstance(event);
+        }
+
+        assert fragment != null;
+
         // add enrolled list fragment
         getParentFragmentManager()
                 .beginTransaction()
-                .replace(R.id.entrant_manager_fragment_container, fragmentClass, null)
+                .replace(R.id.entrant_manager_fragment_container, fragment, null)
                 .commit();
+
+
 
         // Close the bottom sheet
         dismiss();

@@ -113,6 +113,7 @@ public class EventFragment extends Fragment {
                 @Override
                 public void onEventRetrieved(Event event) {
                     WEventList.add(event);
+                    Wadapter.notifyDataSetChanged();
                 }
             });
             //Eadapter = new MyEventListAdapter(EEventList);
@@ -133,10 +134,15 @@ public class EventFragment extends Fragment {
                 TextView title = requireActivity().findViewById(R.id.set_title);
                 title.setText("Event Details");
 
+                //get entrant for vm model to get entrant id for require instance for event details
+                UserViewModel vmEntrant = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+                Entrant entrant = vmEntrant.getUser().getValue();
+
+                EventDetailsFragment fragment = EventDetailsFragment.newInstance(entrant.getAndroid_id(), selectedEvent.getEventID());
                 // open event details
                 requireActivity().getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.fragment_container, EventDetailsFragment.class, null)
+                        .replace(R.id.fragment_container, fragment, null)
                         .setReorderingAllowed(true)
                         .addToBackStack(null)
                         .commit();
@@ -164,6 +170,10 @@ public class EventFragment extends Fragment {
         });*/
 
 
+        }
+
+        if (WEventList.isEmpty()){
+            Log.d("Empty", "WEventList is Empty");
         }
         return view;
     }

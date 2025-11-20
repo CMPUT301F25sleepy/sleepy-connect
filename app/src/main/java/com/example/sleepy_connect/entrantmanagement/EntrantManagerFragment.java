@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
@@ -19,6 +20,7 @@ import com.example.sleepy_connect.Entrant;
 import com.example.sleepy_connect.Event;
 import com.example.sleepy_connect.EventListFragment;
 import com.example.sleepy_connect.R;
+import com.example.sleepy_connect.eventdetails.EventDetailsFragment;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -28,7 +30,7 @@ import java.util.List;
  * Fragment class for navigating between an event's different entrant lists.
  * @author Sam Francisco
  */
-public class EntrantManagerFragment extends Fragment {
+public class EntrantManagerFragment extends Fragment implements EntrantManagerSelectedBottomSheet.EntrantManagerSelectedBottomSheetListener{
     private Event event;
     private final ArrayList<Entrant> entrantList = new ArrayList<>();
 
@@ -74,7 +76,8 @@ public class EntrantManagerFragment extends Fragment {
         ListViewModel vm = new ViewModelProvider(requireActivity()).get(ListViewModel.class);
         ArrayList<Entrant> entrantList = vm.getWaitingList().getValue();
 
-        WaitlistFragment fragment = new WaitlistFragment();
+        WaitlistFragment fragment = WaitlistFragment.newInstance(event);
+
         // set default child fragment to waitlist fragment
         getChildFragmentManager()
                 .beginTransaction()
@@ -84,11 +87,26 @@ public class EntrantManagerFragment extends Fragment {
         // set click listener for list title
         ConstraintLayout list_title = view.findViewById(R.id.entrant_manager_cl_list);
         list_title.setOnClickListener(v -> {
-
             // open bottom sheet
-            EntrantManagerBottomSheet bottomSheet = new EntrantManagerBottomSheet();
-            bottomSheet.show(getChildFragmentManager(), "ModalBottomSheet");
 
+            EntrantManagerBottomSheet bottomSheet = EntrantManagerBottomSheet.newInstance(event);
+            bottomSheet.show(getChildFragmentManager(), "ModalBottomSheet");
         });
+    }
+
+    @Override
+    public void EntrantManagerSelectedBottomSheetClosed(boolean bsClosed) {
+        Log.d("Sucesss","WE HERE :D");
+        if (bsClosed){
+
+            EntrantManagerFragment fragment = EntrantManagerFragment.newInstance(event);
+
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, fragment, null)
+                    .setReorderingAllowed(true)
+                    .addToBackStack(null)
+                    .commit();
+        }
     }
 }
