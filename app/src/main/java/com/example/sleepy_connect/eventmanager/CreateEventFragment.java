@@ -226,6 +226,9 @@ public class CreateEventFragment extends Fragment {
 
                     if (isAdded()) requireActivity().getSupportFragmentManager().popBackStack();
 
+                    // generate QR code, go to QRCode fragment automatically.
+                    openQRCodeFragment(newID);
+
                 } catch (ParseException | IOException e) {
                     Log.e("CreateEventFragment", "Error creating event", e);
                 }
@@ -319,6 +322,27 @@ public class CreateEventFragment extends Fragment {
             tv.setBackground(hasViewGroup ? null :
                     getDrawable(getResources(), R.drawable.light_text_border, null));
             return true;
+        }
+    }
+
+    protected void openQRCodeFragment(String eventID) {
+        TextView errorText = requireView().findViewById(R.id.qr_code_error_text);
+
+        eventID = "sleepyEventApp/".concat(eventID);
+        // checks event id is not null(default string value)
+        if (eventID != null) {
+            // generates QR code, opens up fragment with code
+            errorText.setVisibility(View.GONE);
+            QRCodeFragment qrCodeFragment = QRCodeFragment.newInstance(eventID);
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, qrCodeFragment)
+                    .addToBackStack(null)
+                    .commit();
+        }
+
+        else {
+            errorText.setVisibility(View.VISIBLE);
         }
     }
 }

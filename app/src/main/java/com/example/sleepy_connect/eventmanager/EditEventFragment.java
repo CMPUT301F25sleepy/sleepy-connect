@@ -205,7 +205,6 @@ public class EditEventFragment extends Fragment {
         }
     }
 
-    // TODO: update encoded info in QR
     protected void openQRCodeFragment() {
         TextView errorText = requireView().findViewById(R.id.qr_code_error_text);
 

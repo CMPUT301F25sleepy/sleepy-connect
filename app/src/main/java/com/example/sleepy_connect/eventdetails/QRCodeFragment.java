@@ -61,7 +61,7 @@ public class QRCodeFragment extends Fragment {
      * closes fragment after hitting back button
      */
     private void closeFragment() {
-        getParentFragmentManager().popBackStack();
+        requireActivity().getSupportFragmentManager().popBackStack();
     }
 
 }
