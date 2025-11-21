@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,10 +14,9 @@ import android.widget.ListView;
 
 import com.example.sleepy_connect.Entrant;
 import com.example.sleepy_connect.R;
+import com.example.sleepy_connect.UserViewModel;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
-
 import java.util.ArrayList;
 
 /**
@@ -25,8 +25,6 @@ import java.util.ArrayList;
 public class AdminProfileListFragment extends Fragment {
 
     private ArrayList<Entrant> entrants;
-    private ListView listView;
-    private AdminProfileListAdapter adapter;
 
     public AdminProfileListFragment() {
         // Required empty public constructor
@@ -55,9 +53,26 @@ public class AdminProfileListFragment extends Fragment {
 
         // initialize list, listview, adapter
         entrants = new ArrayList<>();
-        adapter = new AdminProfileListAdapter(requireContext(), entrants);
-        listView = view.findViewById(R.id.admin_list_lv);
+        AdminProfileListAdapter adapter = new AdminProfileListAdapter(requireContext(), entrants);
+        ListView listView = view.findViewById(R.id.admin_list_lv);
         listView.setAdapter(adapter);
+
+        // initialize listener for admin profile list items
+        listView.setOnItemClickListener((parent, v, position, id) -> {
+
+            // store selected entrant in viewmodel
+            Entrant selectedEntrant = entrants.get(position);
+            UserViewModel vmEntrant = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+            vmEntrant.setUser(selectedEntrant);
+
+            // show entrant details
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.admin_container, AdminProfileDetailsFragment.class, null)
+                    .setReorderingAllowed(true)
+                    .addToBackStack(null)
+                    .commit();
+        });
 
         // get all users
         FirebaseFirestore db = FirebaseFirestore.getInstance();
