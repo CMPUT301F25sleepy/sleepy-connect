@@ -179,6 +179,8 @@ public class ProfileFragment extends Fragment {
                 //correct password inputted
                 if (user_input.equals(correct_password)) {
                     Intent intent = new Intent(requireActivity(), AdminActivity.class);
+                    NavigationActivity host = (NavigationActivity) requireActivity();
+                    intent.putExtra("uid", host.userID);
                     startActivity(intent);
                 } else {
                     // wrong password inputted
