@@ -142,6 +142,9 @@ public class AdminProfileDetailsFragment extends Fragment {
                     doc.getReference().set(updatedEvent);
                 }
 
+                // delete profile from collection
+                db.collection("users").document(user.getAndroid_id()).delete();
+
                 // exit fragment
                 finishProcedure();
             });
