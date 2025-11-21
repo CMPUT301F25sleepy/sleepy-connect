@@ -25,6 +25,7 @@ import com.example.sleepy_connect.EntrantDAL;
 import com.example.sleepy_connect.Event;
 import com.example.sleepy_connect.EventDAL;
 import com.example.sleepy_connect.ExportCSV;
+import com.example.sleepy_connect.Image;
 import com.example.sleepy_connect.InviteFromDetailsFragment;
 import com.example.sleepy_connect.Notification;
 import com.example.sleepy_connect.EventViewModel;
@@ -307,7 +308,8 @@ public class EventDetailsFragment extends Fragment{
         // set poster if provided
         if (event.getPoster() != null) {
             ImageView poster = view.findViewById(R.id.event_details_poster);
-            poster.setImageBitmap(event.getPoster().decodeImage());
+            Image img = new Image(event.getPoster());
+            poster.setImageBitmap(img.decodeImage());
         }
     }
 

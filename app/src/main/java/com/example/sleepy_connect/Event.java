@@ -19,7 +19,7 @@ public class Event implements Serializable {
     public String qrCode;                                   // TODO: Generated automatically
     public String creatorID;                                // Required. Get it by calling entrant.getAndroidID()
     public long createdDate;                                // Automatic timestamp
-    public Image poster;                                    // Optional. Default -> Default image
+    public String poster;                                    // Optional. Default -> Default image
     public long registrationOpens;                          // Required
     public long registrationCloses;                         // Required
     public long eventStartDate;                             // Required
@@ -120,12 +120,12 @@ public class Event implements Serializable {
         return createdDate;
     }
 
-    public Image getPoster() {
+    public String getPoster() {
         return poster;
     }
 
-    public void setPoster(Image poster) {
-        this.poster = poster;
+    public void setPoster(String base64String) {
+        this.poster = base64String;
     }
 
     public long getRegistrationOpens() {

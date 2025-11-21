@@ -200,7 +200,8 @@ public class CreateEventFragment extends Fragment {
                     }
 
                     if (posterUri != null) {
-                        event.setPoster(new Image(getContext(), posterUri));
+                        Image img = new Image(getContext(), posterUri);
+                        event.setPoster(img.getBase64String());
                     }
 
                     // Add event to this rec centre
