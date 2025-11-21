@@ -54,7 +54,7 @@ public class Image {
      * @return Scaled Bitmap of an image
      */
     public Bitmap rescaleImage(Bitmap bmp) {
-        float ratio = Math.min(1024 / bmp.getWidth(), 768 / bmp.getHeight());
+        float ratio = Math.min((float)1024 / bmp.getWidth(), (float)768 / bmp.getHeight());
         int width = Math.round(bmp.getWidth() * ratio);
         int height = Math.round(bmp.getHeight() * ratio);
         return Bitmap.createScaledBitmap(bmp, width, height, true);
