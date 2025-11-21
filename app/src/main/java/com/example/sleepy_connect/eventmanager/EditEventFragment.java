@@ -201,7 +201,8 @@ public class EditEventFragment extends Fragment {
 
         // set poster if provided
         if (event.getPoster() != null) {
-            ivPoster.setImageBitmap(event.getPoster().decodeImage());
+            Image img = new Image(event.getPoster());
+            ivPoster.setImageBitmap(img.decodeImage());
         }
     }
 
@@ -327,7 +328,8 @@ public class EditEventFragment extends Fragment {
         // update poster if changed
         if (posterUri != null) {
             try {
-                event.setPoster(new Image(getContext(), posterUri));
+                Image img = new Image(getContext(), posterUri);
+                event.setPoster(img.getBase64String());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
