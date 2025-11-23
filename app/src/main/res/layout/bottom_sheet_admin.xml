@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".admin.AdminBottomSheet">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bs_admin_gl_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/width_gutter" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bs_admin_gl_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/width_gutter" />
+
+    <TextView
+        android:id="@+id/bs_admin_tv_profiles"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/light_text_border"
+        android:fontFamily="@font/roboto_medium"
+        android:padding="5dp"
+        android:text="@string/label_profiles"
+        android:textColor="@color/text_dark"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/bs_admin_gl_right"
+        app:layout_constraintStart_toStartOf="@+id/bs_admin_gl_left"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/bs_admin_tv_events"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/light_text_border"
+        android:fontFamily="@font/roboto_medium"
+        android:padding="5dp"
+        android:text="@string/label_events"
+        android:textColor="@color/text_dark"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/bs_admin_gl_right"
+        app:layout_constraintStart_toStartOf="@+id/bs_admin_gl_left"
+        app:layout_constraintTop_toBottomOf="@+id/bs_admin_tv_profiles" />
+
+    <TextView
+        android:id="@+id/bs_admin_tv_posters"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/light_text_border"
+        android:fontFamily="@font/roboto_medium"
+        android:padding="5dp"
+        android:text="@string/label_posters"
+        android:textColor="@color/text_dark"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/bs_admin_gl_right"
+        app:layout_constraintStart_toStartOf="@+id/bs_admin_gl_left"
+        app:layout_constraintTop_toBottomOf="@+id/bs_admin_tv_events" />
+
+    <TextView
+        android:id="@+id/bs_admin_tv_notifications"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/light_text_border"
+        android:fontFamily="@font/roboto_medium"
+        android:padding="5dp"
+        android:text="@string/label_notifications"
+        android:textColor="@color/text_dark"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/bs_admin_gl_right"
+        app:layout_constraintStart_toStartOf="@+id/bs_admin_gl_left"
+        app:layout_constraintTop_toBottomOf="@+id/bs_admin_tv_posters" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

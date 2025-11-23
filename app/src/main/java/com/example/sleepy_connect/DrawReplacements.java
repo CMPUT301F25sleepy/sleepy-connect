@@ -1,7 +1,10 @@
 package com.example.sleepy_connect;
 
+import static androidx.test.InstrumentationRegistry.getContext;
+
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.List;
 import java.util.Random;
@@ -15,14 +18,17 @@ public class DrawReplacements {
 
         List<String> waitingList = event.getWaitingList();
         List<String> pendingList = event.getPendingList();
+        List<String> enrolledList = event.getAcceptedList();
         int eventCapacity = event.eventCapacity;
 
         Random random = new Random();
 
-        int slotsToFill = eventCapacity - pendingList.size();
+        // Changed logic to capacity - (enrolled + pending)
+        // Shouldnt alter any properties of the event capacity
+        int slotsToFill = eventCapacity - (enrolledList.size() + pendingList.size());
 
         if (slotsToFill <= 0) {
-            Log.i("DrawReplacements", "Pending list is already full.");
+            Log.i("DrawReplacements", "Event already has enough enrolled + invited participants.");
             return;
         }
 
@@ -40,6 +46,9 @@ public class DrawReplacements {
 
             sendSelectedNotification(randomEntrant, event);
         }
+
+        // Should send a toast but will need to test if getContext() works as intended
+        Toast.makeText(getContext(), "Invited Entrants!", Toast.LENGTH_SHORT).show();
 
         // Push updates to Firestore
         EventDAL eventDAL = new EventDAL();

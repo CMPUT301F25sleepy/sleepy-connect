@@ -25,6 +25,7 @@ import com.example.sleepy_connect.EntrantDAL;
 import com.example.sleepy_connect.Event;
 import com.example.sleepy_connect.EventDAL;
 import com.example.sleepy_connect.ExportCSV;
+import com.example.sleepy_connect.Image;
 import com.example.sleepy_connect.InviteFromDetailsFragment;
 import com.example.sleepy_connect.Notification;
 import com.example.sleepy_connect.EventViewModel;
@@ -52,6 +53,7 @@ public class EventDetailsFragment extends Fragment{
 
     Boolean inInvited = false;
     Boolean inWaitlist = false;
+    Boolean eventOpen = false;
     Button viewStatusButton;
     Button joinButton;
     Button leaveButton;
@@ -103,11 +105,16 @@ public class EventDetailsFragment extends Fragment{
         event = EventViewModel.getEvent().getValue();
         entrant = UserViewModel.getUser().getValue();
 
+        long currentDate = System.currentTimeMillis();
+        if (currentDate > event.registrationOpens && currentDate < event.registrationCloses) {
+            eventOpen = true;
+        }
+
         //checks if user is in the waitlist and sets bool
         if (event.getWaitingList() != null) {
             waitList = event.getWaitingList();
             for (String entrant : waitList) {
-                if (Objects.equals(entrant, entrantID)) {
+                if (Objects.equals(entrant, entrantID) && currentDate < event.eventStartDate) {
                     inWaitlist = true;
                     break;
                 }
@@ -118,7 +125,7 @@ public class EventDetailsFragment extends Fragment{
         if (event.getPendingList() != null) {
             pendingList = event.getPendingList();
             for (String entrant : pendingList) {
-                if (Objects.equals(entrant, entrantID)) {
+                if (Objects.equals(entrant, entrantID) && currentDate < event.eventStartDate) {
                     inInvited = true;
                     break;
                 }
@@ -129,7 +136,7 @@ public class EventDetailsFragment extends Fragment{
         if (event.getAcceptedList() != null) {
             acceptedList = event.getAcceptedList();
             for (String entrant : acceptedList) {
-                if (Objects.equals(entrant, entrantID)) {
+                if (Objects.equals(entrant, entrantID) || !eventOpen) {
                     joinButton.setVisibility(View.GONE);
                 }
             }
@@ -301,7 +308,8 @@ public class EventDetailsFragment extends Fragment{
         // set poster if provided
         if (event.getPoster() != null) {
             ImageView poster = view.findViewById(R.id.event_details_poster);
-            poster.setImageBitmap(event.getPoster().decodeImage());
+            Image img = new Image(event.getPoster());
+            poster.setImageBitmap(img.decodeImage());
         }
     }
 

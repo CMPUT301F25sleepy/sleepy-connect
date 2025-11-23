@@ -51,7 +51,7 @@
             android:id="@+id/admin_tv_exit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="110dp"
+            android:layout_marginEnd="12dp"
             android:fontFamily="@font/roboto_serif"
             android:text="@string/label_exit"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1"
@@ -60,7 +60,6 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/admin_tv_title"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.72" />
 
@@ -78,10 +77,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="8dp"
         android:fontFamily="@font/roboto_medium"
         android:padding="5dp"
-        android:text="@string/label_profiles"
+        android:text="@string/label_dropdown_profiles"
         android:textColor="@color/text_dark"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -91,7 +90,6 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/admin_container"
-        android:name="com.example.sleepy_connect.AlertFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"

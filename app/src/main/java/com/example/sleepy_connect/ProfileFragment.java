@@ -1,5 +1,6 @@
 package com.example.sleepy_connect;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,6 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import com.example.sleepy_connect.admin.AdminActivity;
 
 //file needs to be cleaned up
 //we should move edit and read-only changes into methods since they have multiple uses
@@ -28,6 +32,7 @@ public class ProfileFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private String correct_password = "sleepyadmin";
     private String saved_user;
     private String saved_first;
     private String saved_last;
@@ -40,6 +45,7 @@ public class ProfileFragment extends Fragment {
     private KeyListener birthday_key;
     private KeyListener phone_key;
     private KeyListener email_key;
+    private KeyListener password_key;
     private Entrant user;
     private EntrantDAL entrantDal;
 
@@ -118,12 +124,17 @@ public class ProfileFragment extends Fragment {
         EditText profile_birthday = view.findViewById(R.id.profile_birthday);
         EditText profile_phone = view.findViewById(R.id.profile_phone);
         EditText profile_email = view.findViewById(R.id.profile_email);
+        EditText admin_password = view.findViewById(R.id.admin_password_input);
 
-        //ids for the four buttons
+        //ids for the seven buttons
         Button edit_button = view.findViewById(R.id.edit_profile_button);
         Button delete_button = view.findViewById(R.id.delete_profile_button);
         Button confirm_button = view.findViewById(R.id.confirm_profile_button);
         Button cancel_button = view.findViewById(R.id.cancel_profile_button);
+        Button notif_setting_button = view.findViewById(R.id.notification_settings_button);
+        Button geolocation_setting_button = view.findViewById(R.id.profile_geolocation_button);
+        Button admin_view_button = view.findViewById(R.id.admin_view_button);
+
 
         //sets the textviews with the current information for the user
         profile_user.setText(saved_user);
@@ -157,7 +168,27 @@ public class ProfileFragment extends Fragment {
         profile_phone.setKeyListener(null);
         profile_email.setKeyListener(null);
 
+        //keyboard listener for admin view password stays on when not editing profile
+        password_key = admin_password.getKeyListener();
+        admin_password.setKeyListener(password_key);
 
+        admin_view_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String user_input = admin_password.getText().toString().trim();
+                //correct password inputted
+                if (user_input.equals(correct_password)) {
+                    Intent intent = new Intent(requireActivity(), AdminActivity.class);
+                    NavigationActivity host = (NavigationActivity) requireActivity();
+                    intent.putExtra("uid", host.userID);
+                    startActivity(intent);
+                } else {
+                    // wrong password inputted
+                    Toast.makeText(requireActivity(), "Incorrect password", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
 
         edit_button.setOnClickListener(new View.OnClickListener() {
             /**
@@ -182,6 +213,11 @@ public class ProfileFragment extends Fragment {
                 enableText(profile_birthday);
                 enableText(profile_phone);
                 enableText(profile_email);
+
+                //disable switching to admin view
+                disableText(admin_password);
+                admin_view_button.setVisibility(view.INVISIBLE);
+                admin_password.setKeyListener(null);
 
                 //sets key listener to specific input for future exception handling
                 profile_user.setKeyListener(user_key);
@@ -221,6 +257,11 @@ public class ProfileFragment extends Fragment {
                 profile_birthday.setKeyListener(null);
                 profile_phone.setKeyListener(null);
                 profile_email.setKeyListener(null);
+
+                //admin profile can now be switched to again
+                enableText(admin_password);
+                admin_password.setKeyListener(password_key);
+                admin_view_button.setVisibility(view.VISIBLE);
 
                 //set the confirmed information to the screen
                 saved_user = profile_user.getText().toString();
@@ -277,6 +318,11 @@ public class ProfileFragment extends Fragment {
                 profile_birthday.setKeyListener(null);
                 profile_phone.setKeyListener(null);
                 profile_email.setKeyListener(null);
+
+                //admin profile can now be switched to again
+                enableText(admin_password);
+                admin_password.setKeyListener(password_key);
+                admin_view_button.setVisibility(view.VISIBLE);
 
                 edit_button.setVisibility(view.VISIBLE);
                 delete_button.setVisibility(view.VISIBLE);
