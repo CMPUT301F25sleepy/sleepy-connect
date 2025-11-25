@@ -16,7 +16,7 @@ public class EntrantTest {
     // Had to move this test to an instrumented test, because the encoder relies on android utility.
     // The java utility could work too, but needs an SDK that is higher than our app supports.
 
-    /*@Test
+    @Test
     public void testSaltHashNonNull() {
         // Checking generation of salt and hash
         String password = "password";
@@ -63,6 +63,6 @@ public class EntrantTest {
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             throw new RuntimeException(e);
         }
-    }*/
+    }
 }
 
