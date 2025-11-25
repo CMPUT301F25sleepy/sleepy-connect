@@ -334,6 +334,15 @@ public class ProfileFragment extends Fragment {
                 cancel_button.setVisibility(view.GONE);
             }
         });
+
+        // set click listener for delete profile button
+        delete_button.setOnClickListener(v -> {
+
+            // update database
+            EntrantDAL entrantDAL = new EntrantDAL();
+            NavigationActivity host = (NavigationActivity) requireActivity();
+            entrantDAL.deleteEntrant(host.userID, () -> requireActivity().finish());
+        });
     }
 
     /**
