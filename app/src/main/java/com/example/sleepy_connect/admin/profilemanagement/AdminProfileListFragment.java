@@ -14,7 +14,7 @@ import android.widget.ListView;
 
 import com.example.sleepy_connect.Entrant;
 import com.example.sleepy_connect.R;
-import com.example.sleepy_connect.UserViewModel;
+import com.example.sleepy_connect.admin.AdminUserViewModel;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
@@ -62,7 +62,7 @@ public class AdminProfileListFragment extends Fragment {
 
             // store selected entrant in viewmodel
             Entrant selectedEntrant = entrants.get(position);
-            UserViewModel vmEntrant = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+            AdminUserViewModel vmEntrant = new ViewModelProvider(requireActivity()).get(AdminUserViewModel.class);
             vmEntrant.setUser(selectedEntrant);
 
             // show entrant details

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.text.method.KeyListener;
 import android.view.LayoutInflater;
@@ -82,8 +83,11 @@ public class ProfileFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        //obtain entrant
-        user = UserViewModel.getUser().getValue();
+
+        // get user from viewmodel
+        UserViewModel vmUser = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+        user = vmUser.getUser().getValue();
+        assert user != null;
 
         //set strings as empty first so they still have a value to display even if the user information cannot be pulled
         //cleans up code by avoiding 6 if-else statements
@@ -132,7 +136,6 @@ public class ProfileFragment extends Fragment {
         Button confirm_button = view.findViewById(R.id.confirm_profile_button);
         Button cancel_button = view.findViewById(R.id.cancel_profile_button);
         Button notif_setting_button = view.findViewById(R.id.notification_settings_button);
-        Button geolocation_setting_button = view.findViewById(R.id.profile_geolocation_button);
         Button admin_view_button = view.findViewById(R.id.admin_view_button);
 
 
@@ -329,6 +332,15 @@ public class ProfileFragment extends Fragment {
                 confirm_button.setVisibility(view.GONE);
                 cancel_button.setVisibility(view.GONE);
             }
+        });
+
+        // set click listener for delete profile button
+        delete_button.setOnClickListener(v -> {
+
+            // update database
+            EntrantDAL entrantDAL = new EntrantDAL();
+            NavigationActivity host = (NavigationActivity) requireActivity();
+            entrantDAL.deleteEntrant(host.userID, () -> requireActivity().finish());
         });
     }
 

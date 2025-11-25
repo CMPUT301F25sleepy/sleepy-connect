@@ -5,11 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -63,6 +65,7 @@ public class EventListFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_event_display, container, false);
 
+        TextView filterEvents = view.findViewById(R.id.filter_event);
         listView = view.findViewById(R.id.event_list_view);
         adapter = new EventListAdapter(eventList);
         listView.setAdapter(adapter);
@@ -101,6 +104,14 @@ public class EventListFragment extends Fragment {
                     .setReorderingAllowed(true)
                     .addToBackStack(null)
                     .commit();
+        });
+
+        filterEvents.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FilterEventsFragment dialog = new FilterEventsFragment();
+                dialog.show(getChildFragmentManager(), "filter events");
+            }
         });
 
         return view;

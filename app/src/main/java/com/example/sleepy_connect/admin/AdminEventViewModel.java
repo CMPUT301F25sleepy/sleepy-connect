@@ -1,12 +1,11 @@
-package com.example.sleepy_connect;
+package com.example.sleepy_connect.admin;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-/**
- * class for the view model to get the event object from the database
- */
-public class EventViewModel extends ViewModel {
+import com.example.sleepy_connect.Event;
+
+public class AdminEventViewModel extends ViewModel {
     private static final MutableLiveData<Event> event = new MutableLiveData<>();
 
     public MutableLiveData<Event> getEvent() {

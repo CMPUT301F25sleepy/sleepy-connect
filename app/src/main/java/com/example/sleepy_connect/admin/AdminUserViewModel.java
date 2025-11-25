@@ -1,12 +1,14 @@
-package com.example.sleepy_connect;
+package com.example.sleepy_connect.admin;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.sleepy_connect.Entrant;
+
 /**
- * class for view model to get user object
+ * View model to store passed user data
  */
-public class UserViewModel extends ViewModel {
+public class AdminUserViewModel extends ViewModel {
     private static final MutableLiveData<Entrant> user = new MutableLiveData<>();
 
     public MutableLiveData<Entrant> getUser() {

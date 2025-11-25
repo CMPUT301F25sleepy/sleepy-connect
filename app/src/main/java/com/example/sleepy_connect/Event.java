@@ -160,6 +160,8 @@ public class Event implements Serializable {
         return geolocationEnabled;
     }
 
+    public void setGeolocationEnabled(boolean geolocationEnabled) {this.geolocationEnabled = geolocationEnabled;}
+
     public String getEventTime() {
         return eventTime;
     }
@@ -290,6 +292,23 @@ public class Event implements Serializable {
 
     public int getWaitlistSize() {
         return waitingList.size();
+    }
+
+    /**
+     * Returns the event object after erasing records of deleted user in entrant lists.
+     * @param event Event object to be updated.
+     * @param uid User id to be removed from records.
+     * @return Updated event object.
+     */
+    public static Event removeFromEventLists(Event event, String uid) {
+
+        // update all lists
+        event.getWaitingList().remove(uid);
+        event.getPendingList().remove(uid);
+        event.getAcceptedList().remove(uid);
+        event.getDeclinedList().remove(uid);
+
+        return event;
     }
 
 }

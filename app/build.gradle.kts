@@ -86,11 +86,15 @@ dependencies {
 
     // For FragmentScenario to test fragments in isolation
     debugImplementation("androidx.fragment:fragment-testing:1.6.2")
+    
+    //for the keywords under the searchbar
+    implementation("com.google.android.flexbox:flexbox:3.0.0")
 }
 
 configurations {
-    // protobuf inside conflicts espresso-contrib conflicts with firebase so remove it
+    // protobuf inside conflicts espresso-contrib conflicts with firebase so we exclude it
     named("androidTestImplementation") {
         exclude(group = "com.google.protobuf", module = "protobuf-lite")
-    }
 }
+
+   

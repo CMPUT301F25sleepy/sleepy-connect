@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,12 +14,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.sleepy_connect.Entrant;
-import com.example.sleepy_connect.Event;
+import com.example.sleepy_connect.EntrantDAL;
 import com.example.sleepy_connect.R;
-import com.example.sleepy_connect.UserViewModel;
 import com.example.sleepy_connect.admin.AdminActivity;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.example.sleepy_connect.admin.AdminUserViewModel;
 
 import java.util.Objects;
 
@@ -66,7 +65,9 @@ public class AdminProfileDetailsFragment extends Fragment {
         currentUID = host.currentUID;
 
         // retrieve selected entrant details from viewmodel
-        user = UserViewModel.getUser().getValue();
+        AdminUserViewModel vmUser = new ViewModelProvider(requireActivity()).get(AdminUserViewModel.class);
+        user = vmUser.getUser().getValue();
+        assert user != null;
 
         // set user fields
         setProfileFields(view);
@@ -131,41 +132,9 @@ public class AdminProfileDetailsFragment extends Fragment {
             return;
         }
 
-        // check each event in collection
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("events").get()
-            .addOnSuccessListener(queryDocumentSnapshots -> {
-
-                // update each event's list if deleted user is in it
-                for (DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()) {
-                    Event updatedEvent = updateEventLists(Objects.requireNonNull(doc.toObject(Event.class)));
-                    doc.getReference().set(updatedEvent);
-                }
-
-                // delete profile from collection
-                db.collection("users").document(user.getAndroid_id()).delete();
-
-                // exit fragment
-                finishProcedure();
-            });
+        // update database
+        EntrantDAL entrantDAL = new EntrantDAL();
+        entrantDAL.deleteEntrant(user.getAndroid_id(), this::finishProcedure);
     }
 
-    /**
-     * Returns the event object after erasing records of deleted user in entrant lists.
-     * @param event Event object to be updated.
-     * @return Updated event object.
-     */
-    private Event updateEventLists(Event event) {
-
-        // store uid
-        String uid = user.getAndroid_id();
-
-        // update all lists
-        event.getWaitingList().remove(uid);
-        event.getPendingList().remove(uid);
-        event.getAcceptedList().remove(uid);
-        event.getDeclinedList().remove(uid);
-
-        return event;
-    }
 }

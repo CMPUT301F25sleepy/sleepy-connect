@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.sleepy_connect.DrawReplacements;
 import com.example.sleepy_connect.Entrant;
@@ -50,7 +51,10 @@ public class WaitlistFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        event = EventViewModel.getEvent().getValue();
+        // get event from viewmodel
+        EventViewModel vmEvent = new ViewModelProvider(requireActivity()).get(EventViewModel.class);
+        event = vmEvent.getEvent().getValue();
+        assert event != null;
 
         View view = inflater.inflate(R.layout.fragment_waitlist, container, false);
         listView = view.findViewById(R.id.waitlist_entrant_list);
@@ -72,7 +76,12 @@ public class WaitlistFragment extends Fragment {
      * Loads waitlisted entrant IDs from the EventViewModel and fills adapter list.
      */
     private void loadWaitlistedEntrants() {
-        Event event = EventViewModel.getEvent().getValue();
+
+        // get event from viewmodel
+        EventViewModel vmEvent = new ViewModelProvider(requireActivity()).get(EventViewModel.class);
+        event = vmEvent.getEvent().getValue();
+        assert event != null;
+
         if (event == null) {
             return;
         }
@@ -92,22 +101,36 @@ public class WaitlistFragment extends Fragment {
     private void setupMapButton(View view) {
         Button viewLocationList = view.findViewById(R.id.waitlist_map_button);
 
-        viewLocationList.setOnClickListener(v -> {
-            ObtainGeolocation fragment = new ObtainGeolocation();
+        // Determines whether the event has geolocation enabled, if so allow them to view map
+        if (event.isGeolocationEnabled()) {
+            viewLocationList.setOnClickListener(v -> {
+                ObtainGeolocation fragment = new ObtainGeolocation();
 
-            requireActivity().getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment_container, fragment)
-                    .addToBackStack(null)
-                    .commit();
-        });
+                requireActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, fragment)
+                        .addToBackStack(null)
+                        .commit();
+            });
+        }
+        // ...or deny if they have geolocation disabled
+        else {
+            viewLocationList.setOnClickListener(v -> {
+                Toast.makeText(requireContext(), "Geolocation Disabled", Toast.LENGTH_SHORT).show();
+            });
+        }
     }
 
     private void setupInviteButton(View view) {
         Button inviteEntrants = view.findViewById(R.id.waitlist_invite_button);
 
         inviteEntrants.setOnClickListener(v -> {
-            Event event = EventViewModel.getEvent().getValue();
+
+            // get event from viewmodel
+            EventViewModel vmEvent = new ViewModelProvider(requireActivity()).get(EventViewModel.class);
+            event = vmEvent.getEvent().getValue();
+            assert event != null;
+
             if (event == null) return;
 
             DrawReplacements replace = new DrawReplacements();

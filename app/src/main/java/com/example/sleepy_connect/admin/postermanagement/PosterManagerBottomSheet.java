@@ -8,8 +8,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.example.sleepy_connect.Event;
+import com.example.sleepy_connect.EventDAL;
 import com.example.sleepy_connect.R;
+import com.example.sleepy_connect.admin.AdminEventViewModel;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 /**
@@ -25,10 +29,28 @@ public class PosterManagerBottomSheet extends BottomSheetDialogFragment {
         // Inflate the bottom sheet layout
         View view = inflater.inflate(R.layout.bottom_sheet_poster_manager, container, false);
 
-        // set listener for removing poster option
+        // set listener for removing selected poster
         TextView tvRemovePoster = view.findViewById(R.id.bs_poster_manager_tv_remove_poster);
         tvRemovePoster.setOnClickListener(v -> {
 
+            // get event from viewmodel
+            AdminEventViewModel vmEvent = new ViewModelProvider(requireActivity()).get(AdminEventViewModel.class);
+            Event event = vmEvent.getEvent().getValue();
+            assert event != null;
+
+            // clear event poster
+            event.setPoster(null);
+
+            // update db
+            EventDAL eventDAL = new EventDAL();
+            eventDAL.updateEvent(event);
+
+            // update list
+            AdminPosterListFragment parent = (AdminPosterListFragment) requireParentFragment();
+            parent.getPosters();
+
+            // close bottom sheet
+            dismiss();
         });
 
         return view;

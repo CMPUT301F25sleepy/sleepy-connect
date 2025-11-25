@@ -108,6 +108,7 @@ public class Entrant implements Serializable {
         this.created_event_list.add(eventID);
     }
 
+
     public ArrayList<Notification> getNotification_list() {
         if (notification_list == null){
             notification_list = new ArrayList<>();

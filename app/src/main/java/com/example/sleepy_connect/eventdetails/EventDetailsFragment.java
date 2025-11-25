@@ -101,9 +101,15 @@ public class EventDetailsFragment extends Fragment{
         String entrantID = args.getString("entrant");
         String eventID = args.getString("event");
 
-        // receive event details from viewmodel
-        event = EventViewModel.getEvent().getValue();
-        entrant = UserViewModel.getUser().getValue();
+        // get event from viewmodel
+        EventViewModel vmEvent = new ViewModelProvider(requireActivity()).get(EventViewModel.class);
+        event = vmEvent.getEvent().getValue();
+        assert event != null;
+
+        // get user from viewmodel
+        UserViewModel vmUser = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+        entrant = vmUser.getUser().getValue();
+        assert entrant != null;
 
         long currentDate = System.currentTimeMillis();
         if (currentDate > event.registrationOpens && currentDate < event.registrationCloses) {
