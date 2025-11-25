@@ -42,10 +42,10 @@ public class EventManagerBottomSheet extends BottomSheetDialogFragment {
         // Set click listener for edit event
         tvEditEvent.setOnClickListener(v -> {
 
-            // open edit event screen
+            // open edit poster screen
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragment_container, EditEventFragment.class, null)
+                    .replace(R.id.fragment_container, EditPosterFragment.class, null)
                     .setReorderingAllowed(true)
                     .addToBackStack(null)
                     .commit();
