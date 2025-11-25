@@ -292,7 +292,7 @@ public class Event implements Serializable {
         this.declinedList = declinedList;
     }
 
-    @Exclude
+    @Exclude //
     public int getWaitlistSize() {
         return waitingList.size();
     }
