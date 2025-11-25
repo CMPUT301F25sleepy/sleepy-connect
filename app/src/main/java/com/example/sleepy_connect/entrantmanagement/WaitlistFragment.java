@@ -101,6 +101,7 @@ public class WaitlistFragment extends Fragment {
     private void setupMapButton(View view) {
         Button viewLocationList = view.findViewById(R.id.waitlist_map_button);
 
+        // Determines whether the event has geolocation enabled, if so allow them to view map
         if (event.isGeolocationEnabled()) {
             viewLocationList.setOnClickListener(v -> {
                 ObtainGeolocation fragment = new ObtainGeolocation();
@@ -112,6 +113,7 @@ public class WaitlistFragment extends Fragment {
                         .commit();
             });
         }
+        // ...or deny if they have geolocation disabled
         else {
             viewLocationList.setOnClickListener(v -> {
                 Toast.makeText(requireContext(), "Geolocation Disabled", Toast.LENGTH_SHORT).show();
