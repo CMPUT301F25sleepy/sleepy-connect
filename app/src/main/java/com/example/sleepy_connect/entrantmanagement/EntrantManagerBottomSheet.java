@@ -95,8 +95,6 @@ public class EntrantManagerBottomSheet extends BottomSheetDialogFragment {
                 .replace(R.id.entrant_manager_fragment_container, fragment, null)
                 .commit();
 
-
-
         // Close the bottom sheet
         dismiss();
     }
