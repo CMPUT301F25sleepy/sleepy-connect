@@ -2,12 +2,18 @@ package com.example.sleepy_connect;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
 
 /**
  * Data access layer for the event objects to the database
@@ -48,28 +54,6 @@ public class EventDAL {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         System.err.println("Error with event.");
-                    }
-                });
-    }
-
-    /**
-     * Removing an event from the event collection
-     * @param event event object to be removed
-     */
-    public void removeEvent(Event event) {
-        eventsRef.document(event.getEventID()).delete()
-                // Adding listeners that tell us whether it was successful
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        System.out.println("Event removed: " + event.getEventID());
-                    }
-                })
-                // Adding listeners that tell us whether it was successful
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        System.err.println("Error removing event: " + e.getMessage());
                     }
                 });
     }
@@ -159,5 +143,80 @@ public class EventDAL {
                                 onSuccessListener.onSuccess(finalCurrentID);
                             });
                 });
+    }
+
+    /**
+     * Removing an event from the event collection.
+     * @param eventID ID of event object to be removed.
+     * @param organizerID ID of given event's organizer.
+     */
+    public void removeEvent(String eventID, String organizerID) {
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        // update community centres
+        Task<QuerySnapshot> updateCommunityCentres =
+                db.collection("community centres")
+                .whereArrayContains("events", eventID)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+
+                    // remove reference to event id if community centre has a reference
+                    for (DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()) {
+                        CommunityCentre location = doc.toObject(CommunityCentre.class);
+                        assert location != null;
+                        location.events.remove(eventID);
+                        doc.getReference().set(location);
+                    }
+                });
+
+        // update organizer
+        Task<QuerySnapshot> updateOrganizer =
+        db.collection("users")
+                .whereEqualTo("android_id", organizerID)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+
+                    // remove reference in organizer's created event list
+                    for (DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()) {
+                        Entrant organizer = doc.toObject(Entrant.class);
+                        assert organizer != null;
+                        organizer.getCreated_event_list().remove(eventID);
+                        doc.getReference().set(organizer);
+                    }
+                });
+
+        // TODO: update entrants
+
+        // delete from events collection
+        eventsRef.document(eventID).delete()
+                // Adding listeners that tell us whether it was successful
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        System.out.println("Event removed: " + eventID);
+                    }
+                })
+                // Adding listeners that tell us whether it was successful
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        System.err.println("Error removing event: " + e.getMessage());
+                    }
+                });
+
+        // synchronize tasks
+        ArrayList<Task<?>> removeEventTasks = new ArrayList<>();
+        removeEventTasks.add(updateCommunityCentres);
+        removeEventTasks.add(updateOrganizer);
+        // TODO: add update entrants task
+        Task<Void> barrierTask = Tasks.whenAll(removeEventTasks);
+
+        // perform callback on all complete
+        barrierTask.addOnCompleteListener(task -> {
+
+            // TODO: add callback here
+
+        });
     }
 }
