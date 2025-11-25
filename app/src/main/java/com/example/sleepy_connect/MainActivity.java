@@ -59,7 +59,6 @@ public class MainActivity extends AppCompatActivity{
                     // new user
                     user = new Entrant(androidID);
 
-                    //xander_test(user);
                     entrantDal.addEntrant(user);
                 }
             }
