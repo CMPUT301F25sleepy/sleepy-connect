@@ -32,6 +32,7 @@ public class Entrant implements Serializable {
     public ArrayList<String> all_event_list;                // List of all events that entrant is affiliated with
     public ArrayList<String> created_event_list;            // List of all events that entrant may have created (organizer)
 
+    public Boolean allow_location;
 
     public Entrant(String android_id) {
         this.android_id = android_id;
@@ -106,6 +107,14 @@ public class Entrant implements Serializable {
 
     public void addCreatedEvent(String eventID) {
         this.created_event_list.add(eventID);
+    }
+
+    public Boolean getAllow_Location() {
+        return allow_location;
+    }
+
+    public void setAllow_location(Boolean allow_location) {
+        this.allow_location = allow_location;
     }
 
     public ArrayList<Notification> getNotification_list() {
