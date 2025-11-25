@@ -15,9 +15,9 @@ import android.widget.TextView;
 
 import com.example.sleepy_connect.CommunityCentre;
 import com.example.sleepy_connect.Event;
-import com.example.sleepy_connect.EventViewModel;
 import com.example.sleepy_connect.Image;
 import com.example.sleepy_connect.R;
+import com.example.sleepy_connect.admin.AdminEventViewModel;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -62,7 +62,7 @@ public class AdminEventDetailsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // get selected event from viewmodel
-        EventViewModel vmEvent = new ViewModelProvider(requireActivity()).get(EventViewModel.class);
+        AdminEventViewModel vmEvent = new ViewModelProvider(requireActivity()).get(AdminEventViewModel.class);
         event = vmEvent.getEvent().getValue();
         assert event != null;
 

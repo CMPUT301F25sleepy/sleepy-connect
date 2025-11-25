@@ -12,8 +12,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.sleepy_connect.Event;
 import com.example.sleepy_connect.EventDAL;
-import com.example.sleepy_connect.EventViewModel;
 import com.example.sleepy_connect.R;
+import com.example.sleepy_connect.admin.AdminEventViewModel;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 /**
@@ -34,7 +34,7 @@ public class PosterManagerBottomSheet extends BottomSheetDialogFragment {
         tvRemovePoster.setOnClickListener(v -> {
 
             // get event from viewmodel
-            EventViewModel vmEvent = new ViewModelProvider(requireActivity()).get(EventViewModel.class);
+            AdminEventViewModel vmEvent = new ViewModelProvider(requireActivity()).get(AdminEventViewModel.class);
             Event event = vmEvent.getEvent().getValue();
             assert event != null;
 
