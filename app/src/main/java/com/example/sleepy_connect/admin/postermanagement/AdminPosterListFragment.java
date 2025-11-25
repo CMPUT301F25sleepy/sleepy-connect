@@ -5,16 +5,16 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.example.sleepy_connect.Entrant;
 import com.example.sleepy_connect.Event;
+import com.example.sleepy_connect.EventViewModel;
 import com.example.sleepy_connect.R;
-import com.example.sleepy_connect.admin.profilemanagement.AdminProfileListAdapter;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -26,6 +26,7 @@ import java.util.ArrayList;
 public class AdminPosterListFragment extends Fragment {
 
     private ArrayList<Event> events;
+    private AdminPosterListAdapter adapter;
 
     public AdminPosterListFragment() {
         // Required empty public constructor
@@ -54,11 +55,30 @@ public class AdminPosterListFragment extends Fragment {
 
         // initialize list, listview, adapter
         events = new ArrayList<>();
-        AdminPosterListAdapter adapter = new AdminPosterListAdapter(requireContext(), events);
+        adapter = new AdminPosterListAdapter(requireContext(), events);
         ListView listView = view.findViewById(R.id.admin_list_lv);
         listView.setAdapter(adapter);
 
-        // get posters
+        // initialize listener for admin profile list items
+        listView.setOnItemClickListener((parent, v, position, id) -> {
+
+            // store selected entrant in viewmodel
+            Event selectedEvent = events.get(position);
+            EventViewModel vmEvent = new ViewModelProvider(requireActivity()).get(EventViewModel.class);
+            vmEvent.setEvent(selectedEvent);
+
+            // show poster manager bottom sheet
+            PosterManagerBottomSheet bottomSheet = new PosterManagerBottomSheet();
+            bottomSheet.show(getChildFragmentManager(), "ModalBottomSheet");
+
+        });
+
+        getPosters();
+    }
+
+    public void getPosters() {
+
+        // update events list and notify adapter
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("events")
                 .whereNotEqualTo("poster", null)
