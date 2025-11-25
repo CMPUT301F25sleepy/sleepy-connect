@@ -27,7 +27,7 @@ public class EventManagerBottomSheet extends BottomSheetDialogFragment {
         View view = inflater.inflate(R.layout.fragment_event_manager_bottom_sheet, container, false);
 
         // Find buttons from the layout
-        TextView tvEditEvent = view.findViewById(R.id.bs_event_manager_tv_edit_event);
+        TextView tvEditEvent = view.findViewById(R.id.bs_event_manager_tv_edit_poster);
         TextView tvManageEntrants = view.findViewById(R.id.bs_event_manager_tv_manage_entrants);
 
         // Set click listener for edit event
@@ -36,7 +36,7 @@ public class EventManagerBottomSheet extends BottomSheetDialogFragment {
             // open edit event screen
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragment_container, EditEventFragment.class, null)
+                    .replace(R.id.fragment_container, EditPosterFragment.class, null)
                     .setReorderingAllowed(true)
                     .addToBackStack(null)
                     .commit();
