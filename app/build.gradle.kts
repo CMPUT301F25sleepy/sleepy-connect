@@ -95,6 +95,7 @@ configurations {
     // protobuf inside conflicts espresso-contrib conflicts with firebase so we exclude it
     named("androidTestImplementation") {
         exclude(group = "com.google.protobuf", module = "protobuf-lite")
+    }
 }
 
    
