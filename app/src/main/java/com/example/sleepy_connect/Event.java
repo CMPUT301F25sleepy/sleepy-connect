@@ -1,5 +1,6 @@
 package com.example.sleepy_connect;
 
+import java.io.Serializable;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.TextStyle;
@@ -10,7 +11,7 @@ import java.util.Locale;
  * Object class for events
  */
 
-public class Event {
+public class Event implements Serializable {
     public String eventID;                                  // Automatic
     public String eventName;                                // Required
     public String description;                              // Optional
@@ -18,7 +19,7 @@ public class Event {
     public String qrCode;                                   // TODO: Generated automatically
     public String creatorID;                                // Required. Get it by calling entrant.getAndroidID()
     public long createdDate;                                // Automatic timestamp
-    public Image poster;                                    // Optional. Default -> Default image
+    public String poster;                                    // Optional. Default -> Default image
     public long registrationOpens;                          // Required
     public long registrationCloses;                         // Required
     public long eventStartDate;                             // Required
@@ -119,12 +120,12 @@ public class Event {
         return createdDate;
     }
 
-    public Image getPoster() {
+    public String getPoster() {
         return poster;
     }
 
-    public void setPoster(Image poster) {
-        this.poster = poster;
+    public void setPoster(String base64String) {
+        this.poster = base64String;
     }
 
     public long getRegistrationOpens() {
@@ -289,6 +290,23 @@ public class Event {
 
     public int getWaitlistSize() {
         return waitingList.size();
+    }
+
+    /**
+     * Returns the event object after erasing records of deleted user in entrant lists.
+     * @param event Event object to be updated.
+     * @param uid User id to be removed from records.
+     * @return Updated event object.
+     */
+    public static Event removeFromEventLists(Event event, String uid) {
+
+        // update all lists
+        event.getWaitingList().remove(uid);
+        event.getPendingList().remove(uid);
+        event.getAcceptedList().remove(uid);
+        event.getDeclinedList().remove(uid);
+
+        return event;
     }
 
 }

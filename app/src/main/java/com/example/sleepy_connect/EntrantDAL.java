@@ -3,9 +3,13 @@ package com.example.sleepy_connect;
 import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.Objects;
 
 /**
  * Data access layer for the entrant objects to the database
@@ -132,5 +136,39 @@ public class EntrantDAL {
                         System.err.println("Error updating entrant: " + e.getMessage());
                     }
                 });
+    }
+
+    /**
+     * Interface for the callback used in deleteEntrant.
+     */
+    public interface OnEntrantDeleteListener {
+        void onEntrantDeleted();
+    }
+
+    /**
+     * Deletes all references to the entrant with the given uid and its created events.
+     * @param uid User id of the entrant to be deleted.
+     * @param listener Callback performed for cleanup after database updating.
+     */
+    public void deleteEntrant(String uid, OnEntrantDeleteListener listener) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        Task<QuerySnapshot> updateLists = db.collection("events").get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+
+                    // update each event's list if deleted user is in it
+                    for (DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()) {
+                        Event updatedEvent = Event.removeFromEventLists(Objects.requireNonNull(doc.toObject(Event.class)), uid);
+                        doc.getReference().set(updatedEvent);
+                    }
+
+                    // delete profile from collection
+                    db.collection("users").document(uid).delete();
+
+                    // perform implemented callback
+                    listener.onEntrantDeleted();
+                });
+
+        // TODO: delete all the created events and synchronize tasks before callback
     }
 }

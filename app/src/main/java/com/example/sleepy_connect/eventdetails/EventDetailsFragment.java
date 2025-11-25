@@ -7,6 +7,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,12 +26,14 @@ import com.example.sleepy_connect.EntrantDAL;
 import com.example.sleepy_connect.Event;
 import com.example.sleepy_connect.EventDAL;
 import com.example.sleepy_connect.ExportCSV;
+import com.example.sleepy_connect.Image;
 import com.example.sleepy_connect.InviteFromDetailsFragment;
 import com.example.sleepy_connect.Notification;
 import com.example.sleepy_connect.EventViewModel;
 import com.example.sleepy_connect.ObtainGeolocation;
 import com.example.sleepy_connect.R;
 import com.example.sleepy_connect.SignUpFragment;
+import com.example.sleepy_connect.UserViewModel;
 import com.example.sleepy_connect.alertSelectFragment;
 
 import java.text.SimpleDateFormat;
@@ -45,9 +50,11 @@ public class EventDetailsFragment extends Fragment{
 
     Event event;
     SimpleDateFormat dateFormat = new SimpleDateFormat("M/d/y", Locale.getDefault());
+    Entrant entrant;
 
     Boolean inInvited = false;
     Boolean inWaitlist = false;
+    Boolean eventOpen = false;
     Button viewStatusButton;
     Button joinButton;
     Button leaveButton;
@@ -98,14 +105,26 @@ public class EventDetailsFragment extends Fragment{
         Log.d("QRCodeScanner", "event details Starting event with entrant id " + entrantID);
 
 
-        // receive event details from viewmodel
-        event = EventViewModel.getEvent().getValue();
+        // get event from viewmodel
+        EventViewModel vmEvent = new ViewModelProvider(requireActivity()).get(EventViewModel.class);
+        event = vmEvent.getEvent().getValue();
+        assert event != null;
+
+        // get user from viewmodel
+        UserViewModel vmUser = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+        entrant = vmUser.getUser().getValue();
+        assert entrant != null;
+
+        long currentDate = System.currentTimeMillis();
+        if (currentDate > event.registrationOpens && currentDate < event.registrationCloses) {
+            eventOpen = true;
+        }
 
         //checks if user is in the waitlist and sets bool
         if (event.getWaitingList() != null) {
             waitList = event.getWaitingList();
             for (String entrant : waitList) {
-                if (Objects.equals(entrant, entrantID)) {
+                if (Objects.equals(entrant, entrantID) && currentDate < event.eventStartDate) {
                     inWaitlist = true;
                     break;
                 }
@@ -116,7 +135,7 @@ public class EventDetailsFragment extends Fragment{
         if (event.getPendingList() != null) {
             pendingList = event.getPendingList();
             for (String entrant : pendingList) {
-                if (Objects.equals(entrant, entrantID)) {
+                if (Objects.equals(entrant, entrantID) && currentDate < event.eventStartDate) {
                     inInvited = true;
                     break;
                 }
@@ -127,7 +146,7 @@ public class EventDetailsFragment extends Fragment{
         if (event.getAcceptedList() != null) {
             acceptedList = event.getAcceptedList();
             for (String entrant : acceptedList) {
-                if (Objects.equals(entrant, entrantID)) {
+                if (Objects.equals(entrant, entrantID) || !eventOpen) {
                     joinButton.setVisibility(View.GONE);
                 }
             }
@@ -160,7 +179,25 @@ public class EventDetailsFragment extends Fragment{
         leaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO - set button to remove the entrant from the waitlist
+                String entrantID = entrant.getAndroid_id();
+                if (waitList.contains(entrantID)) {
+                    waitList.remove(entrantID);
+                }
+                event.setWaitingList(waitList);
+
+                DialogFragment SignFragment = SignUpFragment.newInstance();
+                SignFragment.show(getParentFragmentManager(), "leave");
+
+                // update vm model
+                EventViewModel vmEvent = new ViewModelProvider(requireActivity()).get(EventViewModel.class);
+                vmEvent.setEvent(event);
+
+                // update database
+                EventDAL db = new EventDAL();
+                db.updateEvent(event);
+
+                //restart fragment
+                restartFragment();
             }
         });
 
@@ -173,13 +210,7 @@ public class EventDetailsFragment extends Fragment{
             }
         });
 
-        // For the export CSV button
-        Button exportCSV = view.findViewById(R.id.export_csv);
 
-        exportCSV.setOnClickListener(v -> {
-            ExportCSV exporter = new ExportCSV();
-            exporter.exportCSVFile(requireContext(), event, "accepted_users.csv");
-        });
 
         // implement join lottery click
         joinButton.setOnClickListener(v -> {
@@ -216,14 +247,22 @@ public class EventDetailsFragment extends Fragment{
                                             event.addToWaitlist(entrantID);
                                             eDAL.updateEvent(event);
                                             SignFragment.show(getParentFragmentManager(), "success");
+                                            EventViewModel vmEvent = new ViewModelProvider(requireActivity()).get(EventViewModel.class);
+                                            vmEvent.setEvent(event);
+
+                                            //update necessary models and database
+                                            entrant.addToAllEventList(eventID);
+                                            DAL.updateEntrant(entrant);
+                                            UserViewModel vmEntrant = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+                                            vmEntrant.setUser(entrant);
+
+                                            restartFragment();
                                         }
                                     } else {
                                         System.err.println("No event found with ID: " + eventID);
                                     }
                                 }
                             });
-                            entrant.addToAllEventList(eventID);
-                            DAL.updateEntrant(entrant);
 
                         }
                     } else {
@@ -279,7 +318,8 @@ public class EventDetailsFragment extends Fragment{
         // set poster if provided
         if (event.getPoster() != null) {
             ImageView poster = view.findViewById(R.id.event_details_poster);
-            poster.setImageBitmap(event.getPoster().decodeImage());
+            Image img = new Image(event.getPoster());
+            poster.setImageBitmap(img.decodeImage());
         }
     }
 
@@ -304,5 +344,18 @@ public class EventDetailsFragment extends Fragment{
         String startStr = dateFormat.format(new Date(start));
         String endStr = dateFormat.format(new Date(end));
         return startStr + "-" + endStr;
+    }
+
+    public void restartFragment(){
+        FragmentManager fm = requireActivity().getSupportFragmentManager();
+
+        EventDetailsFragment fragment =
+                EventDetailsFragment.newInstance(entrant.getAndroid_id(), event.getEventID());
+
+        fm.beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .setReorderingAllowed(true)
+                .addToBackStack(null)
+                .commit();
     }
 }

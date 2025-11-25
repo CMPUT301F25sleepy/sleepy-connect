@@ -22,7 +22,7 @@
         app:layout_constraintGuide_end="@dimen/width_gutter" />
 
     <TextView
-        android:id="@+id/bs_event_manager_title"
+        android:id="@+id/bs_entrant_manager_selected_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -37,7 +37,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/bs_event_manager_tv_edit_event"
+        android:id="@+id/bs_entrant_manager_selected_delete_entrant"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
@@ -49,10 +49,10 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toStartOf="@+id/bs_event_manager_gl_right"
         app:layout_constraintStart_toStartOf="@+id/bs_event_manager_gl_left"
-        app:layout_constraintTop_toBottomOf="@+id/bs_event_manager_title" />
+        app:layout_constraintTop_toBottomOf="@+id/bs_entrant_manager_selected_title" />
 
     <TextView
-        android:id="@+id/bs_event_manager_tv_manage_entrants"
+        android:id="@+id/bs_entrant_manager_selected_send_notification"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
@@ -64,6 +64,6 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toStartOf="@+id/bs_event_manager_gl_right"
         app:layout_constraintStart_toStartOf="@+id/bs_event_manager_gl_left"
-        app:layout_constraintTop_toBottomOf="@+id/bs_event_manager_tv_edit_event" />
+        app:layout_constraintTop_toBottomOf="@+id/bs_entrant_manager_selected_delete_entrant" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

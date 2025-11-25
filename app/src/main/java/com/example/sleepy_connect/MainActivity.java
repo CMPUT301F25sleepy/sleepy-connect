@@ -109,6 +109,7 @@ public class MainActivity extends AppCompatActivity{
             return;
         }
         Intent i = new Intent(MainActivity.this, NavigationActivity.class);
+        i.putExtra("entrantID", androidID);
         i.putExtra("user", user);
         startActivity(i);
     }

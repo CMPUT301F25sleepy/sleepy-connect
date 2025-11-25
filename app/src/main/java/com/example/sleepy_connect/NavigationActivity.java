@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.sleepy_connect.databinding.ActivityNavigationBinding;
+import com.example.sleepy_connect.entrantmanagement.EntrantManagerSelectedBottomSheet;
 import com.example.sleepy_connect.eventmanager.EventManagerFragment;
 
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ import java.util.ArrayList;
  * Switches between all of the main screens accessed through the nav bar
  * Has a container to hold all of the screen fragments
  */
-public class NavigationActivity extends AppCompatActivity implements SignUpFragment.DialogFragmentListener{
+public class NavigationActivity extends AppCompatActivity implements SignUpFragment.DialogFragmentListener, EntrantManagerSelectedBottomSheet.EntrantManagerSelectedBottomSheetListener{
     /* Handles Navigation between fragments of the app */
     // Bottom Navigation View Implementation Code from https://www.youtube.com/watch?v=jOFLmKMOcK0
 
@@ -49,6 +50,7 @@ public class NavigationActivity extends AppCompatActivity implements SignUpFragm
 
         // get user
         user = (Entrant) getIntent().getSerializableExtra("user");
+        userID = (String) getIntent().getSerializableExtra("entrantID");
 
         // store user in UserViewModel
         UserViewModel userVM = new ViewModelProvider(this).get(UserViewModel.class);
@@ -56,18 +58,16 @@ public class NavigationActivity extends AppCompatActivity implements SignUpFragm
 
         // Initialize Activity with Community fragment and set the title in top to "Community"
         title = findViewById(R.id.set_title);
-        replaceFragment(new CommunityFragment());
+        replaceFragment(CommunityFragment.newInstance(userID));
         title.setText("Community");
 
         userVM.getUser().observe(this, entrant -> {
             if (entrant == null) {
                 notification_list = new ArrayList<>();
-                userID = "0";
                 return;
             }
 
             notification_list = entrant.getNotification_list();
-            userID = entrant.getAndroid_id();
         });
 
 
@@ -76,7 +76,7 @@ public class NavigationActivity extends AppCompatActivity implements SignUpFragm
 
             if (item.getItemId() == R.id.home_button) {
                 title.setText("Community");
-                replaceFragment(CommunityFragment.newInstance(user.getAndroid_id()));
+                replaceFragment(CommunityFragment.newInstance(userID));
             } else if (item.getItemId() == R.id.alert_button){
                 title.setText("Alerts");
                 replaceFragment(AlertFragment.newInstance(notification_list, userID));
@@ -107,5 +107,10 @@ public class NavigationActivity extends AppCompatActivity implements SignUpFragm
     public void goToProfile() {
         title.setText("Profile");
         replaceFragment(new ProfileFragment());
+    }
+
+    @Override
+    public void EntrantManagerSelectedBottomSheetClosed(boolean bsClosed) {
+
     }
 }

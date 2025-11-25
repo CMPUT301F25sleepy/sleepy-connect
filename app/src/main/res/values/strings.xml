@@ -23,10 +23,35 @@
     <string name="label_event_manager_bottom_sheet">Event Management Options</string>
     <string name="label_edit_event">Edit Event</string>
     <string name="label_manage_entrants">Manage Entrants</string>
-    <string name="label_waitlist">Waitlist</string>
-    <string name="label_invited">Invited</string>
-    <string name="label_cancelled">Cancelled</string>
-    <string name="label_enrolled">Enrolled</string>
+
+    <string name="label_waitlist">Waitlist ▾</string>
+    <string name="label_invited">Invited ▾</string>
+    <string name="label_cancelled">Cancelled ▾</string>
+    <string name="label_enrolled">Enrolled ▾</string>
+
+    <string name="label_admin_title">Admin View</string>
+    <string name="label_exit">Exit</string>
+    <string name="label_delete">Delete</string>
+    <string name="label_return">Return</string>
+    <string name="label_remove_poster">Remove Poster</string>
+
+    <string name="label_reg_period">Registration Period</string>
+
+    <string name="label_dropdown_profiles">Profiles ▾</string>
+    <string name="label_dropdown_events">Events ▾</string>
+    <string name="label_dropdown_posters">Posters ▾</string>
+    <string name="label_dropdown_notifications">Notifications ▾</string>
+
+    <string name="label_profiles">Profiles</string>
+    <string name="label_events">Events</string>
+    <string name="label_posters">Posters</string>
+    <string name="label_notifications">Notifications</string>
+
+    <string name="label_username">Username</string>
+    <string name="label_first_name">First Name</string>
+    <string name="label_last_name">Last Name</string>
+    <string name="label_email">Email</string>
+    <string name="label_phone_num">Phone Number</string>
 
     <string name="error_create_event">Error: Highlighted fields must be filled</string>
 

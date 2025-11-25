@@ -145,9 +145,12 @@ public class EventListFragment extends Fragment {
                                 .addOnSuccessListener(eventDoc -> {
                                     if (eventDoc.exists()) {
                                         Event event = eventDoc.toObject(Event.class);
-                                        eventList.add(event);
-                                        adapter.notifyDataSetChanged();
-                                        Log.d("EventListFragment", "Got event" + event.getEventName());
+                                        long currentDate = System.currentTimeMillis();
+                                        if (currentDate > event.registrationOpens && currentDate < event.registrationCloses) {
+                                            eventList.add(event);
+                                            adapter.notifyDataSetChanged();
+                                            Log.d("EventListFragment", "Got event" + event.getEventName());
+                                        }
                                     }
                                 })
                                 .addOnFailureListener(e ->

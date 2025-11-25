@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.example.sleepy_connect.eventdetails.EventDetailsFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -33,6 +34,7 @@ import java.util.Locale;
 import java.util.zip.Inflater;
 
 /**
+ * DOES NOT CURRENTLY WORK
  * A simple {@link Fragment} subclass.
  * Use the {@link EventFragment#newInstance} factory method to
  * create an instance of this fragment.
@@ -46,13 +48,14 @@ public class EventFragment extends Fragment {
 
     private ListView WListView;
     private MyEventListAdapter Wadapter;
+    private ArrayList<String> affiliatedEvents;
 
     private ListView EListView;
     private MyEventListAdapter Eadapter;
 
     //private EventListFragment.EventListAdapter adapter;
     private final List<Event> WEventList = new ArrayList<>();
-    private final List<Event> EEventList = new ArrayList<>();
+    //private final List<String> EEventList = new ArrayList<>();
 
     private FloatingActionButton scanQRFab;
     private Button test_button;
@@ -88,7 +91,10 @@ public class EventFragment extends Fragment {
         if (getArguments() != null) {
             entrantID = getArguments().getString("entrant");
 
-            user = UserViewModel.getUser().getValue();
+            // get user from viewmodel
+            UserViewModel vmUser = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+            user = vmUser.getUser().getValue();
+            assert user != null;
         }
     }
 
@@ -105,38 +111,63 @@ public class EventFragment extends Fragment {
 
         test_button = view.findViewById(R.id.test_btn);
         test_button.setOnClickListener(v -> testNav());
+        //EListView = view.findViewById(R.id.enrolled_events_list);
 
         Wadapter = new MyEventListAdapter(WEventList);
         WListView.setAdapter(Wadapter);
 
-        Eadapter = new MyEventListAdapter(EEventList);
-        EListView.setAdapter(Eadapter);
+        // get user from viewmodel
+        UserViewModel vmUser = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+        user = vmUser.getUser().getValue();
+        assert user != null;
 
-        //TODO - differentiate between current events and all events
-        fetchEventsForEntrant();
+        affiliatedEvents = user.getAll_event_list();
 
-        WListView.setOnItemClickListener((parent, view1, position, id) -> {
-            Event selectedEvent = WEventList.get(position);
-            Log.d("EventFragment", "Clicked event: " + selectedEvent.getEventName());
+        for (String event : affiliatedEvents) {
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-            // pass selected event to viewmodel
-            EventViewModel vmEvent = new ViewModelProvider(requireActivity()).get(EventViewModel.class);
-            vmEvent.setEvent(selectedEvent);
+            eventDAL = new EventDAL();
 
-            //set toolbar title
-            TextView title = requireActivity().findViewById(R.id.set_title);
-            title.setText("Event Details");
+            eventDAL.getEvent(event, new EventDAL.OnEventRetrievedListener() {
+                @Override
+                public void onEventRetrieved(Event event) {
+                    WEventList.add(event);
+                    Wadapter.notifyDataSetChanged();
+                }
+            });
+            //Eadapter = new MyEventListAdapter(EEventList);
+            //EListView.setAdapter(Eadapter);
 
-            // open event details
-            requireActivity().getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment_container, EventDetailsFragment.class, null)
-                    .setReorderingAllowed(true)
-                    .addToBackStack(null)
-                    .commit();
-        });
+            //TODO - differentiate between current events and all events
 
-        EListView.setOnItemClickListener((parent, view1, position, id) -> {
+
+            WListView.setOnItemClickListener((parent, view1, position, id) -> {
+                Event selectedEvent = WEventList.get(position);
+                Log.d("EventFragment", "Clicked event: " + selectedEvent.getEventName());
+
+                // pass selected event to viewmodel
+                EventViewModel vmEvent = new ViewModelProvider(requireActivity()).get(EventViewModel.class);
+                vmEvent.setEvent(selectedEvent);
+
+                //set toolbar title
+                TextView title = requireActivity().findViewById(R.id.set_title);
+                title.setText("Event Details");
+
+                //get entrant for vm model to get entrant id for require instance for event details
+                UserViewModel vmEntrant = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+                Entrant entrant = vmEntrant.getUser().getValue();
+
+                EventDetailsFragment fragment = EventDetailsFragment.newInstance(entrant.getAndroid_id(), selectedEvent.getEventID());
+                // open event details
+                requireActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, fragment, null)
+                        .setReorderingAllowed(true)
+                        .addToBackStack(null)
+                        .commit();
+            });
+
+        /*EListView.setOnItemClickListener((parent, view1, position, id) -> {
             Event selectedEvent = EEventList.get(position);
             Log.d("EventListFragment", "Clicked event: " + selectedEvent.getEventName());
 
@@ -155,14 +186,15 @@ public class EventFragment extends Fragment {
                     .setReorderingAllowed(true)
                     .addToBackStack(null)
                     .commit();
-        });
+        });*/
 
+
+        }
+
+        if (WEventList.isEmpty()){
+            Log.d("Empty", "WEventList is Empty");
+        }
         return view;
-    }
-
-    private void fetchEventsForEntrant() {
-        //TODO - get events from database
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
     }
 
     /**

@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".admin.profilemanagement.AdminProfileDetailsFragment" >
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/admin_profile_details_gl_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/width_gutter" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/admin_profile_details_gl_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/width_gutter" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/admin_profile_details_cl_username"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/light_text_border"
+        app:layout_constraintEnd_toStartOf="@+id/admin_profile_details_gl_right"
+        app:layout_constraintStart_toStartOf="@+id/admin_profile_details_gl_left"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/admin_profile_details_tv_label_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_medium"
+            android:padding="5dp"
+            android:text="@string/label_username"
+            android:textColor="@color/text_dark"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/admin_profile_details_tv_username"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/admin_profile_details_tv_username"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_medium"
+            android:padding="10dp"
+            android:textAlignment="viewStart"
+            android:textColor="@color/text_dark"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/admin_profile_details_tv_label_username" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/admin_profile_details_cl_first_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/light_text_border"
+        app:layout_constraintEnd_toStartOf="@+id/admin_profile_details_gl_right"
+        app:layout_constraintStart_toStartOf="@+id/admin_profile_details_gl_left"
+        app:layout_constraintTop_toBottomOf="@+id/admin_profile_details_cl_username">
+
+        <TextView
+            android:id="@+id/admin_profile_details_tv_label_first_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_medium"
+            android:padding="5dp"
+            android:text="@string/label_first_name"
+            android:textColor="@color/text_dark"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/admin_profile_details_tv_first_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/admin_profile_details_tv_first_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_medium"
+            android:padding="10dp"
+            android:textAlignment="viewStart"
+            android:textColor="@color/text_dark"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/admin_profile_details_tv_label_first_name" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/admin_profile_details_cl_last_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/light_text_border"
+        app:layout_constraintEnd_toStartOf="@+id/admin_profile_details_gl_right"
+        app:layout_constraintStart_toStartOf="@+id/admin_profile_details_gl_left"
+        app:layout_constraintTop_toBottomOf="@+id/admin_profile_details_cl_first_name">
+
+        <TextView
+            android:id="@+id/admin_profile_details_tv_label_last_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_medium"
+            android:padding="5dp"
+            android:text="@string/label_last_name"
+            android:textColor="@color/text_dark"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/admin_profile_details_tv_last_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/admin_profile_details_tv_last_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_medium"
+            android:padding="10dp"
+            android:textAlignment="viewStart"
+            android:textColor="@color/text_dark"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/admin_profile_details_tv_label_last_name" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/admin_profile_details_cl_email"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/light_text_border"
+        app:layout_constraintEnd_toStartOf="@+id/admin_profile_details_gl_right"
+        app:layout_constraintStart_toStartOf="@+id/admin_profile_details_gl_left"
+        app:layout_constraintTop_toBottomOf="@+id/admin_profile_details_cl_last_name">
+
+        <TextView
+            android:id="@+id/admin_profile_details_tv_label_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_medium"
+            android:padding="5dp"
+            android:text="@string/label_email"
+            android:textColor="@color/text_dark"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/admin_profile_details_tv_email"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/admin_profile_details_tv_email"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_medium"
+            android:padding="10dp"
+            android:textAlignment="viewStart"
+            android:textColor="@color/text_dark"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/admin_profile_details_tv_label_email" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/admin_profile_details_cl_phone"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/light_text_border"
+        app:layout_constraintEnd_toStartOf="@+id/admin_profile_details_gl_right"
+        app:layout_constraintStart_toStartOf="@+id/admin_profile_details_gl_left"
+        app:layout_constraintTop_toBottomOf="@+id/admin_profile_details_cl_email">
+
+        <TextView
+            android:id="@+id/admin_profile_details_tv_label_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_medium"
+            android:padding="5dp"
+            android:text="@string/label_phone_num"
+            android:textColor="@color/text_dark"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/admin_profile_details_tv_phone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/admin_profile_details_tv_phone"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_medium"
+            android:padding="10dp"
+            android:textAlignment="viewStart"
+            android:textColor="@color/text_dark"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/admin_profile_details_tv_label_phone" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/admin_profile_details_tv_delete"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/button"
+        android:fontFamily="@font/roboto_medium"
+        android:padding="10dp"
+        android:text="@string/label_delete"
+        android:textAlignment="center"
+        android:textColor="@color/text_light"
+        app:layout_constraintEnd_toStartOf="@+id/admin_profile_details_tv_return"
+        app:layout_constraintStart_toStartOf="@+id/admin_profile_details_gl_left"
+        app:layout_constraintTop_toBottomOf="@+id/admin_profile_details_cl_phone" />
+
+    <TextView
+        android:id="@+id/admin_profile_details_tv_return"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/button"
+        android:fontFamily="@font/roboto_medium"
+        android:padding="10dp"
+        android:text="@string/label_return"
+        android:textAlignment="center"
+        android:textColor="@color/text_light"
+        app:layout_constraintEnd_toStartOf="@+id/admin_profile_details_gl_right"
+        app:layout_constraintStart_toEndOf="@+id/admin_profile_details_tv_delete"
+        app:layout_constraintTop_toBottomOf="@+id/admin_profile_details_cl_phone" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

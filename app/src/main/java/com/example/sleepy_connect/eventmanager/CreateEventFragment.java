@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -131,12 +132,10 @@ public class CreateEventFragment extends Fragment {
             return;
         }
 
-        // get user data from user viewmodel
-        user = UserViewModel.getUser().getValue();
-        if (user == null) {
-            Log.e("CreateEventFragment", "User is null");
-            return;
-        }
+        // get user from viewmodel
+        UserViewModel vmUser = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+        user = vmUser.getUser().getValue();
+        assert user != null;
 
         // save data in the database
         EventDAL eventDal = new EventDAL();
@@ -200,7 +199,8 @@ public class CreateEventFragment extends Fragment {
                     }
 
                     if (posterUri != null) {
-                        event.setPoster(new Image(getContext(), posterUri));
+                        Image img = new Image(getContext(), posterUri);
+                        event.setPoster(img.getBase64String());
                     }
 
                     // Add event to this rec centre

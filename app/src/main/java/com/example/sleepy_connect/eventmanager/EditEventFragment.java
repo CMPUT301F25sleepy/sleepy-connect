@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -108,8 +109,10 @@ public class EditEventFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // receive event details from viewmodel
-        event = EventViewModel.getEvent().getValue();
+        // get event from viewmodel
+        EventViewModel vmEvent = new ViewModelProvider(requireActivity()).get(EventViewModel.class);
+        event = vmEvent.getEvent().getValue();
+        assert event != null;
 
         // set the fields from received event model
         initViewReferences(view);
@@ -201,7 +204,8 @@ public class EditEventFragment extends Fragment {
 
         // set poster if provided
         if (event.getPoster() != null) {
-            ivPoster.setImageBitmap(event.getPoster().decodeImage());
+            Image img = new Image(event.getPoster());
+            ivPoster.setImageBitmap(img.decodeImage());
         }
     }
 
@@ -326,7 +330,8 @@ public class EditEventFragment extends Fragment {
         // update poster if changed
         if (posterUri != null) {
             try {
-                event.setPoster(new Image(getContext(), posterUri));
+                Image img = new Image(getContext(), posterUri);
+                event.setPoster(img.getBase64String());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
