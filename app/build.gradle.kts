@@ -72,4 +72,7 @@ dependencies {
 
     // For FragmentScenario to test fragments in isolation
     debugImplementation("androidx.fragment:fragment-testing:1.6.2")
+
+    //for the keywords under the searchbar
+    implementation("com.google.android.flexbox:flexbox:3.0.0")
 }
