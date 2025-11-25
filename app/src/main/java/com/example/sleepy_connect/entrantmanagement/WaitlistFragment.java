@@ -50,7 +50,10 @@ public class WaitlistFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        event = EventViewModel.getEvent().getValue();
+        // get event from viewmodel
+        EventViewModel vmEvent = new ViewModelProvider(requireActivity()).get(EventViewModel.class);
+        event = vmEvent.getEvent().getValue();
+        assert event != null;
 
         View view = inflater.inflate(R.layout.fragment_waitlist, container, false);
         listView = view.findViewById(R.id.waitlist_entrant_list);
@@ -72,7 +75,12 @@ public class WaitlistFragment extends Fragment {
      * Loads waitlisted entrant IDs from the EventViewModel and fills adapter list.
      */
     private void loadWaitlistedEntrants() {
-        Event event = EventViewModel.getEvent().getValue();
+
+        // get event from viewmodel
+        EventViewModel vmEvent = new ViewModelProvider(requireActivity()).get(EventViewModel.class);
+        event = vmEvent.getEvent().getValue();
+        assert event != null;
+
         if (event == null) {
             return;
         }
@@ -107,7 +115,12 @@ public class WaitlistFragment extends Fragment {
         Button inviteEntrants = view.findViewById(R.id.waitlist_invite_button);
 
         inviteEntrants.setOnClickListener(v -> {
-            Event event = EventViewModel.getEvent().getValue();
+
+            // get event from viewmodel
+            EventViewModel vmEvent = new ViewModelProvider(requireActivity()).get(EventViewModel.class);
+            event = vmEvent.getEvent().getValue();
+            assert event != null;
+
             if (event == null) return;
 
             DrawReplacements replace = new DrawReplacements();

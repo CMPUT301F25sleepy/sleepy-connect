@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModel;
 public class EventViewModel extends ViewModel {
     private static final MutableLiveData<Event> event = new MutableLiveData<>();
 
-    public static MutableLiveData<Event> getEvent() {
+    public MutableLiveData<Event> getEvent() {
         return event;
     }
 

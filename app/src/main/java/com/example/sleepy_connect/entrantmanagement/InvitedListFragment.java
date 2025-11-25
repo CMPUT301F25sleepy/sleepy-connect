@@ -42,7 +42,11 @@ public class InvitedListFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        event = EventViewModel.getEvent().getValue();
+
+        // get event from viewmodel
+        EventViewModel vmEvent = new ViewModelProvider(requireActivity()).get(EventViewModel.class);
+        event = vmEvent.getEvent().getValue();
+        assert event != null;
 
         View view = inflater.inflate(R.layout.fragment_invited_list, container, false);
         ListViewModel vm = new ViewModelProvider(requireActivity()).get(ListViewModel.class);
@@ -61,7 +65,12 @@ public class InvitedListFragment extends Fragment {
      * Loads invited entrant IDs from the EventViewModel and fills the adapter list.
      */
     private void loadInvitedEntrants() {
-        Event event = EventViewModel.getEvent().getValue();
+
+        // get event from viewmodel
+        EventViewModel vmEvent = new ViewModelProvider(requireActivity()).get(EventViewModel.class);
+        event = vmEvent.getEvent().getValue();
+        assert event != null;
+
         if (event == null) return;
 
         ArrayList<String> invited = event.getPendingList();
