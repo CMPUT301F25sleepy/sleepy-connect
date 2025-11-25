@@ -16,8 +16,8 @@ import android.widget.Toast;
 import com.example.sleepy_connect.Entrant;
 import com.example.sleepy_connect.Event;
 import com.example.sleepy_connect.R;
-import com.example.sleepy_connect.UserViewModel;
 import com.example.sleepy_connect.admin.AdminActivity;
+import com.example.sleepy_connect.admin.AdminUserViewModel;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -67,7 +67,7 @@ public class AdminProfileDetailsFragment extends Fragment {
         currentUID = host.currentUID;
 
         // retrieve selected entrant details from viewmodel
-        UserViewModel vmUser = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+        AdminUserViewModel vmUser = new ViewModelProvider(requireActivity()).get(AdminUserViewModel.class);
         user = vmUser.getUser().getValue();
         assert user != null;
 

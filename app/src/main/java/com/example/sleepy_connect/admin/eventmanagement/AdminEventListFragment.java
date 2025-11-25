@@ -13,8 +13,8 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.example.sleepy_connect.Event;
-import com.example.sleepy_connect.EventViewModel;
 import com.example.sleepy_connect.R;
+import com.example.sleepy_connect.admin.AdminEventViewModel;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -63,7 +63,7 @@ public class AdminEventListFragment extends Fragment {
 
             // store selected event in viewmodel
             Event selectedEvent = events.get(position);
-            EventViewModel vmEvent = new ViewModelProvider(requireActivity()).get(EventViewModel.class);
+            AdminEventViewModel vmEvent = new ViewModelProvider(requireActivity()).get(AdminEventViewModel.class);
             vmEvent.setEvent(selectedEvent);
 
             // show event details
