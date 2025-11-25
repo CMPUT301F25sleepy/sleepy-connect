@@ -64,7 +64,11 @@ public class EntrantManagerSelectedBottomSheet extends BottomSheetDialogFragment
         Bundle args = getArguments();
         listname = args.getString("list");
 
-        event = EventViewModel.getEvent().getValue();
+        // get event from viewmodel
+        EventViewModel vmEvent = new ViewModelProvider(requireActivity()).get(EventViewModel.class);
+        event = vmEvent.getEvent().getValue();
+        assert event != null;
+
         entrantID = UserViewModel.getUser().getValue().getAndroid_id();
         // Inflate the bottom sheet layout
         View view = inflater.inflate(R.layout.fragment_entrant_manager_selected_sheet, container, false);

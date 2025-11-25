@@ -42,7 +42,10 @@ public class CancelledListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        event = EventViewModel.getEvent().getValue();
+        // get event from viewmodel
+        EventViewModel vmEvent = new ViewModelProvider(requireActivity()).get(EventViewModel.class);
+        event = vmEvent.getEvent().getValue();
+        assert event != null;
 
         View view = inflater.inflate(R.layout.fragment_cancelled_list, container, false);
         ListViewModel vm = new ViewModelProvider(requireActivity()).get(ListViewModel.class);
@@ -61,10 +64,11 @@ public class CancelledListFragment extends Fragment {
      * Loads cancelled entrant IDs from the EventViewModel and updates the adapter.
      */
     private void loadCancelledEntrants() {
-        Event event = EventViewModel.getEvent().getValue();
-        if (event == null) {
-            return;
-        }
+
+        // get event from viewmodel
+        EventViewModel vmEvent = new ViewModelProvider(requireActivity()).get(EventViewModel.class);
+        event = vmEvent.getEvent().getValue();
+        assert event != null;
 
         ArrayList<String> cancelled = event.getDeclinedList();
 

@@ -44,7 +44,10 @@ public class EnrolledListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        event = EventViewModel.getEvent().getValue();
+        // get event from viewmodel
+        EventViewModel vmEvent = new ViewModelProvider(requireActivity()).get(EventViewModel.class);
+        event = vmEvent.getEvent().getValue();
+        assert event != null;
 
         View view = inflater.inflate(R.layout.fragment_enrolled_list, container, false);
         ListViewModel vm = new ViewModelProvider(requireActivity()).get(ListViewModel.class);
@@ -67,10 +70,11 @@ public class EnrolledListFragment extends Fragment {
      * Loads enrolled entrant IDs from the EventViewModel and fills the adapter list.
      */
     private void loadEnrolledEntrants() {
-        Event event = EventViewModel.getEvent().getValue();
-        if (event == null) {
-            return;
-        }
+
+        // get event from viewmodel
+        EventViewModel vmEvent = new ViewModelProvider(requireActivity()).get(EventViewModel.class);
+        event = vmEvent.getEvent().getValue();
+        assert event != null;
 
         ArrayList<String> enrolled = event.getAcceptedList();
 
@@ -91,7 +95,12 @@ public class EnrolledListFragment extends Fragment {
         Button exportCSV = view.findViewById(R.id.enrolled_export_button);
 
         exportCSV.setOnClickListener(v -> {
-            Event event = EventViewModel.getEvent().getValue();
+
+            // get event from viewmodel
+            EventViewModel vmEvent = new ViewModelProvider(requireActivity()).get(EventViewModel.class);
+            event = vmEvent.getEvent().getValue();
+            assert event != null;
+
             if (event == null) return;
 
             ExportCSV exporter = new ExportCSV();
