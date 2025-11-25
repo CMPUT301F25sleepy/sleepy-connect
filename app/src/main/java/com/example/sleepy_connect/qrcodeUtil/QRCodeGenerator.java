@@ -34,7 +34,7 @@ public class QRCodeGenerator {
      */
     public void generateQRCode(String text, ImageView qrCodeIV) {
         try {
-
+            text = "sleepyEventApp/".concat(text);
             // creates a Bitmap image of the QR code with a height and width of 400 pixels
             this.bitmap = this.barcodeEncoder.encodeBitmap(text, BarcodeFormat.QR_CODE, 300, 300);
 

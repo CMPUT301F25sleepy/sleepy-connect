@@ -208,7 +208,7 @@ public class EditEventFragment extends Fragment {
     protected void openQRCodeFragment() {
         TextView errorText = requireView().findViewById(R.id.qr_code_error_text);
 
-        String eventID = "sleepyEventApp/".concat(event.getEventID());
+        String eventID = event.getEventID();
         // checks event id is not null(default string value)
         if (eventID != null) {
             // generates QR code, opens up fragment with code

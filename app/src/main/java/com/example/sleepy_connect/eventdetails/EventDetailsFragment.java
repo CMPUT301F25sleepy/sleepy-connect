@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -93,6 +94,9 @@ public class EventDetailsFragment extends Fragment{
         Bundle args = getArguments();
         String entrantID = args.getString("entrant");
         String eventID = args.getString("event");
+        Log.d("QRCodeScanner", "event details Starting event with event id " + eventID);
+        Log.d("QRCodeScanner", "event details Starting event with entrant id " + entrantID);
+
 
         // receive event details from viewmodel
         event = EventViewModel.getEvent().getValue();

@@ -94,7 +94,8 @@ public class EventListFragment extends Fragment {
 
             // open event details
             EventDetailsFragment fragment = EventDetailsFragment.newInstance(entrantID, selectedEvent.getEventID());
-
+            Log.d("QRCodeScanner", "event list fragment Starting event with event id " + selectedEvent.getEventID());
+            Log.d("QRCodeScanner", "event list fragment Starting event with entrant id " + entrantID);
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, fragment)
