@@ -134,7 +134,7 @@ public class WaitlistFragment extends Fragment {
             if (event == null) return;
 
             DrawReplacements replace = new DrawReplacements();
-            replace.drawReplacementApp(event);
+            replace.drawReplacementApp(requireContext(), event);
         });
     }
 
