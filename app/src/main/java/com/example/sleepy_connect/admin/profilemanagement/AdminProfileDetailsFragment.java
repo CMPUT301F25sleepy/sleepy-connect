@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -66,7 +67,9 @@ public class AdminProfileDetailsFragment extends Fragment {
         currentUID = host.currentUID;
 
         // retrieve selected entrant details from viewmodel
-        user = UserViewModel.getUser().getValue();
+        UserViewModel vmUser = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+        user = vmUser.getUser().getValue();
+        assert user != null;
 
         // set user fields
         setProfileFields(view);

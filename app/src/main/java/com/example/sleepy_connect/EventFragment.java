@@ -85,7 +85,10 @@ public class EventFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
 
-            user = UserViewModel.getUser().getValue();
+            // get user from viewmodel
+            UserViewModel vmUser = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+            user = vmUser.getUser().getValue();
+            assert user != null;
         }
     }
 
@@ -101,7 +104,11 @@ public class EventFragment extends Fragment {
         Wadapter = new MyEventListAdapter(WEventList);
         WListView.setAdapter(Wadapter);
 
-        user = UserViewModel.getUser().getValue();
+        // get user from viewmodel
+        UserViewModel vmUser = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+        user = vmUser.getUser().getValue();
+        assert user != null;
+
         affiliatedEvents = user.getAll_event_list();
 
         for (String event : affiliatedEvents) {

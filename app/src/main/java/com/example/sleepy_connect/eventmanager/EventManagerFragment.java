@@ -75,8 +75,10 @@ public class EventManagerFragment extends Fragment {
         adapter = new EventManagerListAdapter(eventList);
         listview.setAdapter(adapter);
 
-        // get user info
-        user = UserViewModel.getUser().getValue();
+        // get user from viewmodel
+        UserViewModel vmUser = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+        user = vmUser.getUser().getValue();
+        assert user != null;
 
         // fetch and display events created by the user
         fetchEventsCreated();

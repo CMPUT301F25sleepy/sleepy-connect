@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModel;
 public class UserViewModel extends ViewModel {
     private static final MutableLiveData<Entrant> user = new MutableLiveData<>();
 
-    public static MutableLiveData<Entrant> getUser() {
+    public MutableLiveData<Entrant> getUser() {
         return user;
     }
 
