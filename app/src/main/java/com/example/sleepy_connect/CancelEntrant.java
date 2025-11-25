@@ -4,28 +4,30 @@ import java.util.List;
 
 /**
  * Class which allows an event creator to manually remove a user from the list of invited entrants for a particular event
- * @deprecated No longer needed as functionality was implemented into alertSelectFragment and Notification classes, resulting in cleaner code.
  */
 public class CancelEntrant {
-    // Basically just remove the user from the InvitedList, US 02.06.04
-    // Takes in the Entrant and Event objects
+
     public void removeCancelledEntrant(Entrant entrant, Event event) {
-
-        // Sets the variables of the invitedList and entrantID
-        String entrantID;
+        String entrantID = entrant.getAndroid_id();
         List<String> invitedList = event.getPendingList();
-        entrantID = entrant.getAndroid_id();
 
-        // If it finds that the person is in the invitedList, remove them
-        for (int i = 0; i < invitedList.size(); i++) {
-            if (invitedList.get(i).equals(entrantID)) {
-                event.getPendingList().remove(entrantID);
-            }
+        // Remove from pending list
+        if (invitedList.contains(entrantID)) {
+            invitedList.remove(entrantID);
+
+            // Sends cancelled notification
+            Notification notif = new Notification(
+                    event.getEventName(),    // event name
+                    false,                   // selected = false
+                    true,                    // cancelled = true
+                    event.getEventID()       // eventID
+            );
+            notif.sendNotification(entrantID);
         }
 
-        // Updates the firebase, at least I hope it does Im trusting you Sasha
+        // Update Firebase event object
         EventDAL eventDAL = new EventDAL();
         eventDAL.updateEvent(event);
-
     }
 }
+
