@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".admin.eventmanagement.AdminEventDetails">
+    tools:context=".admin.eventmanagement.AdminEventDetailsFragment">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/admin_event_details_gl_left"
