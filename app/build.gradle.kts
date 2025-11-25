@@ -36,6 +36,10 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
+    testOptions {
+        animationsDisabled = true
+    }
 }
 
 dependencies {
@@ -55,11 +59,21 @@ dependencies {
     implementation(libs.recyclerview)
     implementation(libs.fragment)
     implementation(libs.play.services.maps)
-    testImplementation(libs.junit)
-    testImplementation(libs.junit.junit)
-    testImplementation(libs.junit.junit)
-    androidTestImplementation(libs.ext.junit)
-    androidTestImplementation(libs.espresso.core)
+//    testImplementation(libs.junit)
+//    testImplementation(libs.junit.junit)
+//    testImplementation(libs.junit.junit)
+//    androidTestImplementation(libs.ext.junit)
+//    androidTestImplementation(libs.espresso.core)
+
+    // implemented commented code but with versions
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test:core:1.5.0")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation("androidx.test:runner:1.5.2")
+    androidTestImplementation("androidx.test:rules:1.5.0")
+    androidTestImplementation("androidx.test.espresso:espresso-contrib:3.5.1")
+
     implementation("com.google.android.material:material:1.12.0")
 
     // ZXing for QR code generation + scanning
@@ -72,7 +86,15 @@ dependencies {
 
     // For FragmentScenario to test fragments in isolation
     debugImplementation("androidx.fragment:fragment-testing:1.6.2")
-
+    
     //for the keywords under the searchbar
     implementation("com.google.android.flexbox:flexbox:3.0.0")
 }
+
+configurations {
+    // protobuf inside conflicts espresso-contrib conflicts with firebase so we exclude it
+    named("androidTestImplementation") {
+        exclude(group = "com.google.protobuf", module = "protobuf-lite")
+}
+
+   

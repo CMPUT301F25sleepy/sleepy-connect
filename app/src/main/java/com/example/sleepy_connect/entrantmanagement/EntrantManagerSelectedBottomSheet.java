@@ -96,6 +96,8 @@ public class EntrantManagerSelectedBottomSheet extends BottomSheetDialogFragment
     public void deleteEntrantPressed() {
         EventDAL db = new EventDAL();
         EventViewModel vmEvent = new ViewModelProvider(requireActivity()).get(EventViewModel.class);
+
+        // following if statements determines which list to modify and delete the corresponding entrant
         if (Objects.equals(listname, "Waiting")) {
             ArrayList<String> list = event.getWaitingList();
             if (list.contains(entrantID)) {

@@ -176,8 +176,10 @@ public class EventDetailsFragment extends Fragment{
             @Override
             public void onClick(View v) {
                 String entrantID = entrant.getAndroid_id();
+                Entrant entrant = UserViewModel.getUser().getValue();
                 if (waitList.contains(entrantID)) {
                     waitList.remove(entrantID);
+                    entrant.removeFromAllEventList(eventID);
                 }
                 event.setWaitingList(waitList);
 
@@ -191,6 +193,12 @@ public class EventDetailsFragment extends Fragment{
                 // update database
                 EventDAL db = new EventDAL();
                 db.updateEvent(event);
+
+                // update user and user model
+                UserViewModel vmUser = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+                vmUser.setUser(entrant);
+                EntrantDAL userdal = new EntrantDAL();
+                userdal.updateEntrant(entrant);
 
                 //restart fragment
                 restartFragment();
