@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.sleepy_connect.DrawReplacements;
 import com.example.sleepy_connect.Entrant;
@@ -100,15 +101,22 @@ public class WaitlistFragment extends Fragment {
     private void setupMapButton(View view) {
         Button viewLocationList = view.findViewById(R.id.waitlist_map_button);
 
-        viewLocationList.setOnClickListener(v -> {
-            ObtainGeolocation fragment = new ObtainGeolocation();
+        if (event.isGeolocationEnabled()) {
+            viewLocationList.setOnClickListener(v -> {
+                ObtainGeolocation fragment = new ObtainGeolocation();
 
-            requireActivity().getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment_container, fragment)
-                    .addToBackStack(null)
-                    .commit();
-        });
+                requireActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, fragment)
+                        .addToBackStack(null)
+                        .commit();
+            });
+        }
+        else {
+            viewLocationList.setOnClickListener(v -> {
+                Toast.makeText(requireContext(), "Geolocation Disabled", Toast.LENGTH_SHORT).show();
+            });
+        }
     }
 
     private void setupInviteButton(View view) {

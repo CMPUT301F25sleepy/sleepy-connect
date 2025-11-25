@@ -133,8 +133,17 @@ public class EditEventFragment extends Fragment {
         view.findViewById(R.id.edit_event_end_button).setOnClickListener(v -> updateDateTime(view, R.id.edit_event_end_date));
 
         // Geolocation switch
-        SwitchCompat geolocationSwitch = view.findViewById(R.id.edit_geolocation_switch);
-        geolocationSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> geolocationOn = isChecked);
+        switchGeolocation = view.findViewById(R.id.edit_geolocation_switch);
+
+        // Set initial state from event
+        switchGeolocation.setChecked(event.isGeolocationEnabled());
+        geolocationOn = event.isGeolocationEnabled();
+
+        // Listen for changes
+        switchGeolocation.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            geolocationOn = isChecked;
+            event.setGeolocationEnabled(isChecked);
+        });
 
         // initialize QR Code generator, set visibility of QR code views
         Button generateQRCodeButton = view.findViewById(R.id.generate_qr_code_button);
@@ -343,6 +352,9 @@ public class EditEventFragment extends Fragment {
         if (!description.getText().toString().isEmpty()) {
             event.setDescription(description.getText().toString());
         }
+
+        // save geolocation toggle state
+        event.setGeolocationEnabled(geolocationOn);
 
         // update database
         EventDAL dal = new EventDAL();

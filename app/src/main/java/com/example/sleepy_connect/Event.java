@@ -160,6 +160,8 @@ public class Event implements Serializable {
         return geolocationEnabled;
     }
 
+    public void setGeolocationEnabled(boolean geolocationEnabled) {this.geolocationEnabled = geolocationEnabled;}
+
     public String getEventTime() {
         return eventTime;
     }
