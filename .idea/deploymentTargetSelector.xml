@@ -5,6 +5,7 @@
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
+      <SelectionState runConfigName="EntrantTest">
       <SelectionState runConfigName="testJoinWaitList()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
