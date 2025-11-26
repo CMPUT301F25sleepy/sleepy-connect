@@ -7,4 +7,13 @@
     <style name="ShapeAppearanceOverlay.MaterialAlertDialog.NoRoundedCorners" parent="">
         <item name="cornerSize">0dp</item>
     </style>
+
+    <style name="MyTimePickerSpinnerStyle" parent="android:Widget.Material.Light.TimePicker">
+        <item name="android:timePickerMode">spinner</item>
+    </style>
+
+    <style name="SpinnerTimePickerTheme" parent="@android:style/Theme.DeviceDefault.Light.Dialog.Alert">
+        <item name="android:timePickerStyle">@style/MyTimePickerSpinnerStyle</item>
+    </style>
 </resources>
+
