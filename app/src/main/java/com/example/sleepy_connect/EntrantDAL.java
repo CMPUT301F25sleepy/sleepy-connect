@@ -4,11 +4,13 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 /**
@@ -139,36 +141,39 @@ public class EntrantDAL {
     }
 
     /**
-     * Interface for the callback used in deleteEntrant.
-     */
-    public interface OnEntrantDeleteListener {
-        void onEntrantDeleted();
-    }
-
-    /**
      * Deletes all references to the entrant with the given uid and its created events.
      * @param uid User id of the entrant to be deleted.
-     * @param listener Callback performed for cleanup after database updating.
+     * @return Task to be given a listener for completion.
      */
-    public void deleteEntrant(String uid, OnEntrantDeleteListener listener) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+    public Task<Void> deleteEntrant(String uid, ArrayList<String> createdEvents) {
 
-        Task<QuerySnapshot> updateLists = db.collection("events").get()
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        ArrayList<Task<?>> removeProfileTasks = new ArrayList<>();
+
+        // update each event's list if deleted user is in it
+        Task<QuerySnapshot> updateLists =
+                db.collection("events").get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
 
-                    // update each event's list if deleted user is in it
                     for (DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()) {
                         Event updatedEvent = Event.removeFromEventLists(Objects.requireNonNull(doc.toObject(Event.class)), uid);
                         doc.getReference().set(updatedEvent);
                     }
-
-                    // delete profile from collection
-                    db.collection("users").document(uid).delete();
-
-                    // perform implemented callback
-                    listener.onEntrantDeleted();
                 });
 
-        // TODO: delete all the created events and synchronize tasks before callback
+        // delete all the created events
+        EventDAL eventDAL = new EventDAL();
+        for (String eventID : createdEvents) {
+            removeProfileTasks.add(eventDAL.removeEvent(eventID, uid));
+        }
+
+        // delete profile from collection
+        Task<Void> removeProfile = db.collection("users").document(uid).delete();
+
+        // synchronize tasks
+        removeProfileTasks.add(updateLists);
+        removeProfileTasks.add(removeProfile);
+
+        return Tasks.whenAll(removeProfileTasks);
     }
 }
