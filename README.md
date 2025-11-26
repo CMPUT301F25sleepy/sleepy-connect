@@ -3,6 +3,8 @@
 Have you ever wanted to host an event but had nowhere to post it?
 Sleepy is an event management app designed to make creating, sharing, joining, and managing events simple and fun.
 
+Sleepy aims to make event joining fair. This means no sitting in front of your computer waiting for signs up to open. Simply place your name on the waitlist and wait for our lottery system to choose you!
+
 Using our lottery system, hosts can randomly select participants from a waitlist, which is perfect for limited capacity events!
 
 ## Features
