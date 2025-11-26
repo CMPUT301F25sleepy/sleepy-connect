@@ -42,7 +42,7 @@ public class ExportCSV {
             Uri fileUri;
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                // Android 10+ → use MediaStore to save in Downloads
+                //use MediaStore to save in downloads
                 ContentValues values = new ContentValues();
                 values.put(MediaStore.Downloads.DISPLAY_NAME, fileName);
                 values.put(MediaStore.Downloads.MIME_TYPE, "text/csv");
@@ -50,7 +50,7 @@ public class ExportCSV {
 
                 fileUri = context.getContentResolver().insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values);
             } else {
-                // Older Android → save to external files dir
+                //save to external files dir
                 java.io.File file = new java.io.File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileName);
                 fileUri = Uri.fromFile(file);
             }
