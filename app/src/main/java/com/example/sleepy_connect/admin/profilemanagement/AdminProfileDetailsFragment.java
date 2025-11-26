@@ -134,7 +134,8 @@ public class AdminProfileDetailsFragment extends Fragment {
 
         // update database
         EntrantDAL entrantDAL = new EntrantDAL();
-        entrantDAL.deleteEntrant(user.getAndroid_id(), this::finishProcedure);
+        entrantDAL.deleteEntrant(user.getAndroid_id(), user.created_event_list)
+                .addOnCompleteListener(task -> finishProcedure());
     }
 
 }

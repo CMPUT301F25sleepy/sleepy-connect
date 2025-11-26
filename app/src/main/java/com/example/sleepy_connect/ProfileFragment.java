@@ -339,8 +339,8 @@ public class ProfileFragment extends Fragment {
 
             // update database
             EntrantDAL entrantDAL = new EntrantDAL();
-            NavigationActivity host = (NavigationActivity) requireActivity();
-            entrantDAL.deleteEntrant(host.userID, () -> requireActivity().finish());
+            entrantDAL.deleteEntrant(user.getAndroid_id(), user.created_event_list)
+                    .addOnCompleteListener(task -> requireActivity().finish());
         });
     }
 
