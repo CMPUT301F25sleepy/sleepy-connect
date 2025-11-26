@@ -261,7 +261,7 @@ public class EventFragment extends Fragment {
     }
 
     public void openQRCodeScanner() {
-        Log.d("QRCodeScanner", "are we here 1");
+        Log.d("QRCodeScanner", "are we here");
         ScanOptions options = new ScanOptions();
         options.setOrientationLocked(false);
         options.setDesiredBarcodeFormats(ScanOptions.QR_CODE);
@@ -286,6 +286,16 @@ public class EventFragment extends Fragment {
             // open event details
             Log.d("QRCodeScanner", "qr code starting event with id " + eventId);
 
+            // pass selected event to viewmodel
+            EventDAL eventDal = new EventDAL();
+            eventDal.getEvent(eventId, event -> {
+                putEventInViewModel(event);
+            });
+
+            //set toolbar title
+            TextView title = requireActivity().findViewById(R.id.set_title);
+            title.setText("Event Details");
+
             EventDetailsFragment fragment = EventDetailsFragment.newInstance(entrantID, eventId);
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()
@@ -297,7 +307,7 @@ public class EventFragment extends Fragment {
     });
 
     public void testNav() {
-        EventDetailsFragment fragment = EventDetailsFragment.newInstance(entrantID, "22");
+        EventDetailsFragment fragment = EventDetailsFragment.newInstance(entrantID, "28");
         requireActivity().getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container, fragment)
@@ -306,4 +316,10 @@ public class EventFragment extends Fragment {
                 .commit();
     }
 
+    public void putEventInViewModel(Event event) {
+        Log.d("QRCodeScanner", "event name: " + event.getEventName());
+        EventViewModel vmEvent = new ViewModelProvider(requireActivity()).get(EventViewModel.class);
+        vmEvent.setEvent(event);
+    }
 }
+
