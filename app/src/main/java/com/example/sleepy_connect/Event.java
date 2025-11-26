@@ -1,5 +1,7 @@
 package com.example.sleepy_connect;
 
+import com.google.firebase.firestore.Exclude;
+
 import java.io.Serializable;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -290,6 +292,7 @@ public class Event implements Serializable {
         this.declinedList = declinedList;
     }
 
+    @Exclude //
     public int getWaitlistSize() {
         return waitingList.size();
     }
