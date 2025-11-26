@@ -14,6 +14,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Data access layer for the event objects to the database
@@ -146,33 +148,24 @@ public class EventDAL {
     }
 
     /**
+     * Interface for the callback used in removeEvent.
+     */
+    public interface OnEventRemovedListener{
+        void onEventRemoved();
+    }
+
+    /**
      * Removing an event from the event collection.
      * @param eventID ID of event object to be removed.
      * @param organizerID ID of given event's organizer.
      */
-    public void removeEvent(String eventID, String organizerID) {
+    public void removeEvent(String eventID, String organizerID, OnEventRemovedListener listener) {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        // update community centres
-        Task<QuerySnapshot> updateCommunityCentres =
-                db.collection("community centres")
-                .whereArrayContains("events", eventID)
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-
-                    // remove reference to event id if community centre has a reference
-                    for (DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()) {
-                        CommunityCentre location = doc.toObject(CommunityCentre.class);
-                        assert location != null;
-                        location.events.remove(eventID);
-                        doc.getReference().set(location);
-                    }
-                });
-
         // update organizer
         Task<QuerySnapshot> updateOrganizer =
-        db.collection("users")
+                db.collection("users")
                 .whereEqualTo("android_id", organizerID)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
@@ -186,10 +179,25 @@ public class EventDAL {
                     }
                 });
 
-        // TODO: update entrants
+        // update entrants
+        Task<QuerySnapshot> updateEntrants =
+                db.collection("users")
+                .whereArrayContains("all_event_list", eventID)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+
+                    // remove reference in user's event list
+                    for (DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()) {
+                        Entrant user = doc.toObject(Entrant.class);
+                        assert user != null;
+                        user.all_event_list.removeAll(List.of(eventID));
+                        doc.getReference().set(user);
+                    }
+                });
 
         // delete from events collection
-        eventsRef.document(eventID).delete()
+        Task<Void> deleteEvent =
+                eventsRef.document(eventID).delete()
                 // Adding listeners that tell us whether it was successful
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -207,16 +215,12 @@ public class EventDAL {
 
         // synchronize tasks
         ArrayList<Task<?>> removeEventTasks = new ArrayList<>();
-        removeEventTasks.add(updateCommunityCentres);
         removeEventTasks.add(updateOrganizer);
-        // TODO: add update entrants task
-        Task<Void> barrierTask = Tasks.whenAll(removeEventTasks);
+        removeEventTasks.add(updateEntrants);
+        removeEventTasks.add(deleteEvent);
 
-        // perform callback on all complete
-        barrierTask.addOnCompleteListener(task -> {
-
-            // TODO: add callback here
-
-        });
+        // perform callback on all tasks complete
+        Tasks.whenAll(removeEventTasks)
+                .addOnCompleteListener(task -> listener.onEventRemoved());
     }
 }

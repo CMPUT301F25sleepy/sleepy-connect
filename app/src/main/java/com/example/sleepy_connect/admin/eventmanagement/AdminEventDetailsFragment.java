@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.example.sleepy_connect.CommunityCentre;
 import com.example.sleepy_connect.Event;
+import com.example.sleepy_connect.EventDAL;
 import com.example.sleepy_connect.Image;
 import com.example.sleepy_connect.R;
 import com.example.sleepy_connect.admin.AdminEventViewModel;
@@ -71,7 +72,10 @@ public class AdminEventDetailsFragment extends Fragment {
 
         // initialize click listener for delete button
         TextView tvDelete = view.findViewById(R.id.admin_event_details_tv_delete);
-        tvDelete.setOnClickListener(v -> {});
+        tvDelete.setOnClickListener(v -> {
+            EventDAL eventDAL = new EventDAL();
+            eventDAL.removeEvent(event.getEventID(), event.getCreatorID(), this::finishProcedure);
+        });
 
         // initialize click listener for return button
         TextView tvReturn = view.findViewById(R.id.admin_event_details_tv_return);
