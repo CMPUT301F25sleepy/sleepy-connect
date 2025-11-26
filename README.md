@@ -40,6 +40,6 @@ Java JDK version 11
 To submit bug reports please add them as issues on the GitHub page.
 
 ## Demo (Browsing)
-![demo](https://github.com/user-attachments/assets/d151bf2f-d249-4904-824a-275d8489ab58)
+[EventSignUp.webm](https://github.com/user-attachments/assets/0d0cbc11-048a-4a44-9555-257e8969bec3)
 
 ## Demo (Event Creation / Management)
