@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.SearchView;
 
@@ -17,6 +18,9 @@ import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.search.SearchBar;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FilterEventsFragment extends DialogFragment {
 
@@ -60,6 +64,36 @@ public class FilterEventsFragment extends DialogFragment {
             }
         });
 
+        Button applyButton = view.findViewById(R.id.apply_filters);
+
+        applyButton.setOnClickListener(v -> {
+
+            // Get Days
+            List<String> selectedDays = new ArrayList<>();
+            if (monday.isChecked()) selectedDays.add("Monday");
+            if (tuesday.isChecked()) selectedDays.add("Tuesday");
+            if (wednesday.isChecked()) selectedDays.add("Wednesday");
+            if (thursday.isChecked()) selectedDays.add("Thursday");
+            if (friday.isChecked()) selectedDays.add("Friday");
+            if (saturday.isChecked()) selectedDays.add("Saturday");
+            if (sunday.isChecked()) selectedDays.add("Sunday");
+
+            // Get keywords
+            List<String> keywords = new ArrayList<>();
+            for (int i = 0; i < keywordContainer.getChildCount(); i++) {
+                Chip chip = (Chip) keywordContainer.getChildAt(i);
+                keywords.add(chip.getText().toString().toLowerCase());
+            }
+
+            // send away
+            if (listener != null) {
+                listener.onFilterApplied(selectedDays, keywords);
+            }
+
+            dismiss();
+        });
+
+
         return dialog;
     }
 
@@ -85,4 +119,14 @@ public class FilterEventsFragment extends DialogFragment {
 
             keywordContainer.addView(chip);
         }
+
+    public interface FilterListener {
+        void onFilterApplied(List<String> selectedDays, List<String> keywords);
+    }
+
+    private FilterListener listener;
+
+    public void setFilterListener(FilterListener listener) {
+        this.listener = listener;
+    }
 }

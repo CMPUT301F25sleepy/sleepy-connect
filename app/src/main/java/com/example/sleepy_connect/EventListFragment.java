@@ -106,12 +106,15 @@ public class EventListFragment extends Fragment {
                     .commit();
         });
 
-        filterEvents.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FilterEventsFragment dialog = new FilterEventsFragment();
-                dialog.show(getChildFragmentManager(), "filter events");
-            }
+        filterEvents.setOnClickListener(v -> {
+            FilterEventsFragment dialog = new FilterEventsFragment();
+
+            dialog.setFilterListener((selectedDays, keywords) -> {
+                Log.e("EventListFragment", String.valueOf(keywords));
+                applyFilters(selectedDays, keywords);
+            });
+
+            dialog.show(getChildFragmentManager(), "filter events");
         });
 
         return view;
@@ -232,5 +235,33 @@ public class EventListFragment extends Fragment {
             TextView dayOfWeek;
             TextView time;
         }
+    }
+
+    private void applyFilters(List<String> days, List<String> keywords) {
+        List<Event> filtered = new ArrayList<>();
+
+        for (Event event : eventList) {
+            boolean dayMatches = days.isEmpty() || days.contains(event.getEventDayOfWeek());
+
+            boolean keywordMatches = true;
+            if (!keywords.isEmpty()) {
+                keywordMatches = false;
+                String name = event.getEventName().toLowerCase();
+                for (String k : keywords) {
+                    if (name.contains(k.toLowerCase())) {
+                        keywordMatches = true;
+                        break;
+                    }
+                }
+            }
+
+            if (dayMatches && keywordMatches) {
+                filtered.add(event);
+            }
+        }
+
+        adapter.events.clear();
+        adapter.events.addAll(filtered);
+        adapter.notifyDataSetChanged();
     }
 }
