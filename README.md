@@ -1,4 +1,6 @@
+<img width="1024" height="1024" alt="content" src="https://github.com/user-attachments/assets/063f3195-f0b6-4b1e-a399-80a0216c0d86" />
 # Sleepy Event Management App
+
 
 Have you ever wanted to host an event but had nowhere to post it?
 Sleepy is an event management app designed to make creating, sharing, joining, and managing events simple and fun.
