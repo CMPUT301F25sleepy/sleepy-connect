@@ -39,5 +39,5 @@ Java JDK version 11
 ## Bug Reports
 To submit bug reports please add them as issues on the GitHub page.
 
-## Demo
+## Demo (No Login)
 ![demo](https://github.com/user-attachments/assets/d151bf2f-d249-4904-824a-275d8489ab58)
