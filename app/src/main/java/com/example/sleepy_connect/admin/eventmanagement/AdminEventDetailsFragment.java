@@ -74,7 +74,10 @@ public class AdminEventDetailsFragment extends Fragment {
         TextView tvDelete = view.findViewById(R.id.admin_event_details_tv_delete);
         tvDelete.setOnClickListener(v -> {
             EventDAL eventDAL = new EventDAL();
-            eventDAL.removeEvent(event.getEventID(), event.getCreatorID(), this::finishProcedure);
+            eventDAL.removeEvent(event.getEventID(), event.getCreatorID())
+                    .addOnCompleteListener(task -> {
+                        finishProcedure();
+                    });
         });
 
         // initialize click listener for return button

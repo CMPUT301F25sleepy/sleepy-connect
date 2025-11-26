@@ -148,18 +148,12 @@ public class EventDAL {
     }
 
     /**
-     * Interface for the callback used in removeEvent.
-     */
-    public interface OnEventRemovedListener{
-        void onEventRemoved();
-    }
-
-    /**
      * Removing an event from the event collection.
      * @param eventID ID of event object to be removed.
      * @param organizerID ID of given event's organizer.
+     * @return Task to be given a listener for completion.
      */
-    public void removeEvent(String eventID, String organizerID, OnEventRemovedListener listener) {
+    public Task<Void> removeEvent(String eventID, String organizerID) {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -219,8 +213,6 @@ public class EventDAL {
         removeEventTasks.add(updateEntrants);
         removeEventTasks.add(deleteEvent);
 
-        // perform callback on all tasks complete
-        Tasks.whenAll(removeEventTasks)
-                .addOnCompleteListener(task -> listener.onEventRemoved());
+        return Tasks.whenAll(removeEventTasks);
     }
 }
