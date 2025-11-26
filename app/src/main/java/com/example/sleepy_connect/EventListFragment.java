@@ -237,6 +237,10 @@ public class EventListFragment extends Fragment {
         }
     }
 
+
+    /**
+     * Filters events from database.
+     */
     private void applyFilters(List<String> days, List<String> keywords) {
         List<Event> filtered = new ArrayList<>();
 
@@ -247,10 +251,22 @@ public class EventListFragment extends Fragment {
             if (!keywords.isEmpty()) {
                 keywordMatches = false;
                 String name = event.getEventName().toLowerCase();
+                String description = event.getDescription();
+                if (description != null) {
+                    description = description.toLowerCase();
+                }
                 for (String k : keywords) {
+                    // Check title
                     if (name.contains(k.toLowerCase())) {
                         keywordMatches = true;
                         break;
+                    }
+                    // Check if description matches
+                    if (description != null) {
+                        if (description.contains(k.toLowerCase())) {
+                            keywordMatches = true;
+                            break;
+                        }
                     }
                 }
             }
