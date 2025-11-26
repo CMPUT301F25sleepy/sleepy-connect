@@ -12,15 +12,22 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.anything;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
+
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
+import androidx.test.rule.ActivityTestRule;
+
 import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 
+
+import com.google.firebase.firestore.auth.User;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -46,14 +53,14 @@ public class ListTest {
     }
 
     @Rule
-    public ActivityScenarioRule<MainActivity> scenario = new
-            ActivityScenarioRule<MainActivity>(MainActivity.class);
+    public ActivityTestRule<MainActivity> scenario = new ActivityTestRule<MainActivity>(MainActivity.class);
 
     @Test
     public void testEventDetailWaitList() {
         /// tests if joining and leaving the waitlist updates the database correctly
+        /// - works if profile is filled and not joined on the first event on All locations
 
-        // starts with pressing the start
+        // press start until 
         boolean start = false;
         while (!start) {
             onView(withId(R.id.start_button)).perform(click());
@@ -83,8 +90,11 @@ public class ListTest {
         onView(withText("Return")).perform(click());
 
         // check if user is inside the waitlist
-        Entrant currentUser = UserViewModel.getUser().getValue();
-        Event selectedEvent = EventViewModel.getEvent().getValue();
+        EventViewModel vmEvent = new ViewModelProvider(scenario.getActivity()).get(EventViewModel.class);
+        UserViewModel vmUser = new ViewModelProvider(scenario.getActivity()).get(UserViewModel.class);
+
+        Entrant currentUser = vmUser.getUser().getValue();
+        Event selectedEvent = vmEvent.getEvent().getValue();
         ArrayList<String> waiting_list = selectedEvent.getWaitingList();
         assertTrue("user should be in waiting list", waiting_list.contains(currentUser.getAndroid_id()));
 
@@ -92,7 +102,7 @@ public class ListTest {
         onView(withId(R.id.leave_waitlist_button)).check(matches(isDisplayed()));
         onView(withId(R.id.leave_waitlist_button)).perform(click());
 
-        selectedEvent = EventViewModel.getEvent().getValue();
+        selectedEvent = vmEvent.getEvent().getValue();
         ArrayList<String> waiting_list2 = selectedEvent.getWaitingList();
         assertFalse("user should NOT be in waiting list", waiting_list2.contains(currentUser.getAndroid_id()));
     }
