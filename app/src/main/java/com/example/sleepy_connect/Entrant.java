@@ -120,6 +120,10 @@ public class Entrant implements Serializable {
         this.notification_list = notification_list;
     }
 
+    public void addToNotificationList(Notification notif){
+        this.notification_list.add(notif);
+    }
+
     public void addToAllEventList(String eventID){
 
         (this.all_event_list).add(eventID);

@@ -4,18 +4,27 @@ import androidx.appcompat.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.example.sleepy_connect.eventdetails.EventDetailsFragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.firebase.firestore.auth.User;
+
+import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
 
@@ -26,6 +35,10 @@ public class alertSelectFragment extends DialogFragment {
     /* fragment for when a user clicks on notification */
     public String eventID;
     public String entrantID;
+    public ArrayList<Notification> notif_list;
+    public UserViewModel userVM;
+    private FragmentManager fm;
+    private Notification notif;
 
     /**
      * Factory method to instantiate a fragment
@@ -33,19 +46,22 @@ public class alertSelectFragment extends DialogFragment {
      * @param entrantID the user identification
      * @return an instance of the fragment
      */
-    static alertSelectFragment newInstance(Notification notif, String entrantID,ArrayList<Notification> array, AlertAdapter adapter, Integer position){
-        // TODO - remove notification from list once user has dealt with it
-
+    static alertSelectFragment newInstance(Notification notif, String entrantID, Integer position){
         // creates a new fragment with selected notification as it's argument and return it
         Bundle args =  new Bundle();
         args.putSerializable("notification", notif);
         args.putString("entrantID", entrantID);
-        args.putSerializable("array", array);
-        args.putSerializable("adapter", adapter);
         args.putInt("position",position);
         alertSelectFragment fragment = new alertSelectFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        userVM = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+        fm = requireActivity().getSupportFragmentManager();
     }
 
     @NonNull
@@ -55,12 +71,11 @@ public class alertSelectFragment extends DialogFragment {
 
         View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_alert_popup, null);
         Bundle args = getArguments();
-        Notification notif = (Notification) args.getSerializable("notification");
-        ArrayList<Notification> notif_list = (ArrayList<Notification>) args.getSerializable("array");
-        AlertAdapter adapter = (AlertAdapter) args.getSerializable("adapter");
-        Integer position = args.getInt("position");
+        notif = (Notification) args.getSerializable("notification");
+        int position = args.getInt("position");
         entrantID = args.getString("entrantID");
         eventID = notif.getEventID();
+        notif_list = userVM.getUser().getValue().getNotification_list();
         TextView alert_text = view.findViewById(R.id.alert_text);
         TextView message_text = view.findViewById(R.id.message_text);
         Button positive_button = view.findViewById(R.id.postive_button);
@@ -84,6 +99,9 @@ public class alertSelectFragment extends DialogFragment {
             message_text.setText("Unfortunately, you have been cancelled for this event");
         }
 
+        // since it got selected, it will counted as read
+        notif.setRead(true);
+
         // Creates fragment with buttons
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext(),R.style.MaterialAlertDialog_NoRoundedCorners);
         builder.setView(view);
@@ -98,19 +116,29 @@ public class alertSelectFragment extends DialogFragment {
                     public void onEventRetrieved(Event event){
                         if (event != null) {
                             if (positive_button.getText() == "Accept") {
+                                // modify corresponding lists
                                 event.addToAcceptedList(entrantID);
                                 event.removeFromPendingList(entrantID);
-                                notif_list.remove(position);
-                                adapter.notifyDataSetChanged();
+
+                                // remove notification from database
+                                removeNotificationFromUser(notif);
+
+                                // update event in database
                                 DAL.updateEvent(event);
+
+                                // pop-up message after accepting
+                                Context ctx = getContext();
+                                if (ctx != null) {
+                                    Toast.makeText(ctx, "Accepted Invitation", Toast.LENGTH_SHORT).show();
+                                }
                             }
                         } else {
                             System.err.println("Add to Waitlist Failed");
                         }
+                        handleDismiss();
                     }
                 });
 
-                dialog.dismiss();
             }
         });
 
@@ -126,20 +154,82 @@ public class alertSelectFragment extends DialogFragment {
                             if (negative_button.getText() == "Decline"){
                                 event.removeFromPendingList(entrantID);
                                 event.addToDeclinelist(entrantID);
+                                Context ctx = getContext();
+                                if (ctx != null) {
+                                    Toast.makeText(ctx, "Declined Invitation", Toast.LENGTH_SHORT).show();
+                                }
                             }
+                            removeNotificationFromUser(notif);
                             DAL.updateEvent(event);
-                            notif_list.remove(position);
-                            adapter.notifyDataSetChanged();
+
                         } else {
                             System.err.println("Remove from Waitlist Failed");
                         }
+                        handleDismiss();
                     }
                 });
-                dialog.dismiss();
+
             }
         });
 
         return dialog;
+    }
+
+    public void updateUserNotifList(ArrayList<Notification> array){
+        Entrant user = userVM.getUser().getValue();
+        assert user != null;
+        user.setNotification_list(array);
+        userVM.setUser(user);
+
+        // update database
+        EntrantDAL db = new EntrantDAL();
+        db.updateEntrant(user);
+    }
+
+    public void restartFragment(){
+        if (!isAdded()) return;
+        FragmentActivity activity = getActivity();
+        if (activity == null) return;
+
+        fm = activity.getSupportFragmentManager();
+        AlertFragment fragment = AlertFragment.newInstance(notif_list, eventID);
+        fm.beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .setReorderingAllowed(true)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    public void handleDismiss(){
+        // sending result back to alertFragment
+        if (isAdded()) {
+            Bundle result = new Bundle();
+            getParentFragmentManager().setFragmentResult("key", result);
+        }
+        dismiss();
+    }
+
+    private void removeNotificationFromUser(Notification notif) {
+        Entrant user = userVM.getUser().getValue();
+        if (user == null) return;
+
+        ArrayList<Notification> currentList = user.getNotification_list();
+        if (currentList == null) return;
+
+        ArrayList<Notification> updatedList = new ArrayList<>(currentList);
+
+        boolean removed = updatedList.remove(notif);
+        if (!removed) {
+            return;
+        }
+
+        // Update ViewModel
+        user.setNotification_list(updatedList);
+        userVM.setUser(user);
+
+        // Update Firestore user
+        EntrantDAL db = new EntrantDAL();
+        db.updateEntrant(user);
     }
 
 }
