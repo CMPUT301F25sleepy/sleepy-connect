@@ -150,7 +150,7 @@ public class NavigationActivity extends AppCompatActivity implements SignUpFragm
                 replaceFragment(new EventManagerFragment());
             } else if (item.getItemId() == R.id.event_button) {
                 title.setText("My Events");
-                replaceFragment(new EventFragment());
+                replaceFragment(EventFragment.newInstance(userID));
             } else if (item.getItemId() == R.id.profile_button) {
                 title.setText("Profile");
                 replaceFragment(new ProfileFragment());

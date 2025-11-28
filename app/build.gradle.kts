@@ -78,7 +78,9 @@ dependencies {
     // ZXing for QR code generation + scanning
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
 
-    // for decoding QR codes in local unit tests
+    // for decoding QR codes
+    implementation("com.google.zxing:core:3.5.3")
+    implementation("com.journeyapps:zxing-android-embedded:4.3.0")
     testImplementation("com.google.zxing:core:3.5.3")
     // Mockito for mocking Android framework classes in tests
     testImplementation("org.mockito:mockito-core:5.12.0")

@@ -43,6 +43,35 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:listitem="@layout/location_item_layout" />
 
+        <TextView
+            android:id="@+id/qr_scan_tv"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:text="Sorry, that QR code scan failed."
+            android:textAlignment="center"
+            android:textColor="#FF0000"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@id/qr_scan_fab"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.85"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/qr_scan_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#FFFFFF"
+            android:clickable="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.8"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.9"
+            app:srcCompat="@drawable/outline_barcode_scanner_24" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

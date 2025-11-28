@@ -8,6 +8,9 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.CAMERA"/>
+
+    <uses-feature android:name="android.hardware.camera"/>
 
     <application
         android:allowBackup="true"
@@ -22,9 +25,10 @@
             android:name=".admin.AdminActivity"
             android:exported="false" />
 
+        <!-- API KEY nonsense -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyC-TSyen3IL8NSaaI_zMQ4wumgyQurJUy0" />
+            android:value="AIzaSyBnqIBQ42X1PPljuOuqRKXmdE6uxaYSDD8" />
 
         <activity
             android:name=".MainActivity"
