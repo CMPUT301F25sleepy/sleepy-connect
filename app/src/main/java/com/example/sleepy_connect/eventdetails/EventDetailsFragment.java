@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -101,6 +102,7 @@ public class EventDetailsFragment extends Fragment{
         Bundle args = getArguments();
         String entrantID = args.getString("entrant");
         String eventID = args.getString("event");
+
 
         // get event from viewmodel
         EventViewModel vmEvent = new ViewModelProvider(requireActivity()).get(EventViewModel.class);

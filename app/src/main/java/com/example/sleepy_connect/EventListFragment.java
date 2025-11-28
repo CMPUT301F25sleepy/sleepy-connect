@@ -97,7 +97,6 @@ public class EventListFragment extends Fragment {
 
             // open event details
             EventDetailsFragment fragment = EventDetailsFragment.newInstance(entrantID, selectedEvent.getEventID());
-
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, fragment)
