@@ -136,7 +136,6 @@ public class ProfileFragment extends Fragment {
         Button confirm_button = view.findViewById(R.id.confirm_profile_button);
         Button cancel_button = view.findViewById(R.id.cancel_profile_button);
         Button notif_setting_button = view.findViewById(R.id.notification_settings_button);
-        Button geolocation_setting_button = view.findViewById(R.id.profile_geolocation_button);
         Button admin_view_button = view.findViewById(R.id.admin_view_button);
 
 
@@ -340,8 +339,8 @@ public class ProfileFragment extends Fragment {
 
             // update database
             EntrantDAL entrantDAL = new EntrantDAL();
-            NavigationActivity host = (NavigationActivity) requireActivity();
-            entrantDAL.deleteEntrant(host.userID, () -> requireActivity().finish());
+            entrantDAL.deleteEntrant(user.getAndroid_id(), user.created_event_list)
+                    .addOnCompleteListener(task -> requireActivity().finish());
         });
     }
 

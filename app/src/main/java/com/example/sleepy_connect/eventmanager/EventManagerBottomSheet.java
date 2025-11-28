@@ -36,16 +36,33 @@ public class EventManagerBottomSheet extends BottomSheetDialogFragment {
         View view = inflater.inflate(R.layout.fragment_event_manager_bottom_sheet, container, false);
 
         // Find buttons from the layout
-        TextView tvEditEvent = view.findViewById(R.id.bs_entrant_manager_selected_delete_entrant);
-        TextView tvManageEntrants = view.findViewById(R.id.bs_entrant_manager_selected_send_notification);
+        TextView tvEventDetails = view.findViewById(R.id.bs_event_details);
+        TextView tvEditPoster = view.findViewById(R.id.bs_edit_poster);
+        TextView tvManageEntrants = view.findViewById(R.id.bs_manage_entrants);
 
-        // Set click listener for edit event
-        tvEditEvent.setOnClickListener(v -> {
+        tvEventDetails.setOnClickListener(v -> {
+            Bundle args = getArguments();
 
-            // open edit event screen
+            Event event = (Event) args.getSerializable("event");
+
+            OrganizerEventDetailsFragment fragment = OrganizerEventDetailsFragment.newInstance(event);
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragment_container, EditEventFragment.class, null)
+                    .replace(R.id.fragment_container, fragment, null)
+                    .setReorderingAllowed(true)
+                    .addToBackStack(null)
+                    .commit();
+
+            dismiss();
+        });
+
+        // Set click listener for edit event
+        tvEditPoster.setOnClickListener(v -> {
+
+            // open edit poster screen
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, EditPosterFragment.class, null)
                     .setReorderingAllowed(true)
                     .addToBackStack(null)
                     .commit();

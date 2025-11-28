@@ -108,6 +108,7 @@ public class Entrant implements Serializable {
         this.created_event_list.add(eventID);
     }
 
+
     public ArrayList<Notification> getNotification_list() {
         if (notification_list == null){
             notification_list = new ArrayList<>();
@@ -120,7 +121,10 @@ public class Entrant implements Serializable {
     }
 
     public void addToAllEventList(String eventID){
+
         (this.all_event_list).add(eventID);
+    }
+    public void removeFromAllEventList(String eventID){ (this.all_event_list).remove(eventID);
     }
 
 }

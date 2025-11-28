@@ -80,7 +80,7 @@ public class alertSelectFragment extends DialogFragment {
             positive_button.setText("Stay");
         }
         if (notif.isCancelled()){
-            alert_text.setText("Cancelled from event at 2pm");
+            alert_text.setText("Cancelled");
             message_text.setText("Unfortunately, you have been cancelled for this event");
         }
 

@@ -101,8 +101,6 @@ public class EventFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_my_events, container, false);
 
         WListView = view.findViewById(R.id.waitlisted_events_list);
-        EListView = view.findViewById(R.id.enrolled_events_list);
-
         //EListView = view.findViewById(R.id.enrolled_events_list);
 
         Wadapter = new MyEventListAdapter(WEventList);

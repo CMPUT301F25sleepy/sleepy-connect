@@ -41,7 +41,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
-
+// Time picker inspired by Code with Cal
+// https://www.youtube.com/watch?v=c6c1giRekB4
 /**
  * Fragment class for showing event details
  * @author Sam Francisco
@@ -49,7 +50,7 @@ import java.util.Objects;
 public class EventDetailsFragment extends Fragment{
 
     Event event;
-    SimpleDateFormat dateFormat = new SimpleDateFormat("M/d/y", Locale.getDefault());
+    SimpleDateFormat dateFormat = new SimpleDateFormat("MMM. d, yyyy", Locale.getDefault());
     Entrant entrant;
 
     Boolean inInvited = false;
@@ -178,8 +179,11 @@ public class EventDetailsFragment extends Fragment{
             @Override
             public void onClick(View v) {
                 String entrantID = entrant.getAndroid_id();
+                UserViewModel vmUser = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+                Entrant entrant = vmUser.getUser().getValue();
                 if (waitList.contains(entrantID)) {
                     waitList.remove(entrantID);
+                    entrant.removeFromAllEventList(eventID);
                 }
                 event.setWaitingList(waitList);
 
@@ -193,6 +197,11 @@ public class EventDetailsFragment extends Fragment{
                 // update database
                 EventDAL db = new EventDAL();
                 db.updateEvent(event);
+
+                // update user and user model
+                vmUser.setUser(entrant);
+                EntrantDAL userdal = new EntrantDAL();
+                userdal.updateEntrant(entrant);
 
                 //restart fragment
                 restartFragment();
@@ -289,7 +298,8 @@ public class EventDetailsFragment extends Fragment{
 
         // set registration date
         TextView regPeriod = view.findViewById(R.id.reg_deadline);
-        regPeriod.setText(formatDatePeriod(event.getRegistrationOpens(), event.getRegistrationCloses()));
+        String endStr = dateFormat.format(new Date(event.getRegistrationCloses()));
+        regPeriod.setText(endStr);
 
         // set event date
         TextView eventPeriod = view.findViewById(R.id.details_event_dates);
@@ -311,11 +321,12 @@ public class EventDetailsFragment extends Fragment{
 
         // set current waitlist size display
         TextView waitlistSize = view.findViewById(R.id.waitlist_count_display);
-        waitlistSize.setText(String.format("There are %d people currently on the waitlist", event.getWaitlistSize()));
+        waitlistSize.setText(String.valueOf(event.getWaitlistSize()));
 
         // set poster if provided
         if (event.getPoster() != null) {
             ImageView poster = view.findViewById(R.id.event_details_poster);
+            poster.setBackground(null);
             Image img = new Image(event.getPoster());
             poster.setImageBitmap(img.decodeImage());
         }
@@ -341,7 +352,7 @@ public class EventDetailsFragment extends Fragment{
         // format reg start and end dates
         String startStr = dateFormat.format(new Date(start));
         String endStr = dateFormat.format(new Date(end));
-        return startStr + "-" + endStr;
+        return startStr + " - " + endStr;
     }
 
     public void restartFragment(){

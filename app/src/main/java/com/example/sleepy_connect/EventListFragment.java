@@ -5,11 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -63,6 +65,7 @@ public class EventListFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_event_display, container, false);
 
+        TextView filterEvents = view.findViewById(R.id.filter_event);
         listView = view.findViewById(R.id.event_list_view);
         adapter = new EventListAdapter(eventList);
         listView.setAdapter(adapter);
@@ -100,6 +103,17 @@ public class EventListFragment extends Fragment {
                     .setReorderingAllowed(true)
                     .addToBackStack(null)
                     .commit();
+        });
+
+        filterEvents.setOnClickListener(v -> {
+            FilterEventsFragment dialog = new FilterEventsFragment();
+
+            dialog.setFilterListener((selectedDays, keywords) -> {
+                Log.e("EventListFragment", String.valueOf(keywords));
+                applyFilters(selectedDays, keywords);
+            });
+
+            dialog.show(getChildFragmentManager(), "filter events");
         });
 
         return view;
@@ -220,5 +234,49 @@ public class EventListFragment extends Fragment {
             TextView dayOfWeek;
             TextView time;
         }
+    }
+
+
+    /**
+     * Filters events from database.
+     */
+    private void applyFilters(List<String> days, List<String> keywords) {
+        List<Event> filtered = new ArrayList<>();
+
+        for (Event event : eventList) {
+            boolean dayMatches = days.isEmpty() || days.contains(event.getEventDayOfWeek());
+
+            boolean keywordMatches = true;
+            if (!keywords.isEmpty()) {
+                keywordMatches = false;
+                String name = event.getEventName().toLowerCase();
+                String description = event.getDescription();
+                if (description != null) {
+                    description = description.toLowerCase();
+                }
+                for (String k : keywords) {
+                    // Check title
+                    if (name.contains(k.toLowerCase())) {
+                        keywordMatches = true;
+                        break;
+                    }
+                    // Check if description matches
+                    if (description != null) {
+                        if (description.contains(k.toLowerCase())) {
+                            keywordMatches = true;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (dayMatches && keywordMatches) {
+                filtered.add(event);
+            }
+        }
+
+        adapter.events.clear();
+        adapter.events.addAll(filtered);
+        adapter.notifyDataSetChanged();
     }
 }

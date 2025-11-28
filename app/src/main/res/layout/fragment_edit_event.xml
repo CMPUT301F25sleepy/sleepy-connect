@@ -257,8 +257,9 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <EditText
+            <TextView
                 android:id="@+id/edit_event_time_start_time"
+                android:onClick="updateTime"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:inputType="text"
@@ -267,7 +268,6 @@
                 android:textAlignment="viewStart"
                 android:textColor="@color/text_dark"
                 android:textSize="16sp"
-                android:hint="@string/hint_time_input"
                 android:background="@android:color/transparent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -278,6 +278,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/edit_event_time_end_button"
+            android:onClick="updateTime"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginTop="15dp"
@@ -301,7 +302,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <EditText
+            <TextView
                 android:id="@+id/edit_event_time_end_time"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -311,7 +312,6 @@
                 android:textAlignment="viewStart"
                 android:textColor="@color/text_dark"
                 android:textSize="16sp"
-                android:hint="@string/hint_time_input"
                 android:background="@android:color/transparent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

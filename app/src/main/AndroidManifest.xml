@@ -24,9 +24,10 @@
             android:name=".admin.AdminActivity"
             android:exported="false" />
 
+        <!-- API KEY nonsense -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyC-TSyen3IL8NSaaI_zMQ4wumgyQurJUy0" />
+            android:value="AIzaSyBnqIBQ42X1PPljuOuqRKXmdE6uxaYSDD8" />
 
         <activity
             android:name=".MainActivity"

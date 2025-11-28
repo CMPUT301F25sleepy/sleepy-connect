@@ -1,7 +1,6 @@
 package com.example.sleepy_connect;
 
-import static androidx.test.InstrumentationRegistry.getContext;
-
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -14,7 +13,7 @@ import java.util.Random;
  */
 public class DrawReplacements {
 
-    public void drawReplacementApp(Event event) {
+    public void drawReplacementApp(Context context, Event event) {
 
         List<String> waitingList = event.getWaitingList();
         List<String> pendingList = event.getPendingList();
@@ -48,7 +47,7 @@ public class DrawReplacements {
         }
 
         // Should send a toast but will need to test if getContext() works as intended
-        Toast.makeText(getContext(), "Invited Entrants!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "Invited Entrants!", Toast.LENGTH_SHORT).show();
 
         // Push updates to Firestore
         EventDAL eventDAL = new EventDAL();

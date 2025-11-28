@@ -37,22 +37,38 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/bs_entrant_manager_selected_delete_entrant"
+        android:id="@+id/bs_event_details"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:background="@drawable/light_text_border"
         android:fontFamily="@font/roboto_medium"
         android:padding="5dp"
-        android:text="@string/label_edit_event"
+        android:text="Event Details"
         android:textColor="@color/text_dark"
         android:textSize="20sp"
         app:layout_constraintEnd_toStartOf="@+id/bs_event_manager_gl_right"
         app:layout_constraintStart_toStartOf="@+id/bs_event_manager_gl_left"
-        app:layout_constraintTop_toBottomOf="@+id/bs_entrant_manager_selected_title" />
+        app:layout_constraintTop_toBottomOf="@+id/bs_entrant_manager_selected_title"/>
+
 
     <TextView
-        android:id="@+id/bs_entrant_manager_selected_send_notification"
+        android:id="@+id/bs_edit_poster"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/light_text_border"
+        android:fontFamily="@font/roboto_medium"
+        android:padding="5dp"
+        android:text="@string/label_edit_poster"
+        android:textColor="@color/text_dark"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/bs_event_manager_gl_right"
+        app:layout_constraintStart_toStartOf="@+id/bs_event_manager_gl_left"
+        app:layout_constraintTop_toBottomOf="@+id/bs_event_details" />
+
+    <TextView
+        android:id="@+id/bs_manage_entrants"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
@@ -64,6 +80,6 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toStartOf="@+id/bs_event_manager_gl_right"
         app:layout_constraintStart_toStartOf="@+id/bs_event_manager_gl_left"
-        app:layout_constraintTop_toBottomOf="@+id/bs_entrant_manager_selected_delete_entrant" />
+        app:layout_constraintTop_toBottomOf="@+id/bs_edit_poster" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

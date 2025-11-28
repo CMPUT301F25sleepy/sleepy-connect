@@ -3,6 +3,7 @@ package com.example.sleepy_connect.eventmanager;
 import static androidx.core.content.res.ResourcesCompat.getDrawable;
 
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -24,6 +25,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.example.sleepy_connect.CommunityCentre;
 import com.example.sleepy_connect.CommunityCentreDAL;
@@ -53,6 +55,7 @@ public class CreateEventFragment extends Fragment {
     private Uri posterUri = null;
     private ImageView ivPoster;
     private Event event;
+    private int hour, minute;
     private final SimpleDateFormat format = new SimpleDateFormat("EEE MMM d, y", Locale.getDefault());
 
     // Registers a photo picker activity launcher in single-select mode.
@@ -101,6 +104,10 @@ public class CreateEventFragment extends Fragment {
         view.findViewById(R.id.edit_event_start_button).setOnClickListener(v -> updateDateTime(view, R.id.edit_event_start_date));
         view.findViewById(R.id.edit_event_end_button).setOnClickListener(v -> updateDateTime(view, R.id.edit_event_end_date));
 
+        // Time pickers
+        view.findViewById(R.id.edit_event_time_start_time).setOnClickListener(v -> updateTime(view, R.id.edit_event_time_start_time));
+        view.findViewById(R.id.edit_event_time_end_time).setOnClickListener(v -> updateTime(view, R.id.edit_event_time_end_time));
+
         // Geolocation switch
         SwitchCompat geolocationSwitch = view.findViewById(R.id.edit_geolocation_switch);
         geolocationSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> geolocationOn = isChecked);
@@ -120,12 +127,12 @@ public class CreateEventFragment extends Fragment {
         EditText etEventCapacity = view.findViewById(R.id.edit_event_capacity_value);
         EditText etRecCenter = view.findViewById(R.id.edit_host_rec_center_text);
         EditText etAddress = view.findViewById(R.id.edit_host_address_text);
-        EditText etEventStartTime = view.findViewById(R.id.edit_event_time_start_time);
-        EditText etEventEndTime = view.findViewById(R.id.edit_event_time_end_time);
         TextView tvRegStartDate = view.findViewById(R.id.edit_reg_start_date);
         TextView tvRegEndDate = view.findViewById(R.id.edit_reg_end_date);
         TextView tvEventStartDate = view.findViewById(R.id.edit_event_start_date);
         TextView tvEventEndDate = view.findViewById(R.id.edit_event_end_date);
+        TextView tvEventStartTime = view.findViewById(R.id.edit_event_time_start_time);
+        TextView tvEventEndTime = view.findViewById(R.id.edit_event_time_end_time);
 
         // check if mandatory fields are filled
         if (!mandatoryFieldsFilled(etTitle, etEventCapacity, etRecCenter, etAddress, tvRegStartDate, tvRegEndDate, tvEventStartDate)) {
@@ -182,7 +189,7 @@ public class CreateEventFragment extends Fragment {
                             Objects.requireNonNull(format.parse(tvRegEndDate.getText().toString())).getTime(),
                             Objects.requireNonNull(format.parse(tvEventStartDate.getText().toString())).getTime(),
                             Objects.requireNonNull(format.parse(tvEventEndDate.getText().toString())).getTime(),
-                            createTimeString(etEventStartTime, etEventEndTime),
+                            createTimeString(tvEventStartTime, tvEventEndTime),
                             Integer.parseInt(etEventCapacity.getText().toString()),
                             geolocationOn
                     );
@@ -238,12 +245,12 @@ public class CreateEventFragment extends Fragment {
 
     /**
      * Combines input from the event start and end time fields, separated by a "-"
-     * @param etEventStart edittext containing event start time input
-     * @param etEventEnd edittext containing event end time input
+     * @param tvEventStart edittext containing event start time input
+     * @param tvEventEnd edittext containing event end time input
      * @return String combining both time inputs
      */
-    private String createTimeString(EditText etEventStart, EditText etEventEnd) {
-        return etEventStart.getText().toString() + "-" + etEventEnd.getText().toString();
+    private String createTimeString(TextView tvEventStart, TextView tvEventEnd) {
+        return tvEventStart.getText().toString() + "-" + tvEventEnd.getText().toString();
     }
 
     /**
@@ -272,6 +279,23 @@ public class CreateEventFragment extends Fragment {
                 today.get(Calendar.DAY_OF_MONTH)
         );
         datePickerDialog.show();
+    }
+
+    private void updateTime(View rootView, int timeViewID) {
+        TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
+
+            @Override
+            public void onTimeSet(TimePicker view, int selectedHour, int selectedMinute) {
+                hour = selectedHour;
+                minute = selectedMinute;
+                TextView textView = rootView.findViewById(timeViewID);
+                String time = String.format(Locale.getDefault(), "%02d:%02d", hour, minute);
+                textView.setText(time);
+            }
+        };
+        TimePickerDialog timePickerDialog = new TimePickerDialog(requireContext(),R.style.SpinnerTimePickerTheme, onTimeSetListener, hour, minute, true);
+        timePickerDialog.setTitle("Select time:");
+        timePickerDialog.show();
     }
 
     /**
