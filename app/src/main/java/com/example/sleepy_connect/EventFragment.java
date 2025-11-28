@@ -58,8 +58,6 @@ public class EventFragment extends Fragment {
     //private final List<String> EEventList = new ArrayList<>();
 
     private FloatingActionButton scanQRFab;
-    private Button test_button;
-
 
     private EventDAL eventDAL;
 
@@ -109,8 +107,6 @@ public class EventFragment extends Fragment {
         scanQRFab = view.findViewById(R.id.qr_scan_fab);
         scanQRFab.setOnClickListener(v -> openQRCodeScanner());
 
-        test_button = view.findViewById(R.id.test_btn);
-        test_button.setOnClickListener(v -> testNav());
         //EListView = view.findViewById(R.id.enrolled_events_list);
 
         Wadapter = new MyEventListAdapter(WEventList);
@@ -261,7 +257,6 @@ public class EventFragment extends Fragment {
     }
 
     public void openQRCodeScanner() {
-        Log.d("QRCodeScanner", "are we here");
         ScanOptions options = new ScanOptions();
         options.setOrientationLocked(false);
         options.setDesiredBarcodeFormats(ScanOptions.QR_CODE);
@@ -275,7 +270,7 @@ public class EventFragment extends Fragment {
             Log.d("QRCodeScanner", "Scan cancelled");
         }
 
-        else {
+        else if(result.getContents().contains("sleepyEventApp")){
             String contents = result.getContents();
             Log.d("QRCodeScanner", "contents of scan: " + contents);
             Log.d("QRCodeScanner", "id: " + entrantID);
@@ -290,31 +285,27 @@ public class EventFragment extends Fragment {
             EventDAL eventDal = new EventDAL();
             eventDal.getEvent(eventId, event -> {
                 putEventInViewModel(event);
+
+                //set toolbar title
+                TextView title = requireActivity().findViewById(R.id.set_title);
+                title.setText("Event Details");
+
+                EventDetailsFragment fragment = EventDetailsFragment.newInstance(entrantID, eventId);
+                requireActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, fragment)
+                        .setReorderingAllowed(true)
+                        .addToBackStack(null)
+                        .commit();
             });
 
-            //set toolbar title
-            TextView title = requireActivity().findViewById(R.id.set_title);
-            title.setText("Event Details");
+        }
 
-            EventDetailsFragment fragment = EventDetailsFragment.newInstance(entrantID, eventId);
-            requireActivity().getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment_container, fragment)
-                    .setReorderingAllowed(true)
-                    .addToBackStack(null)
-                    .commit();
+        else {
+            Log.d("QRCodeScanner", "Code is not from Sleepy Event app");
         }
     });
 
-    public void testNav() {
-        EventDetailsFragment fragment = EventDetailsFragment.newInstance(entrantID, "28");
-        requireActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment_container, fragment)
-                .setReorderingAllowed(true)
-                .addToBackStack(null)
-                .commit();
-    }
 
     public void putEventInViewModel(Event event) {
         Log.d("QRCodeScanner", "event name: " + event.getEventName());

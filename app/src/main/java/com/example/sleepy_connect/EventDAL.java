@@ -93,12 +93,10 @@ public class EventDAL {
                             Event event = documentSnapshot.toObject(Event.class);
                             listener.onEventRetrieved(event);
                             System.out.println("Event retrieved: " + eventID);
-                            Log.d("QRCodeScanner", "event name: " + event.getEventName());
                         }
                         // entrant is not in the db
                         else {
                             System.err.println("No event found with ID: " + eventID);
-                            Log.d("QRCodeScanner", "event not found");
                             listener.onEventRetrieved(null);
                         }
                     }

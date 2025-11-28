@@ -101,28 +101,22 @@ public class EventDetailsFragment extends Fragment{
         Bundle args = getArguments();
         String entrantID = args.getString("entrant");
         String eventID = args.getString("event");
-        Log.d("QRCodeScanner", "event details Starting event with event id " + eventID);
-        Log.d("QRCodeScanner", "event details Starting event with entrant id " + entrantID);
 
 
         // get event from viewmodel
         EventViewModel vmEvent = new ViewModelProvider(requireActivity()).get(EventViewModel.class);
         event = vmEvent.getEvent().getValue();
-        Log.d("QRCodeScanner", "event.getEvent.getValue from viewmodel is " + event);
         assert event != null;
-        Log.d("QRCodeScanner", "event not null");
 
         // get user from viewmodel
         UserViewModel vmUser = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
         entrant = vmUser.getUser().getValue();
         assert entrant != null;
-        Log.d("QRCodeScanner", "entrant not null");
 
         long currentDate = System.currentTimeMillis();
         if (currentDate > event.registrationOpens && currentDate < event.registrationCloses) {
             eventOpen = true;
         }
-        Log.d("QRCodeScanner", "event open " + eventOpen);
 
         //checks if user is in the waitlist and sets bool
         if (event.getWaitingList() != null) {
@@ -276,7 +270,6 @@ public class EventDetailsFragment extends Fragment{
             });
         });
 
-        Log.d("QRCodeScanner", "event details fragment created fully");
     }
 
     /**
