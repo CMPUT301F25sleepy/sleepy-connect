@@ -1,5 +1,7 @@
 package com.example.sleepy_connect;
 
+import android.os.Bundle;
+
 import com.google.firebase.firestore.Exclude;
 
 import java.io.Serializable;
@@ -35,6 +37,7 @@ public class Event implements Serializable {
     public ArrayList<String> pendingList;                   // Automatic. List of invited entrant android IDs
     public ArrayList<String> declinedList;                  // Automatic. List of entrants that declines / were rejected by android ID
     public ArrayList<String> acceptedList;                  // Automatic. List of accepted entrant android IDs
+    public ArrayList<Bundle> locationsList;                 // Automatic. List of geolocations. Store Longitude on even and Latitude on odd.
 
     public Event(
             String eventID,
@@ -80,6 +83,7 @@ public class Event implements Serializable {
         this.pendingList = new ArrayList<>();
         this.declinedList = new ArrayList<>();
         this.acceptedList = new ArrayList<>();
+        this.locationsList = new ArrayList<>();
     }
 
     public Event() {
@@ -314,4 +318,11 @@ public class Event implements Serializable {
         return event;
     }
 
+    public ArrayList<Bundle> getLocationsList() {
+        return locationsList;
+    }
+
+    public void setLocationsList(ArrayList<Bundle> locationsList) {
+        this.locationsList = locationsList;
+    }
 }
