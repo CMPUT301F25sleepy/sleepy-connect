@@ -47,6 +47,8 @@ public class WaitlistFragment extends Fragment {
         return fragment;
     }
 
+
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -135,6 +137,8 @@ public class WaitlistFragment extends Fragment {
 
             DrawReplacements replace = new DrawReplacements();
             replace.drawReplacementApp(requireContext(), event);
+
+            vmEvent.setEvent(event);
         });
     }
 

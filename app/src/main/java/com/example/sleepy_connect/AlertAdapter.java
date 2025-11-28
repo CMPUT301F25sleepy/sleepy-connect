@@ -21,7 +21,7 @@ import java.util.ArrayList;
 /**
  * Custom array adapter for the notifications from events
  */
-public class AlertAdapter extends ArrayAdapter<Notification> implements Serializable {
+public class AlertAdapter extends ArrayAdapter<Notification> {
     /* Sets up notification in the list for the list view */
 
     public AlertAdapter(@NonNull Context context, ArrayList<Notification> array) {

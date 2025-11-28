@@ -27,6 +27,8 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 
 
+import android.content.Intent;
+
 import com.google.firebase.firestore.auth.User;
 
 import org.junit.Rule;
@@ -52,6 +54,19 @@ public class ListTest {
         }
     }
 
+    // setup test entrant
+    public Entrant mockEntrant(){
+        // generate mock entrant
+        Entrant entrant = new Entrant("TEST_ANDROID_ID");
+        entrant.setPhone_number("00000");
+        entrant.setFirst_name("test");
+        entrant.setLast_name("test");
+        entrant.setBirthday("10/10/2010");
+        entrant.setPhone_number("780-000-0000");
+        entrant.setEmail("780-000-0000");
+        return entrant;
+    }
+
     @Rule
     public ActivityTestRule<MainActivity> scenario = new ActivityTestRule<MainActivity>(MainActivity.class);
 
@@ -60,7 +75,13 @@ public class ListTest {
         /// tests if joining and leaving the waitlist updates the database correctly
         /// - works if profile is filled and not joined on the first event on All locations
 
-        // press start until 
+        // initialize entrant and add to database
+        Entrant testEntrant = mockEntrant();
+
+
+
+
+        // press start until
         boolean start = false;
         while (!start) {
             onView(withId(R.id.start_button)).perform(click());

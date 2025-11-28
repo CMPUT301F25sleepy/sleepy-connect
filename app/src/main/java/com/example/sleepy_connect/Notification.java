@@ -1,5 +1,7 @@
 package com.example.sleepy_connect;
 
+import androidx.lifecycle.ViewModelProvider;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -11,6 +13,7 @@ public class Notification implements Serializable{
     public boolean selected;
     public boolean cancelled;
     public String eventID;
+    public boolean read;
 
     public Notification() {
         // Empty constructor for Firebase to use when retrieving stuff
@@ -20,6 +23,7 @@ public class Notification implements Serializable{
         this.event_name = event_name;
         this.selected = selected;
         this.cancelled = false;
+        this.read = false;
     }
 
     public Notification(String event_name, boolean selected, boolean cancelled, String eventID){
@@ -27,6 +31,7 @@ public class Notification implements Serializable{
         this.selected = selected;
         this.cancelled = cancelled;
         this.eventID = eventID;
+        this.read = false;
     }
 
     /**
@@ -85,6 +90,10 @@ public class Notification implements Serializable{
 
     public void setSelected(boolean selected) {
         this.selected = selected;
+    }
+
+    public void setRead(boolean bool){
+        this.read = bool;
     }
 
     public String getEventID() {

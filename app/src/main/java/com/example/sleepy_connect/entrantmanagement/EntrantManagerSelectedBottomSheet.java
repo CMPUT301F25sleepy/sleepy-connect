@@ -34,7 +34,7 @@ public class EntrantManagerSelectedBottomSheet extends BottomSheetDialogFragment
     private EventViewModel vmEvent;
 
     public interface EntrantManagerSelectedBottomSheetListener {
-        void EntrantManagerSelectedBottomSheetClosed(boolean bsClosed);
+        void EntrantManagerSelectedBottomSheetClosed(boolean bsClosed, String label, Event event);
     }
 
     private EntrantManagerSelectedBottomSheetListener listener;
@@ -57,6 +57,7 @@ public class EntrantManagerSelectedBottomSheet extends BottomSheetDialogFragment
         fragment.setArguments(args);
         return fragment;
     }
+
 
     @Nullable
     @Override
@@ -105,7 +106,7 @@ public class EntrantManagerSelectedBottomSheet extends BottomSheetDialogFragment
                 event.setWaitingList(list);
                 db.updateEvent(event);
                 vmEvent.setEvent(event);
-                listener.EntrantManagerSelectedBottomSheetClosed(true);
+                listener.EntrantManagerSelectedBottomSheetClosed(true, "Waiting", event);
             } else {
                 Log.d("Remove from list fail", "Could not remove " + entrantID + " from waiting list.");
             }
@@ -116,7 +117,7 @@ public class EntrantManagerSelectedBottomSheet extends BottomSheetDialogFragment
                 event.setPendingList(list);
                 db.updateEvent(event);
                 vmEvent.setEvent(event);
-                listener.EntrantManagerSelectedBottomSheetClosed(true);
+                listener.EntrantManagerSelectedBottomSheetClosed(true, "Invited", event);
             } else {
                 Log.d("Remove from list fail", "Could not remove " + entrantID + " from pending list.");
             }
@@ -127,7 +128,7 @@ public class EntrantManagerSelectedBottomSheet extends BottomSheetDialogFragment
                 event.setAcceptedList(list);
                 db.updateEvent(event);
                 vmEvent.setEvent(event);
-                listener.EntrantManagerSelectedBottomSheetClosed(true);
+                listener.EntrantManagerSelectedBottomSheetClosed(true, "Enrolled", event);
             } else {
                 Log.d("Remove from list fail", "Could not remove " + entrantID + " from enroll list.");
             }
@@ -138,7 +139,7 @@ public class EntrantManagerSelectedBottomSheet extends BottomSheetDialogFragment
                 event.setDeclinedList(list);
                 db.updateEvent(event);
                 vmEvent.setEvent(event);
-                listener.EntrantManagerSelectedBottomSheetClosed(true);
+                listener.EntrantManagerSelectedBottomSheetClosed(true, "Cancelled", event);
             } else {
                 Log.d("Remove from list fail", "Could not remove " + entrantID + " from decline list.");
             }
