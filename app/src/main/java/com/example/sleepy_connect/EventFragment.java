@@ -57,8 +57,6 @@ public class EventFragment extends Fragment {
     private final List<Event> WEventList = new ArrayList<>();
     //private final List<String> EEventList = new ArrayList<>();
 
-    private FloatingActionButton scanQRFab;
-
     private EventDAL eventDAL;
 
     private Entrant user;
@@ -104,8 +102,6 @@ public class EventFragment extends Fragment {
 
         WListView = view.findViewById(R.id.waitlisted_events_list);
         EListView = view.findViewById(R.id.enrolled_events_list);
-        scanQRFab = view.findViewById(R.id.qr_scan_fab);
-        scanQRFab.setOnClickListener(v -> openQRCodeScanner());
 
         //EListView = view.findViewById(R.id.enrolled_events_list);
 
@@ -254,63 +250,6 @@ public class EventFragment extends Fragment {
             TextView dayOfWeek;
             TextView time;
         }
-    }
-
-    public void openQRCodeScanner() {
-        ScanOptions options = new ScanOptions();
-        options.setOrientationLocked(false);
-        options.setDesiredBarcodeFormats(ScanOptions.QR_CODE);
-        options.setBeepEnabled(false);
-        qrCodeLauncher.launch(options);
-    }
-
-    private final ActivityResultLauncher<ScanOptions> qrCodeLauncher = registerForActivityResult(new ScanContract(), result ->
-    {
-        if(result.getContents() == null) {
-            Log.d("QRCodeScanner", "Scan cancelled");
-        }
-
-        else if(result.getContents().contains("sleepyEventApp")){
-            String contents = result.getContents();
-            Log.d("QRCodeScanner", "contents of scan: " + contents);
-            Log.d("QRCodeScanner", "id: " + entrantID);
-
-            // Assuming the format is "some_prefix/event_id"
-            String eventId = contents.split("/")[1];
-
-            // open event details
-            Log.d("QRCodeScanner", "qr code starting event with id " + eventId);
-
-            // pass selected event to viewmodel
-            EventDAL eventDal = new EventDAL();
-            eventDal.getEvent(eventId, event -> {
-                putEventInViewModel(event);
-
-                //set toolbar title
-                TextView title = requireActivity().findViewById(R.id.set_title);
-                title.setText("Event Details");
-
-                EventDetailsFragment fragment = EventDetailsFragment.newInstance(entrantID, eventId);
-                requireActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment_container, fragment)
-                        .setReorderingAllowed(true)
-                        .addToBackStack(null)
-                        .commit();
-            });
-
-        }
-
-        else {
-            Log.d("QRCodeScanner", "Code is not from Sleepy Event app");
-        }
-    });
-
-
-    public void putEventInViewModel(Event event) {
-        Log.d("QRCodeScanner", "event name: " + event.getEventName());
-        EventViewModel vmEvent = new ViewModelProvider(requireActivity()).get(EventViewModel.class);
-        vmEvent.setEvent(event);
     }
 }
 
