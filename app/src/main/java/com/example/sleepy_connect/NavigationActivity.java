@@ -259,7 +259,7 @@ public class NavigationActivity extends AppCompatActivity implements SignUpFragm
         notifIntent.putExtra("notification","This is to let activity know this is coming from notifications");
         notifIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);        PendingIntent contentIntent = PendingIntent.getActivity(this,0,notifIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this,"my_channel_id_01")
-                .setSmallIcon(R.drawable.logo)
+                .setSmallIcon(R.drawable.ic_notification)
                 .setContentTitle(title)
                 .setContentText(description)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
