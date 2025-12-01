@@ -13,6 +13,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -72,6 +74,7 @@ public class LocationMapDialogFrag extends DialogFragment implements OnMapReadyC
         LatLng userLocation = new LatLng(latitude, longitude);
 
         googleMap.addMarker(new MarkerOptions().position(userLocation).title("Your Location"));
+        googleMap.addCircle(new CircleOptions().center(userLocation));
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 14));
     }
 }

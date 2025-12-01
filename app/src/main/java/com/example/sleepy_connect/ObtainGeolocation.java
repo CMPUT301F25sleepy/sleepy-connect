@@ -18,6 +18,8 @@ import androidx.fragment.app.Fragment;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 
+import java.util.ArrayList;
+
 /**
  * class to get the geolocation of a user
  */
@@ -28,10 +30,16 @@ public class ObtainGeolocation extends Fragment {
     private TextView locationText;
     private static final int LOCATION_PERMISSION_REQUEST = 1001;
 
+    private Event event;
+    private EventDAL eventDAL = new EventDAL();
+
+
     public ObtainGeolocation() {
         // Required empty public constructor
     }
 
+
+    // COULD POTENTIALLY DELETE
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -69,7 +77,7 @@ public class ObtainGeolocation extends Fragment {
     /**
      * Function to get the current location
      */
-    private void getCurrentLocation() {
+    public void getCurrentLocation() {
         if (ActivityCompat.checkSelfPermission(requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -85,6 +93,22 @@ public class ObtainGeolocation extends Fragment {
                 currentLon = location.getLongitude();
 
                 locationText.setText("Latitude: " + currentLat + "\nLongitude: " + currentLon);
+
+                if (event != null) {
+                    Bundle coord = new Bundle();
+                    coord.putDouble("lat", currentLat);
+                    coord.putDouble("lon", currentLon);
+
+                    // Ensure list exists
+                    if (event.locationsList == null) {
+                        event.locationsList = new ArrayList<>();
+                    }
+
+                    event.locationsList.add(coord);
+
+                    // Update database
+                    eventDAL.updateEvent(event);
+                }
             } else {
                 locationText.setText("Unable to get location");
             }

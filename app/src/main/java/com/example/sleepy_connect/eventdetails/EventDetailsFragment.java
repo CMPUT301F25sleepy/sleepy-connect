@@ -247,6 +247,8 @@ public class EventDetailsFragment extends Fragment{
                                 @Override
                                 public void onEventRetrieved(Event event){
                                     if (event != null){
+                                        ObtainGeolocation geo = new ObtainGeolocation();
+                                        geo.getCurrentLocation();
                                         ArrayList<String> list = event.getWaitingList();
                                         if (list.contains(entrantID)){
                                             SignFragment.show(getParentFragmentManager(), "already applied");
