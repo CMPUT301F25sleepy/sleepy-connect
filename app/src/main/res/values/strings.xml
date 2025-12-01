@@ -24,10 +24,15 @@
     <string name="label_edit_poster">Edit Poster</string>
     <string name="label_manage_entrants">Manage Entrants</string>
 
-    <string name="label_waitlist">Waitlist ▾</string>
-    <string name="label_invited">Invited ▾</string>
-    <string name="label_cancelled">Cancelled ▾</string>
-    <string name="label_enrolled">Enrolled ▾</string>
+    <string name="label_waitlist">Waitlist</string>
+    <string name="label_invited">Invited</string>
+    <string name="label_cancelled">Cancelled</string>
+    <string name="label_enrolled">Enrolled</string>
+
+    <string name="label_dropdown_waitlist">Waitlist ▾</string>
+    <string name="label_dropdown_invited">Invited ▾</string>
+    <string name="label_dropdown_cancelled">Cancelled ▾</string>
+    <string name="label_dropdown_enrolled">Enrolled ▾</string>
 
     <string name="label_admin_title">Admin View</string>
     <string name="label_exit">Exit</string>
