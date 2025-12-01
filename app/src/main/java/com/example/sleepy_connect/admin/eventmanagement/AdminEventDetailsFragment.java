@@ -4,12 +4,14 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,6 +21,7 @@ import com.example.sleepy_connect.EventDAL;
 import com.example.sleepy_connect.Image;
 import com.example.sleepy_connect.R;
 import com.example.sleepy_connect.admin.AdminEventViewModel;
+import com.example.sleepy_connect.eventdetails.QRCodeFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -83,6 +86,11 @@ public class AdminEventDetailsFragment extends Fragment {
         // initialize click listener for return button
         TextView tvReturn = view.findViewById(R.id.admin_event_details_tv_return);
         tvReturn.setOnClickListener(v -> finishProcedure());
+
+        // initialize QR Code generator, set visibility of QR code views
+        Button generateQRCodeButton = view.findViewById(R.id.generate_qr_code_button);
+        generateQRCodeButton.setOnClickListener(v -> openQRCodeFragment());
+        ConstraintLayout QRCodeLayout = view.findViewById(R.id.generate_qr_code_layout);
     }
 
     /**
@@ -144,4 +152,24 @@ public class AdminEventDetailsFragment extends Fragment {
                 .popBackStack();
 
     }
+
+    protected void openQRCodeFragment() {
+        TextView errorText = requireView().findViewById(R.id.qr_code_error_text);
+
+        String eventID = event.getEventID();
+        // checks event id is not null(default string value)
+        if (eventID != null) {
+            // generates QR code, opens up fragment with code
+            errorText.setVisibility(View.GONE);
+            QRCodeFragment qrCodeFragment = QRCodeFragment.newInstance(eventID);
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.admin_container, qrCodeFragment)
+                    .addToBackStack(null)
+                    .commit();
+        } else {
+            errorText.setVisibility(View.VISIBLE);
+        }
+    }
+
 }

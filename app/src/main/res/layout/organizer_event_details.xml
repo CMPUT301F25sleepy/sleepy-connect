@@ -283,6 +283,7 @@ In the java code, check whether the user is joined in the waitlist already and i
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/qr_box"
                     android:layout_weight="1"
                     android:orientation="vertical"
                     android:layout_marginStart="10dp"
