@@ -27,6 +27,11 @@ public class CommunityCentreDAL {
         communityRef = db.collection("community centres");
     }
 
+    // Constructor that doesn't use firebase FOR TESTS ONLY
+    public CommunityCentreDAL(CollectionReference mockRef) {
+        this.communityRef = mockRef;
+    }
+
     /**
      * adds a community centre to the collection
      * @param communityCentre object to be added
