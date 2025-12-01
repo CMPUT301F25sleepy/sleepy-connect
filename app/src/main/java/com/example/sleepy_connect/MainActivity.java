@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -71,7 +72,7 @@ public class MainActivity extends AppCompatActivity{
     public void startPress(View view){
         // button to switch to the main app (the navigation activity)
         if (user == null) {
-            Log.e("DEBUG", "user not loaded in");
+            Toast.makeText(MainActivity.this, "User not loaded in yet. Please wait.", Toast.LENGTH_SHORT).show();
             return;
         }
         Intent i = new Intent(MainActivity.this, NavigationActivity.class);

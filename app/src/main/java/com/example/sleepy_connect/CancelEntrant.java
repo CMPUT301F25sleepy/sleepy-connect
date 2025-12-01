@@ -13,6 +13,12 @@ public class CancelEntrant {
     public CancelEntrant(EventDAL eventDAL) {
         this.eventDAL = eventDAL;
     }
+
+    /**
+     * removes the entrant from the proper lists
+     * @param entrant object
+     * @param event object
+     */
     public void removeCancelledEntrant(Entrant entrant, Event event) {
         String entrantID = entrant.getAndroid_id();
         List<String> invitedList = event.getPendingList();

@@ -281,6 +281,12 @@ public class CreateEventFragment extends Fragment {
         datePickerDialog.show();
     }
 
+    /**
+     *class for the pop up time picker
+     * inspired by Code with Cal on Youtube(url at top of file)
+     * @param rootView view for the pop up to go into
+     * @param timeViewID id representing either the event start time or event end time
+     */
     private void updateTime(View rootView, int timeViewID) {
         TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
 

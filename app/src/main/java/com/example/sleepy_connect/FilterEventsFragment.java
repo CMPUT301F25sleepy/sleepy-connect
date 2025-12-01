@@ -22,6 +22,10 @@ import com.google.android.material.search.SearchBar;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * dialog fragment class to bring up and input filter options for the events list
+ */
+
 public class FilterEventsFragment extends DialogFragment {
 
     @NonNull
@@ -97,7 +101,12 @@ public class FilterEventsFragment extends DialogFragment {
         return dialog;
     }
 
-        private void addChip(String keyword, FlexboxLayout keywordContainer) {
+    /**
+     * add the keyword to the space under the search bar
+     * @param keyword
+     * @param keywordContainer
+     */
+    private void addChip(String keyword, FlexboxLayout keywordContainer) {
             Chip chip = new Chip(requireContext());
             chip.setText(keyword);
 

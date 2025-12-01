@@ -24,10 +24,15 @@
     <string name="label_edit_poster">Edit Poster</string>
     <string name="label_manage_entrants">Manage Entrants</string>
 
-    <string name="label_waitlist">Waitlist ▾</string>
-    <string name="label_invited">Invited ▾</string>
-    <string name="label_cancelled">Cancelled ▾</string>
-    <string name="label_enrolled">Enrolled ▾</string>
+    <string name="label_waitlist">Waitlist</string>
+    <string name="label_invited">Invited</string>
+    <string name="label_cancelled">Cancelled</string>
+    <string name="label_enrolled">Enrolled</string>
+
+    <string name="label_dropdown_waitlist">Waitlist ▾</string>
+    <string name="label_dropdown_invited">Invited ▾</string>
+    <string name="label_dropdown_cancelled">Cancelled ▾</string>
+    <string name="label_dropdown_enrolled">Enrolled ▾</string>
 
     <string name="label_admin_title">Admin View</string>
     <string name="label_exit">Exit</string>
@@ -74,6 +79,6 @@
     </string>
     <string name="qr_code_generator_label">QR Code Generator</string>
     <string name="qr_code_description_2">Don\'t worry, you can always get this code by editing your event and clicking the <b>\"Share your event\"</b> button. And even if you change the event details later, this code will still work!</string>
-    <string name="qr_code_description">Screenshot and add this code to your event poster. Scanning it will take you to your details page!</string>
+    <string name="qr_code_description">Screenshot and add this code to your event poster. Scanning the code in app will navigate to the event details page!</string>
 
 </resources>

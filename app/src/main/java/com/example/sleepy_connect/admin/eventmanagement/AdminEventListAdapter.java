@@ -18,6 +18,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
+/**
+ *custom list adapter class for the event list in the admin view
+ */
 public class AdminEventListAdapter extends ArrayAdapter<Event> {
 
     public AdminEventListAdapter(Context context, ArrayList<Event> events) {

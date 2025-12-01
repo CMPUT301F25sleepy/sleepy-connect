@@ -20,6 +20,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * dialog fragment class to display the map of entrants who joined the waitlist
+ */
 public class LocationMapDialogFrag extends DialogFragment implements OnMapReadyCallback {
 
     private List<Map<String, Double>> locationsList;

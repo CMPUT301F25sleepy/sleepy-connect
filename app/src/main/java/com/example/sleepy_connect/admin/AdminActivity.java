@@ -9,6 +9,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.sleepy_connect.R;
 import com.example.sleepy_connect.admin.profilemanagement.AdminProfileListFragment;
 
+/**
+ * main activity for the admin view
+ */
 public class AdminActivity extends AppCompatActivity {
 
     public String currentUID;

@@ -15,6 +15,9 @@ import com.example.sleepy_connect.R;
 
 import java.util.ArrayList;
 
+/**
+ * adapter class for list of notifications in the admin view
+ */
 public class AdminNotificationListAdapter extends ArrayAdapter<Notification> {
 
     public AdminNotificationListAdapter(Context context, ArrayList<Notification> notifications) {
