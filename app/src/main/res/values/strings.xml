@@ -74,6 +74,6 @@
     </string>
     <string name="qr_code_generator_label">QR Code Generator</string>
     <string name="qr_code_description_2">Don\'t worry, you can always get this code by editing your event and clicking the <b>\"Share your event\"</b> button. And even if you change the event details later, this code will still work!</string>
-    <string name="qr_code_description">Screenshot and add this code to your event poster. Scanning it will take you to your details page!</string>
+    <string name="qr_code_description">Screenshot and add this code to your event poster. Scanning the code in app will navigate to the event details page!</string>
 
 </resources>
