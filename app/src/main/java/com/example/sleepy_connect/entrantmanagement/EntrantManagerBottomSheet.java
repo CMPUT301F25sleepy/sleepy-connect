@@ -56,16 +56,16 @@ public class EntrantManagerBottomSheet extends BottomSheetDialogFragment {
         TextView listLabel = requireParentFragment().requireView().findViewById(R.id.entrant_manager_tv_list_label);
 
         // Set click listener for waitlist option
-        tvWaitlist.setOnClickListener(v ->  startListFragment(listLabel, "Waitlist"));
+        tvWaitlist.setOnClickListener(v ->  startListFragment(listLabel, "Waitlist ▾"));
 
         // Set click listener for invited list option
-        tvInvited.setOnClickListener(v ->  startListFragment(listLabel, "Invited"));
+        tvInvited.setOnClickListener(v ->  startListFragment(listLabel, "Invited ▾"));
 
         // Set click listener for cancelled list option
-        tvCancelled.setOnClickListener(v ->  startListFragment(listLabel, "Cancelled"));
+        tvCancelled.setOnClickListener(v ->  startListFragment(listLabel, "Cancelled ▾"));
 
         // Set click listener for enrolled list option
-        tvEnrolled.setOnClickListener(v ->  startListFragment(listLabel, "Enrolled"));
+        tvEnrolled.setOnClickListener(v ->  startListFragment(listLabel, "Enrolled ▾"));
 
         return view;
     }
@@ -77,13 +77,13 @@ public class EntrantManagerBottomSheet extends BottomSheetDialogFragment {
 
         // determine which fragment is called
         Fragment fragment = null;
-        if (newLabel == "Waitlist"){
+        if (newLabel.equals("Waitlist ▾")){
             fragment = WaitlistFragment.newInstance(event);
-        } else if (newLabel == "Invited") {
+        } else if (newLabel.equals("Invited ▾")) {
             fragment = InvitedListFragment.newInstance(event);
-        } else if (newLabel == "Cancelled") {
+        } else if (newLabel.equals("Cancelled ▾")) {
             fragment = CancelledListFragment.newInstance(event);
-        } else if (newLabel == "Enrolled") {
+        } else if (newLabel.equals("Enrolled ▾")) {
             fragment = EnrolledListFragment.newInstance(event);
         }
 
