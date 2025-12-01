@@ -18,6 +18,10 @@ import androidx.fragment.app.Fragment;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * class to get the geolocation of a user
  */
@@ -25,40 +29,45 @@ import com.google.android.gms.location.LocationServices;
 public class ObtainGeolocation extends Fragment {
 
     private FusedLocationProviderClient locationClient;
-    private TextView locationText;
+
     private static final int LOCATION_PERMISSION_REQUEST = 1001;
+
+    private Event event;
+    private EventDAL eventDAL = new EventDAL();
+
 
     public ObtainGeolocation() {
         // Required empty public constructor
     }
 
+
+    // COULD POTENTIALLY DELETE
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.user_location, container, false);
-
-        locationText = view.findViewById(R.id.locationText);
-        Button getLocationBtn = view.findViewById(R.id.getLocationBtn);
+        View view = inflater.inflate(R.layout.fragment_waitlist, container, false);
 
         // NEW BUTTON TO SHOW LOCATION ON MAP
-        Button showMapBtn = view.findViewById(R.id.showMapBtn);
+        Button showMapBtn = view.findViewById(R.id.waitlist_map_button);
 
         locationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
 
-        getLocationBtn.setOnClickListener(v -> getCurrentLocation());
-
         // Show the map dialog
         showMapBtn.setOnClickListener(v -> {
-            if (currentLat != null && currentLon != null) {
-                new LocationMapDialogFrag(currentLat, currentLon)
-                        .show(getChildFragmentManager(), "mapDialog");
+            if (event != null && event.getLocationsList() != null && !event.getLocationsList().isEmpty()) {
+
+                LocationMapDialogFrag dialog =
+                        new LocationMapDialogFrag(event.getLocationsList());
+
+                dialog.show(getChildFragmentManager(), "mapDialog");
+
             } else {
-                locationText.setText("Get location first");
             }
         });
+
 
         return view;
     }
@@ -69,7 +78,7 @@ public class ObtainGeolocation extends Fragment {
     /**
      * Function to get the current location
      */
-    private void getCurrentLocation() {
+    public void getCurrentLocation() {
         if (ActivityCompat.checkSelfPermission(requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -84,9 +93,26 @@ public class ObtainGeolocation extends Fragment {
                 currentLat = location.getLatitude();
                 currentLon = location.getLongitude();
 
-                locationText.setText("Latitude: " + currentLat + "\nLongitude: " + currentLon);
+                if (event != null) {
+                    Bundle bundle = getArguments();
+                    if (bundle != null) {
+                        double lat = bundle.getDouble("latitude");
+                        double lon = bundle.getDouble("longitude");
+
+                        // Create a map with ONLY lat/lng values
+                        Map<String, Double> locationMap = new HashMap<>();
+                        locationMap.put("lat", lat);
+                        locationMap.put("lon", lon);
+
+                        // Add to list
+                        event.getLocationsList().add(locationMap);
+                    }
+
+
+                    // Update database
+                    eventDAL.updateEvent(event);
+                }
             } else {
-                locationText.setText("Unable to get location");
             }
         });
     }
@@ -112,7 +138,6 @@ public class ObtainGeolocation extends Fragment {
 
             getCurrentLocation();
         } else {
-            locationText.setText("Location permission denied");
         }
     }
 }
