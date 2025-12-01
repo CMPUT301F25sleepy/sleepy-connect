@@ -93,7 +93,7 @@ public class CancelledListFragment extends Fragment {
             String selectedEntrant = entrantList.get(position);
 
             // open bottom sheet
-            EntrantManagerSelectedBottomSheet bottomSheet = EntrantManagerSelectedBottomSheet.newInstance("Cancelled");
+            EntrantManagerSelectedBottomSheet bottomSheet = EntrantManagerSelectedBottomSheet.newInstance("Cancelled", selectedEntrant);
             bottomSheet.show(getParentFragmentManager()  , "ModalBottomSheet");
         });
 

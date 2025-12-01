@@ -119,7 +119,7 @@ public class EnrolledListFragment extends Fragment {
             String selectedEntrant = entrantList.get(position);
 
             // open bottom sheet
-            EntrantManagerSelectedBottomSheet bottomSheet = EntrantManagerSelectedBottomSheet.newInstance("Enrolled");
+            EntrantManagerSelectedBottomSheet bottomSheet = EntrantManagerSelectedBottomSheet.newInstance("Enrolled", selectedEntrant);
             bottomSheet.show(getParentFragmentManager()  , "ModalBottomSheet");
         });
 

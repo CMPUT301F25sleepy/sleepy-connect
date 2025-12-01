@@ -172,7 +172,7 @@ public class WaitlistFragment extends Fragment {
             String selectedEntrant = entrantList.get(position);
 
             // open bottom sheet
-            EntrantManagerSelectedBottomSheet bottomSheet = EntrantManagerSelectedBottomSheet.newInstance("Waiting");
+            EntrantManagerSelectedBottomSheet bottomSheet = EntrantManagerSelectedBottomSheet.newInstance("Waiting", selectedEntrant);
             bottomSheet.show(getParentFragmentManager()  , "ModalBottomSheet");
         });
     }

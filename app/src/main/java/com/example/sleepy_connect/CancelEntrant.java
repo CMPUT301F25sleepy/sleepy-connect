@@ -7,6 +7,12 @@ import java.util.List;
  */
 public class CancelEntrant {
 
+    private final EventDAL eventDAL;
+
+    // adding dependency injection for tests
+    public CancelEntrant(EventDAL eventDAL) {
+        this.eventDAL = eventDAL;
+    }
     public void removeCancelledEntrant(Entrant entrant, Event event) {
         String entrantID = entrant.getAndroid_id();
         List<String> invitedList = event.getPendingList();
@@ -26,7 +32,6 @@ public class CancelEntrant {
         }
 
         // Update Firebase event object
-        EventDAL eventDAL = new EventDAL();
         eventDAL.updateEvent(event);
     }
 }
