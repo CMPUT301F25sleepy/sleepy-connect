@@ -250,6 +250,7 @@ public class EventDetailsFragment extends Fragment{
                                 @Override
                                 public void onEventRetrieved(Event event){
                                     if (event != null){
+                                        // Gets the users current location as they sign up
                                         LocationHelper.getUserLocation(requireActivity(), new LocationHelper.LocationCallback() {
                                             @Override
                                             public void onLocation(double lat, double lon) {

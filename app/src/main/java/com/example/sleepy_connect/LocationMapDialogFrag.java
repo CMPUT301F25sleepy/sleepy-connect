@@ -14,6 +14,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
@@ -42,6 +43,10 @@ public class LocationMapDialogFrag extends DialogFragment implements OnMapReadyC
         return inflater.inflate(R.layout.dialog_map_overlay, container, false);
     }
 
+    /**
+     * Initialize the map fragment
+     */
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -56,6 +61,9 @@ public class LocationMapDialogFrag extends DialogFragment implements OnMapReadyC
         mapFragment.getMapAsync(this);
     }
 
+    /**
+     * On map ready, display all locations on the map
+     */
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
 
@@ -63,13 +71,22 @@ public class LocationMapDialogFrag extends DialogFragment implements OnMapReadyC
             return;
         }
 
+        // Builder for lat & lng coordinates
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+
+        // Display all coordinates on the map
         for (Map<String, Double> loc : locationsList) {
             double lat = loc.get("lat");
             double lng = loc.get("lon");
 
             LatLng point = new LatLng(lat, lng);
             googleMap.addMarker(new MarkerOptions().position(point));
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(point, 14f));
+            builder.include(point);
         }
+
+        LatLngBounds bounds = builder.build();
+        // Offset from edges of the map in pixels
+        int padding = 100;
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding));
     }
 }

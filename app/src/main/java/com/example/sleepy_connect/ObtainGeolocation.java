@@ -41,7 +41,6 @@ public class ObtainGeolocation extends Fragment {
     }
 
 
-    // COULD POTENTIALLY DELETE
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -50,28 +49,12 @@ public class ObtainGeolocation extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_waitlist, container, false);
 
-        // NEW BUTTON TO SHOW LOCATION ON MAP
-        Button showMapBtn = view.findViewById(R.id.waitlist_map_button);
-
         locationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
-
-        // Show the map dialog
-        showMapBtn.setOnClickListener(v -> {
-            if (event != null && event.getLocationsList() != null && !event.getLocationsList().isEmpty()) {
-
-                LocationMapDialogFrag dialog =
-                        new LocationMapDialogFrag(event.getLocationsList());
-
-                dialog.show(getChildFragmentManager(), "mapDialog");
-
-            } else {
-            }
-        });
-
 
         return view;
     }
 
+    // Declare vars
     private Double currentLat = null;
     private Double currentLon = null;
 
@@ -112,7 +95,6 @@ public class ObtainGeolocation extends Fragment {
                     // Update database
                     eventDAL.updateEvent(event);
                 }
-            } else {
             }
         });
     }
@@ -137,7 +119,6 @@ public class ObtainGeolocation extends Fragment {
                 grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
             getCurrentLocation();
-        } else {
         }
     }
 }
