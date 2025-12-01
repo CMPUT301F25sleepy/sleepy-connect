@@ -53,7 +53,6 @@ public class MainActivity extends AppCompatActivity{
                 if (entrant != null) {
                     // existing user
                     user = entrant;
-                    //xander_test(user);
 
                 } else {
                     // new user

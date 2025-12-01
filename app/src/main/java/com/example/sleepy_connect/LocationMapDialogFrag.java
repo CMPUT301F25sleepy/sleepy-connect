@@ -14,16 +14,18 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.List;
+import java.util.Map;
 
 public class LocationMapDialogFrag extends DialogFragment implements OnMapReadyCallback {
 
-    private double latitude;
-    private double longitude;
+    private List<Map<String, Double>> locationsList;
 
-    public LocationMapDialogFrag(double lat, double lon) {
-        this.latitude = lat;
-        this.longitude = lon;
+    public LocationMapDialogFrag(List<Map<String, Double>> locationsList) {
+        this.locationsList = locationsList;
     }
 
     @Override
@@ -41,6 +43,10 @@ public class LocationMapDialogFrag extends DialogFragment implements OnMapReadyC
         return inflater.inflate(R.layout.dialog_map_overlay, container, false);
     }
 
+    /**
+     * Initialize the map fragment
+     */
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -50,30 +56,37 @@ public class LocationMapDialogFrag extends DialogFragment implements OnMapReadyC
         getChildFragmentManager()
                 .beginTransaction()
                 .replace(R.id.mapContainer, mapFragment)
-                .commitNow(); // important: commit immediately so map can attach
+                .commit();
 
         mapFragment.getMapAsync(this);
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        if (getDialog() != null && getDialog().getWindow() != null) {
-            // Ensure dialog actually shows its content
-            getDialog().getWindow().setLayout(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-            );
-        }
-    }
-
+    /**
+     * On map ready, display all locations on the map
+     */
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
-        LatLng userLocation = new LatLng(latitude, longitude);
 
-        googleMap.addMarker(new MarkerOptions().position(userLocation).title("Your Location"));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 14));
+        if (locationsList == null || locationsList.isEmpty()) {
+            return;
+        }
+
+        // Builder for lat & lng coordinates
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+
+        // Display all coordinates on the map
+        for (Map<String, Double> loc : locationsList) {
+            double lat = loc.get("lat");
+            double lng = loc.get("lon");
+
+            LatLng point = new LatLng(lat, lng);
+            googleMap.addMarker(new MarkerOptions().position(point));
+            builder.include(point);
+        }
+
+        LatLngBounds bounds = builder.build();
+        // Offset from edges of the map in pixels
+        int padding = 100;
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding));
     }
 }
-
-

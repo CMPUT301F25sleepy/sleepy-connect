@@ -28,6 +28,7 @@ import com.example.sleepy_connect.EventDAL;
 import com.example.sleepy_connect.ExportCSV;
 import com.example.sleepy_connect.Image;
 import com.example.sleepy_connect.InviteFromDetailsFragment;
+import com.example.sleepy_connect.LocationHelper;
 import com.example.sleepy_connect.Notification;
 import com.example.sleepy_connect.EventViewModel;
 import com.example.sleepy_connect.ObtainGeolocation;
@@ -39,7 +40,9 @@ import com.example.sleepy_connect.alertSelectFragment;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 // Time picker inspired by Code with Cal
 // https://www.youtube.com/watch?v=c6c1giRekB4
@@ -247,6 +250,33 @@ public class EventDetailsFragment extends Fragment{
                                 @Override
                                 public void onEventRetrieved(Event event){
                                     if (event != null){
+                                        // Gets the users current location as they sign up
+                                        LocationHelper.getUserLocation(requireActivity(), new LocationHelper.LocationCallback() {
+                                            @Override
+                                            public void onLocation(double lat, double lon) {
+
+                                                // Save to event
+                                                Map<String, Double> coord = new HashMap<>();
+                                                coord.put("lat", lat);
+                                                coord.put("lon", lon);
+
+                                                if (event.getLocationsList() == null) {
+                                                    event.setLocationsList(new ArrayList<>());
+                                                }
+
+                                                event.getLocationsList().add(coord);
+
+
+                                                new EventDAL().updateEvent(event);
+
+                                                Log.d("GEO", "Saved location: " + lat + ", " + lon);
+                                            }
+
+                                            @Override
+                                            public void onError(String message) {
+                                                Log.e("GEO", message);
+                                            }
+                                        });
                                         ArrayList<String> list = event.getWaitingList();
                                         if (list.contains(entrantID)){
                                             SignFragment.show(getParentFragmentManager(), "already applied");

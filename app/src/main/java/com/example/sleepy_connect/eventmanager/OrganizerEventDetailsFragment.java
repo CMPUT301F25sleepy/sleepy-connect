@@ -7,10 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -29,6 +31,7 @@ import com.example.sleepy_connect.UserViewModel;
 import com.example.sleepy_connect.entrantmanagement.EntrantManagerFragment;
 import com.example.sleepy_connect.eventdetails.EventDetailsFragment;
 import com.example.sleepy_connect.eventdetails.LotteryGuidelinesFragment;
+import com.example.sleepy_connect.eventdetails.QRCodeFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -75,6 +78,10 @@ public class OrganizerEventDetailsFragment extends Fragment {
         Bundle args = getArguments();
 
         event = (Event) args.getSerializable("event");
+
+        // initialize QR Code generator, set visibility of QR code views
+        LinearLayout generateQRCodeButton = view.findViewById(R.id.qr_box);
+        generateQRCodeButton.setOnClickListener(v -> openQRCodeFragment());
 
         // set the fields from received event model
         setFields(view);
@@ -152,5 +159,27 @@ public class OrganizerEventDetailsFragment extends Fragment {
         String startStr = dateFormat.format(new Date(start));
         String endStr = dateFormat.format(new Date(end));
         return startStr + " - " + endStr;
+    }
+
+    protected void openQRCodeFragment() {
+        //TextView errorText = requireView().findViewById(R.id.qr_code_error_text);
+
+        String eventID = event.getEventID();
+        // checks event id is not null(default string value)
+        if (eventID != null) {
+            // generates QR code, opens up fragment with code
+            //errorText.setVisibility(View.GONE);
+            QRCodeFragment qrCodeFragment = QRCodeFragment.newInstance(eventID);
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, qrCodeFragment)
+                    .addToBackStack(null)
+                    .commit();
+        }
+
+        else {
+            //errorText.setVisibility(View.VISIBLE);
+            return;
+        }
     }
 }

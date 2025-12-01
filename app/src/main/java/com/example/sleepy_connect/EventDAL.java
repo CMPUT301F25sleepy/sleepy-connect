@@ -39,6 +39,12 @@ public class EventDAL {
         counterRef = db.collection("metadata").document("eventCounter");
     }
 
+    // Constructor that doesn't use firebase FOR TESTS ONLY
+    public EventDAL(CollectionReference mockRef, DocumentReference counterRef) {
+        this.eventsRef = mockRef;
+        this.counterRef = counterRef;
+    }
+
     /**
      * Adds an event object to the database. Generates an event ID by using a document in Firebase
      * @param event event object

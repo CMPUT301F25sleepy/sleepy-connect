@@ -9,32 +9,17 @@
         android:id="@+id/cancelled_entrant_list"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="24dp"
         android:clipToPadding="false"
         android:divider="@android:color/transparent"
         android:dividerHeight="12dp"
         android:paddingHorizontal="10dp"
         android:paddingVertical="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/cancelled_message_button"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/entrant_list_layout" />
 
-
-    <Button
-        android:id="@+id/cancelled_message_button"
-        style="@style/Widget.MaterialComponents.Button"
-        android:layout_width="125dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:backgroundTint="@color/pale_yellow"
-        android:text="Message"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:strokeColor="@color/black"
-        app:strokeWidth="1dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

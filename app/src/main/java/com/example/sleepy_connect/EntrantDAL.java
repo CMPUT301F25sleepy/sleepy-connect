@@ -28,6 +28,11 @@ public class EntrantDAL {
         usersRef = db.collection("users");
     }
 
+    // Constructor that doesn't use firebase FOR TESTS ONLY
+    public EntrantDAL(CollectionReference mockRef) {
+        this.usersRef = mockRef;
+    }
+
     /**
      * Adding an entrant to users collection.
      * @param entrant An entrant object to add to the collection.
