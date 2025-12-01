@@ -96,7 +96,7 @@ public class InvitedListFragment extends Fragment {
             String selectedEntrant = entrantList.get(position);
 
             // open bottom sheet
-            EntrantManagerSelectedBottomSheet bottomSheet = EntrantManagerSelectedBottomSheet.newInstance("Invited");
+            EntrantManagerSelectedBottomSheet bottomSheet = EntrantManagerSelectedBottomSheet.newInstance("Invited", selectedEntrant);
             bottomSheet.show(getParentFragmentManager()  , "ModalBottomSheet"
             );});
 

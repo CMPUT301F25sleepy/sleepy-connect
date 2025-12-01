@@ -73,6 +73,7 @@ dependencies {
     androidTestImplementation("androidx.test:runner:1.5.2")
     androidTestImplementation("androidx.test:rules:1.5.0")
     androidTestImplementation("androidx.test.espresso:espresso-contrib:3.5.1")
+    androidTestImplementation ("org.mockito:mockito-android:5.20.0")
     implementation("com.google.android.material:material:1.12.0")
 
     // ZXing for QR code generation + scanning

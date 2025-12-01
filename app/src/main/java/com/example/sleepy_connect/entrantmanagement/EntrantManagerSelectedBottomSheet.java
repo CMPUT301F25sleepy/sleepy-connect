@@ -50,10 +50,11 @@ public class EntrantManagerSelectedBottomSheet extends BottomSheetDialogFragment
         }
     }
 
-    public static EntrantManagerSelectedBottomSheet newInstance(String listname) {
+    public static EntrantManagerSelectedBottomSheet newInstance(String listname, String entrantID) {
         EntrantManagerSelectedBottomSheet fragment = new EntrantManagerSelectedBottomSheet();
         Bundle args = new Bundle();
         args.putString("list", listname);
+        args.putString("entrantID", entrantID);
         fragment.setArguments(args);
         return fragment;
     }
@@ -64,6 +65,7 @@ public class EntrantManagerSelectedBottomSheet extends BottomSheetDialogFragment
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Bundle args = getArguments();
         listname = args.getString("list");
+        entrantID = args.getString("entrantID");
 
         // get event from viewmodel
         EventViewModel vmEvent = new ViewModelProvider(requireActivity()).get(EventViewModel.class);
@@ -73,8 +75,6 @@ public class EntrantManagerSelectedBottomSheet extends BottomSheetDialogFragment
         // get user from viewmodel and its id
         UserViewModel vmUser = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
         Entrant user = vmUser.getUser().getValue();
-        assert user != null;
-        entrantID = user.getAndroid_id();
 
         // Inflate the bottom sheet layout
         View view = inflater.inflate(R.layout.fragment_entrant_manager_selected_sheet, container, false);
@@ -123,6 +123,10 @@ public class EntrantManagerSelectedBottomSheet extends BottomSheetDialogFragment
             }
         } else if (Objects.equals(listname, "Enrolled")) {
             ArrayList<String> list = event.getAcceptedList();
+            Log.d("DEBUG", "EntrantID to remove: " + entrantID);
+            Log.d("DEBUG", "Current accepted list: " + list.toString());
+            Log.d("DEBUG", "Pending list: " + event.getPendingList());
+            Log.d("DEBUG", "Waiting list: " + event.getWaitingList());
             if (list.contains(entrantID)) {
                 list.remove(entrantID);
                 event.setAcceptedList(list);
