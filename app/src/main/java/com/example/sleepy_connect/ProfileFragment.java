@@ -188,9 +188,10 @@ public class ProfileFragment extends Fragment {
         Boolean notifsEnabled = userVM.getNotificationsEnabled().getValue();
 
         // initalize notifcation toggle to be on
-        notif_setting_button.setText("On");
-        notif_setting_button.setBackgroundColor(green);
-
+        if (notifsEnabled == true) {
+            notif_setting_button.setText("On");
+            notif_setting_button.setBackgroundColor(green);
+        }
         if (notifsEnabled == false){
             notif_setting_button.setText("Off");
             notif_setting_button.setBackgroundColor(red);
