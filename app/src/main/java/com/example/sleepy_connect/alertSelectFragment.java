@@ -120,18 +120,17 @@ public class alertSelectFragment extends DialogFragment {
                                 event.addToAcceptedList(entrantID);
                                 event.removeFromPendingList(entrantID);
 
-                                // remove notification from database
-                                removeNotificationFromUser(notif);
-
-                                // update event in database
-                                DAL.updateEvent(event);
-
                                 // pop-up message after accepting
                                 Context ctx = getContext();
                                 if (ctx != null) {
                                     Toast.makeText(ctx, "Accepted Invitation", Toast.LENGTH_SHORT).show();
                                 }
                             }
+                            // remove notification from database
+                            removeNotificationFromUser(notif);
+
+                            // update event in database
+                            DAL.updateEvent(event);
                         } else {
                             System.err.println("Add to Waitlist Failed");
                         }
@@ -159,6 +158,14 @@ public class alertSelectFragment extends DialogFragment {
                                     Toast.makeText(ctx, "Declined Invitation", Toast.LENGTH_SHORT).show();
                                 }
                             }
+                            if (negative_button.getText() == "Opt out"){
+                                event.removeFromWaitlist(entrantID);
+                                Context ctx = getContext();
+                                if (ctx != null) {
+                                    Toast.makeText(ctx, "Opted out of Waitlist", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
                             removeNotificationFromUser(notif);
                             DAL.updateEvent(event);
 

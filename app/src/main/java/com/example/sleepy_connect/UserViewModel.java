@@ -3,6 +3,7 @@ package com.example.sleepy_connect;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -21,11 +22,21 @@ import java.util.ArrayList;
 public class UserViewModel extends ViewModel {
     private static final MutableLiveData<Entrant> user = new MutableLiveData<>();
 
+    private final MutableLiveData<Boolean> enableNotifs = new MutableLiveData<>(true);
+
     public MutableLiveData<Entrant> getUser() {
         return user;
     }
 
     public void setUser(Entrant newUser) {
         user.setValue(newUser);
+    }
+
+    public LiveData<Boolean> getNotificationsEnabled() {
+        return enableNotifs;
+    }
+
+    public void setNotificationsEnabled(boolean enabled) {
+        enableNotifs.setValue(enabled);
     }
 }

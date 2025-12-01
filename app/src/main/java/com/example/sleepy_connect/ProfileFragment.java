@@ -1,10 +1,16 @@
 package com.example.sleepy_connect;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -138,7 +144,6 @@ public class ProfileFragment extends Fragment {
         Button notif_setting_button = view.findViewById(R.id.notification_settings_button);
         Button admin_view_button = view.findViewById(R.id.admin_view_button);
 
-
         //sets the textviews with the current information for the user
         profile_user.setText(saved_user);
         profile_first.setText(saved_first);
@@ -174,6 +179,23 @@ public class ProfileFragment extends Fragment {
         //keyboard listener for admin view password stays on when not editing profile
         password_key = admin_password.getKeyListener();
         admin_password.setKeyListener(password_key);
+
+        int green = ContextCompat.getColor(requireContext(), R.color.green_button); // for notifs
+        int red = ContextCompat.getColor(requireContext(), R.color.error_border);
+
+        // setting ui of notification button
+        UserViewModel userVM = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+        Boolean notifsEnabled = userVM.getNotificationsEnabled().getValue();
+
+        // initalize notifcation toggle to be on
+        notif_setting_button.setText("On");
+        notif_setting_button.setBackgroundColor(green);
+
+        if (notifsEnabled == false){
+            notif_setting_button.setText("Off");
+            notif_setting_button.setBackgroundColor(red);
+        }
+
 
         admin_view_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -342,6 +364,21 @@ public class ProfileFragment extends Fragment {
             entrantDAL.deleteEntrant(user.getAndroid_id(), user.created_event_list)
                     .addOnCompleteListener(task -> requireActivity().finish());
         });
+
+        // Set click listener for notification settings button
+        notif_setting_button.setOnClickListener(v -> {
+            if (notif_setting_button.getText() == "Off"){
+                notif_setting_button.setText("On");
+                notif_setting_button.setBackgroundColor(green);
+                userVM.setNotificationsEnabled(true);
+            } else {
+                notif_setting_button.setText("Off");
+                notif_setting_button.setBackgroundColor(red);
+                userVM.setNotificationsEnabled(false);
+            }
+
+        });
+
     }
 
     /**

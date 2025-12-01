@@ -175,8 +175,8 @@
                 style="@style/Widget.MaterialComponents.Button"
                 android:layout_width="175dp"
                 android:layout_height="45dp"
-                android:backgroundTint="@color/light_cyan_blue"
-                android:text="Settings"
+                android:backgroundTint="@color/green_button"
+                android:text="On"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/profile_notifications_label" />

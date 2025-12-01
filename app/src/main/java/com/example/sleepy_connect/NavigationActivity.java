@@ -60,6 +60,7 @@ public class NavigationActivity extends AppCompatActivity implements SignUpFragm
     TextView back;
     private ListenerRegistration notificationListener; // used to detect new notifs
     private int lastNotifCount = -1; // used to check for notification list updates
+    private UserViewModel userVM;
 
     // Declare the launcher at the top of your Activity/Fragment:
     private final ActivityResultLauncher<String> requestPermissionLauncher =
@@ -111,8 +112,11 @@ public class NavigationActivity extends AppCompatActivity implements SignUpFragm
         userID = (String) getIntent().getSerializableExtra("entrantID");
 
         // store user in UserViewModel
-        UserViewModel userVM = new ViewModelProvider(this).get(UserViewModel.class);
+        userVM = new ViewModelProvider(this).get(UserViewModel.class);
         userVM.setUser(user);
+
+        // init. notifications to be true
+        userVM.setNotificationsEnabled(true);
 
         // Initialize Activity with Community fragment and set the title in top to "Community"
         title = findViewById(R.id.set_title);
@@ -173,37 +177,40 @@ public class NavigationActivity extends AppCompatActivity implements SignUpFragm
                 .addSnapshotListener(new EventListener<DocumentSnapshot>() {
                     @Override
                     public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException error) {
-                        if (error != null || snapshot == null || !snapshot.exists()){
+
+
+                        if (error != null || snapshot == null || !snapshot.exists()) {
                             Log.d("Snapshot Listener for user", "Listener failed");
                             return;
                         }
 
                         Entrant entrant = snapshot.toObject(Entrant.class);
 
-                        if (entrant == null){
+                        if (entrant == null) {
                             Log.d("Snapshot Listener for user", "entrant does not exist");
                             return;
                         }
 
                         ArrayList<Notification> notif_list = entrant.getNotification_list();
 
-                        if (notif_list == null){
+                        if (notif_list == null) {
                             Log.d("Snapshot Listener for user", "entrant's notification list does not exist");
                             return;
                         }
 
                         // first run should initialize size
-                        if (lastNotifCount == -1){
+                        if (lastNotifCount == -1) {
                             lastNotifCount = notif_list.size();
                             return;
                         }
 
-                        if (notif_list.size() > lastNotifCount){
-                            Notification newNotif = notif_list.get(notif_list.size()-1);
+                        if (notif_list.size() > lastNotifCount) {
+                            Notification newNotif = notif_list.get(notif_list.size() - 1);
                             DisplayNotification(newNotif);
                         }
 
                         lastNotifCount = notif_list.size();
+
 
                     }
                 });
@@ -234,54 +241,59 @@ public class NavigationActivity extends AppCompatActivity implements SignUpFragm
         String title;
         String description;
 
-        // from the notification object, determine title and description
-        if (notif.isSelected()){
-            title = "Congrats!";
-            description = "You have been invited to " + notif.getEvent_name();
-        } else {
-            title = "Sorry";
-            description = "You were not selected for " + notif.getEvent_name();
+        if (Boolean.TRUE.equals(userVM.getNotificationsEnabled().getValue())) {
+
+            // from the notification object, determine title and description
+            if (notif.isSelected()) {
+                title = "Congrats!";
+                description = "You have been invited to " + notif.getEvent_name();
+            } else {
+                title = "Sorry :(";
+                description = "You were not selected for " + notif.getEvent_name();
+            }
+
+            if (channel == null) {
+                channel = new NotificationChannel("my_channel_id_01", "Channel title", NotificationManager.IMPORTANCE_HIGH);
+                //config notification channel
+                channel.setDescription("[Channel Description]");
+                channel.enableVibration(true);
+                channel.setVibrationPattern(new long[]{100, 1000, 200, 340});
+                channel.setLockscreenVisibility(android.app.Notification.VISIBILITY_PUBLIC);
+                manager.createNotificationChannel(channel);
+            }
+
+            Intent notifIntent = new Intent(this, NavigationActivity.class);
+            notifIntent.putExtra("entrantID", userID);
+            notifIntent.putExtra("user", user);
+            notifIntent.putExtra("notification", "This is to let activity know this is coming from notifications");
+            notifIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notifIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "my_channel_id_01")
+                    .setSmallIcon(R.drawable.ic_notification)
+                    .setContentTitle(title)
+                    .setContentText(description)
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                    .setVibrate(new long[]{100, 1000, 200, 340})
+                    .setAutoCancel(true)
+                    .setTicker("Notification");
+
+            builder.setContentIntent(contentIntent);
+            NotificationManagerCompat m = NotificationManagerCompat.from(getApplicationContext());
+            // id to generate new notification in list notifications menu
+
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                askNotificationPermission();
+                return;
+            }
+            m.notify(1, builder.build());
         }
-
-        if (channel == null){
-            channel = new NotificationChannel("my_channel_id_01", "Channel title", NotificationManager.IMPORTANCE_HIGH);
-            //config notification channel
-            channel.setDescription("[Channel Description]");
-            channel.enableVibration(true);
-            channel.setVibrationPattern(new long[]{100,1000,200,340});
-            channel.setLockscreenVisibility(android.app.Notification.VISIBILITY_PUBLIC);
-            manager.createNotificationChannel(channel);
-        }
-
-        Intent notifIntent = new Intent(this,NavigationActivity.class);
-        notifIntent.putExtra("entrantID", userID);
-        notifIntent.putExtra("user", user);
-        notifIntent.putExtra("notification","This is to let activity know this is coming from notifications");
-        notifIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);        PendingIntent contentIntent = PendingIntent.getActivity(this,0,notifIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this,"my_channel_id_01")
-                .setSmallIcon(R.drawable.ic_notification)
-                .setContentTitle(title)
-                .setContentText(description)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setVibrate(new long[]{100,1000,200,340})
-                .setAutoCancel(true)
-                .setTicker("Notification");
-
-        builder.setContentIntent(contentIntent);
-        NotificationManagerCompat m = NotificationManagerCompat.from(getApplicationContext());
-        // id to generate new notification in list notifications menu
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            askNotificationPermission();
-            return;
-        }
-        m.notify(1,builder.build());
     }
 
     @Override
     public void EntrantManagerSelectedBottomSheetClosed(boolean bsClosed, String label, Event event) {
 
     }
+
 
 
 }

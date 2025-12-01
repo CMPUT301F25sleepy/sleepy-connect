@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Class which draws new entrants from the waitlist when an invited entrant declines their invitation or the event creator cancels their invitation
@@ -46,6 +47,19 @@ public class DrawReplacements {
             sendSelectedNotification(randomEntrant, event);
         }
 
+        try {
+            TimeUnit.SECONDS.sleep(3);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        if (!waitingList.isEmpty()){
+            for (int i = 0; i < waitingList.size(); i++) {
+                String entrantNotSelected = waitingList.get(i);
+                sendNotSelectedNotification(entrantNotSelected,event);
+            }
+        }
+
         // Should send a toast but will need to test if getContext() works as intended
         Toast.makeText(context, "Invited Entrants!", Toast.LENGTH_SHORT).show();
 
@@ -67,6 +81,17 @@ public class DrawReplacements {
         );
 
         // Save to entrant’s notification list in Firestore
+        notif.sendNotification(userID);
+    }
+
+    private void sendNotSelectedNotification(String userID, Event event){
+        Notification notif = new Notification(
+                event.getEventName(),   // event name
+                false,               // selected = false
+                false,              // cancelled = false
+                event.getEventID()  // event ID
+        );
+
         notif.sendNotification(userID);
     }
 }
