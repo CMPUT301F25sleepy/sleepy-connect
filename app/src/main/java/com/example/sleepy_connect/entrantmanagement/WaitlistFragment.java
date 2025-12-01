@@ -49,8 +49,6 @@ public class WaitlistFragment extends Fragment {
         return fragment;
     }
 
-
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -168,7 +166,10 @@ public class WaitlistFragment extends Fragment {
         listView.setOnItemClickListener((parent, view1, position, id) -> {
 
             // retrieve entrant from list
-            String selectedEntrant = entrantList.get(position);
+            Entrant clickedEntrant = (Entrant) adapter.getItem(position);
+            String selectedEntrant = clickedEntrant.getAndroid_id();
+
+            Log.d("List test","selected " + selectedEntrant);
 
             // open bottom sheet
             EntrantManagerSelectedBottomSheet bottomSheet = EntrantManagerSelectedBottomSheet.newInstance("Waiting", selectedEntrant);
