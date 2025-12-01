@@ -14,6 +14,9 @@ import com.example.sleepy_connect.R;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * custom list adapter class for the list of profiles in the organizer view
+ */
 public class EntrantListAdapter extends BaseAdapter {
 
     private Context context;

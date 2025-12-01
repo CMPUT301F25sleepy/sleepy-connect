@@ -59,6 +59,9 @@ public class AdminBottomSheet extends BottomSheetDialogFragment {
         return view;
     }
 
+    /**
+     * opens fragment
+     */
     void startListFragment(TextView listLabel, int newLabelId, Class<? extends Fragment> fragmentClass) {
 
         // set list label

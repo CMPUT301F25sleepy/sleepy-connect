@@ -17,6 +17,9 @@ import com.example.sleepy_connect.R;
 
 import java.util.ArrayList;
 
+/**
+ * adapter class for list of event posters in the admin view
+ */
 public class AdminPosterListAdapter extends ArrayAdapter<Event> {
 
     public AdminPosterListAdapter(Context context, ArrayList<Event> events) {
