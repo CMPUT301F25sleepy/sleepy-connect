@@ -9,7 +9,9 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Object class for events
@@ -37,7 +39,7 @@ public class Event implements Serializable {
     public ArrayList<String> pendingList;                   // Automatic. List of invited entrant android IDs
     public ArrayList<String> declinedList;                  // Automatic. List of entrants that declines / were rejected by android ID
     public ArrayList<String> acceptedList;                  // Automatic. List of accepted entrant android IDs
-    public ArrayList<Bundle> locationsList;                 // Automatic. List of geolocations. Store Longitude on even and Latitude on odd.
+    private List<Map<String, Double>> locationsList = new ArrayList<>();                 // Automatic. List of geolocations. Store Longitude on even and Latitude on odd.
 
     public Event(
             String eventID,
@@ -318,11 +320,11 @@ public class Event implements Serializable {
         return event;
     }
 
-    public ArrayList<Bundle> getLocationsList() {
+    public List<Map<String, Double>> getLocationsList() {
         return locationsList;
     }
 
-    public void setLocationsList(ArrayList<Bundle> locationsList) {
+    public void setLocationsList(List<Map<String, Double>> locationsList) {
         this.locationsList = locationsList;
     }
 }

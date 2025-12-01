@@ -13,19 +13,18 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.Circle;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.List;
+import java.util.Map;
+
 public class LocationMapDialogFrag extends DialogFragment implements OnMapReadyCallback {
 
-    private double latitude;
-    private double longitude;
+    private List<Map<String, Double>> locationsList;
 
-    public LocationMapDialogFrag(double lat, double lon) {
-        this.latitude = lat;
-        this.longitude = lon;
+    public LocationMapDialogFrag(List<Map<String, Double>> locationsList) {
+        this.locationsList = locationsList;
     }
 
     @Override
@@ -52,31 +51,25 @@ public class LocationMapDialogFrag extends DialogFragment implements OnMapReadyC
         getChildFragmentManager()
                 .beginTransaction()
                 .replace(R.id.mapContainer, mapFragment)
-                .commitNow(); // important: commit immediately so map can attach
+                .commit();
 
         mapFragment.getMapAsync(this);
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        if (getDialog() != null && getDialog().getWindow() != null) {
-            // Ensure dialog actually shows its content
-            getDialog().getWindow().setLayout(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-            );
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+
+        if (locationsList == null || locationsList.isEmpty()) {
+            return;
+        }
+
+        for (Map<String, Double> loc : locationsList) {
+            double lat = loc.get("lat");
+            double lng = loc.get("lon");
+
+            LatLng point = new LatLng(lat, lng);
+            googleMap.addMarker(new MarkerOptions().position(point));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(point, 14f));
         }
     }
-
-    @Override
-    public void onMapReady(@NonNull GoogleMap googleMap) {
-        LatLng userLocation = new LatLng(latitude, longitude);
-
-        googleMap.addMarker(new MarkerOptions().position(userLocation).title("Your Location"));
-        googleMap.addCircle(new CircleOptions().center(userLocation));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 14));
-    }
 }
-
-

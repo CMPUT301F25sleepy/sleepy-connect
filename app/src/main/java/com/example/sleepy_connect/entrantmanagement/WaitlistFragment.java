@@ -20,9 +20,11 @@ import com.example.sleepy_connect.Entrant;
 import com.example.sleepy_connect.Event;
 import com.example.sleepy_connect.EventViewModel;
 import com.example.sleepy_connect.DrawReplacements;
+import com.example.sleepy_connect.LocationMapDialogFrag;
 import com.example.sleepy_connect.ObtainGeolocation;
 import com.example.sleepy_connect.R;
 import com.example.sleepy_connect.eventmanager.EventManagerBottomSheet;
+import com.google.android.gms.location.LocationServices;
 
 import java.util.ArrayList;
 
@@ -70,6 +72,23 @@ public class WaitlistFragment extends Fragment {
         setupInviteButton(view);
 
         loadWaitlistedEntrants();
+
+
+        // NEW BUTTON TO SHOW LOCATION ON MAP
+        Button showMapBtn = view.findViewById(R.id.waitlist_map_button);
+
+        // Show the map dialog
+        showMapBtn.setOnClickListener(v -> {
+            if (event != null && event.getLocationsList() != null && !event.getLocationsList().isEmpty()) {
+
+                LocationMapDialogFrag dialog =
+                        new LocationMapDialogFrag(event.getLocationsList());
+
+                dialog.show(getChildFragmentManager(), "mapDialog");
+
+            } else {
+            }
+        });
 
         return view;
     }
