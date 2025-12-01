@@ -27,6 +27,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * bottom sheet for when you click on an entrant name in a manage entrants list
+ */
 public class EntrantManagerSelectedBottomSheet extends BottomSheetDialogFragment {
     private String entrantID;
     private Event event;

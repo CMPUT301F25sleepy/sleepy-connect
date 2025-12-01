@@ -5,6 +5,9 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.sleepy_connect.Event;
 
+/**
+ * view model for events specifically in the admin view so that it doesn't clash with the other view model
+ */
 public class AdminEventViewModel extends ViewModel {
     private static final MutableLiveData<Event> event = new MutableLiveData<>();
 

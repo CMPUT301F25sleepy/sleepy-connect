@@ -34,29 +34,19 @@ import java.util.Locale;
 import java.util.zip.Inflater;
 
 /**
- * DOES NOT CURRENTLY WORK
+ * fragment class for the My Events pages on the nav bar
  * A simple {@link Fragment} subclass.
  * Use the {@link EventFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class EventFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    // TODO: Rename and change types of parameters
     private String entrantID;
 
     private ListView WListView;
     private MyEventListAdapter Wadapter;
     private ArrayList<String> affiliatedEvents;
-
-    private ListView EListView;
-    private MyEventListAdapter Eadapter;
-
-    //private EventListFragment.EventListAdapter adapter;
     private final List<Event> WEventList = new ArrayList<>();
-    //private final List<String> EEventList = new ArrayList<>();
-
     private EventDAL eventDAL;
 
     private Entrant user;
@@ -72,7 +62,6 @@ public class EventFragment extends Fragment {
      * @param entrantID ID number of entrant, for navigating to event details page.
      * @return A new instance of fragment TestFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static EventFragment newInstance(String entrantID) {
         EventFragment fragment = new EventFragment();
         Bundle args = new Bundle();
@@ -125,11 +114,6 @@ public class EventFragment extends Fragment {
                     Wadapter.notifyDataSetChanged();
                 }
             });
-            //Eadapter = new MyEventListAdapter(EEventList);
-            //EListView.setAdapter(Eadapter);
-
-            //TODO - differentiate between current events and all events
-
 
             WListView.setOnItemClickListener((parent, view1, position, id) -> {
                 Event selectedEvent = WEventList.get(position);
@@ -156,29 +140,6 @@ public class EventFragment extends Fragment {
                         .addToBackStack(null)
                         .commit();
             });
-
-        /*EListView.setOnItemClickListener((parent, view1, position, id) -> {
-            Event selectedEvent = EEventList.get(position);
-            Log.d("EventListFragment", "Clicked event: " + selectedEvent.getEventName());
-
-            // pass selected event to viewmodel
-            EventViewModel vmEvent = new ViewModelProvider(requireActivity()).get(EventViewModel.class);
-            vmEvent.setEvent(selectedEvent);
-
-            //set toolbar title
-            TextView title = requireActivity().findViewById(R.id.set_title);
-            title.setText("Event Details");
-
-            // open event details
-            requireActivity().getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment_container, EventDetailsFragment.class, null)
-                    .setReorderingAllowed(true)
-                    .addToBackStack(null)
-                    .commit();
-        });*/
-
-
         }
 
         if (WEventList.isEmpty()){
