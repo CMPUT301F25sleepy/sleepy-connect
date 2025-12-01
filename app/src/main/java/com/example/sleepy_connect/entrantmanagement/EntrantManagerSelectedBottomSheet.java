@@ -79,15 +79,9 @@ public class EntrantManagerSelectedBottomSheet extends BottomSheetDialogFragment
         // Inflate the bottom sheet layout
         View view = inflater.inflate(R.layout.fragment_entrant_manager_selected_sheet, container, false);
         TextView delete_entrant = view.findViewById(R.id.bs_entrant_manager_selected_delete_entrant);
-        TextView send_notif = view.findViewById(R.id.bs_entrant_manager_selected_send_notification);
 
         delete_entrant.setOnClickListener( v -> {
             deleteEntrantPressed();
-            dismiss();
-        });
-
-        send_notif.setOnClickListener(v ->{
-            selectNotifPressed();
             dismiss();
         });
 
@@ -148,9 +142,5 @@ public class EntrantManagerSelectedBottomSheet extends BottomSheetDialogFragment
                 Log.d("Remove from list fail", "Could not remove " + entrantID + " from decline list.");
             }
         }
-    }
-
-    public void selectNotifPressed (){
-            // TODO implement sending notification to entrant
     }
 }
