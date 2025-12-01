@@ -121,6 +121,62 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/generate_qr_code_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:visibility="visible"
+        app:layout_constraintEnd_toStartOf="@+id/admin_event_details_gl_right"
+        app:layout_constraintStart_toStartOf="@+id/admin_event_details_gl_left"
+        app:layout_constraintTop_toBottomOf="@+id/admin_event_details_tv_description">
+
+        <TextView
+            android:id="@+id/generate_qr_code_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_medium"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="@string/qr_code_generator_label"
+            android:textColor="@color/text_dark"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <Button
+            android:id="@+id/generate_qr_code_button"
+            style="@style/Widget.Material3.Button.Icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:backgroundTint="@color/light_cyan_blue"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/black"
+            android:text="View the QR code"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/generate_qr_code_label" />
+
+        <TextView
+            android:id="@+id/qr_code_error_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:text="QR code generation requires an event ID. Try recreating this event."
+            android:textColor="@color/error_text"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/generate_qr_code_label"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <TextView
         android:id="@+id/admin_event_details_tv_label_description"
         android:layout_width="wrap_content"
@@ -166,7 +222,7 @@
         android:textColor="@color/text_light"
         app:layout_constraintEnd_toStartOf="@+id/admin_event_details_tv_return"
         app:layout_constraintStart_toStartOf="@+id/admin_event_details_gl_left"
-        app:layout_constraintTop_toBottomOf="@+id/admin_event_details_tv_description" />
+        app:layout_constraintTop_toBottomOf="@+id/generate_qr_code_layout" />
 
     <TextView
         android:id="@+id/admin_event_details_tv_return"
@@ -181,6 +237,6 @@
         android:textColor="@color/text_light"
         app:layout_constraintEnd_toStartOf="@+id/admin_event_details_gl_right"
         app:layout_constraintStart_toEndOf="@+id/admin_event_details_tv_delete"
-        app:layout_constraintTop_toBottomOf="@+id/admin_event_details_tv_description" />
+        app:layout_constraintTop_toBottomOf="@+id/generate_qr_code_layout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
