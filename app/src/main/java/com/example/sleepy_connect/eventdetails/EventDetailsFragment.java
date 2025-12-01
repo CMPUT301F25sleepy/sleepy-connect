@@ -240,7 +240,7 @@ public class EventDetailsFragment extends Fragment{
                         String email = entrant.getEmail();
                         DialogFragment SignFragment = SignUpFragment.newInstance();
 
-                        if (user == null || first == null || last == null || birthday == null || phone == null || email == null || user == "" || first == "" || last == "" || birthday == "" || phone == "" || email == "") {
+                        if (user == null || first == null || last == null || birthday == null || email == null || user == "" || first == "" || last == "" || birthday == "" || email == "") {
                             // if any information is missing, pop up a sign up fragment to fill details
                             SignFragment.show(getParentFragmentManager(), "failure");
                         } else {
