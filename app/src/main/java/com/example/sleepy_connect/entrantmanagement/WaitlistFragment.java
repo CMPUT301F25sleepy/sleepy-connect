@@ -74,7 +74,7 @@ public class WaitlistFragment extends Fragment {
         loadWaitlistedEntrants();
 
 
-        // NEW BUTTON TO SHOW LOCATION ON MAP
+        // Button to show map
         Button showMapBtn = view.findViewById(R.id.waitlist_map_button);
 
         // Show the map dialog
@@ -86,7 +86,6 @@ public class WaitlistFragment extends Fragment {
 
                 dialog.show(getChildFragmentManager(), "mapDialog");
 
-            } else {
             }
         });
 

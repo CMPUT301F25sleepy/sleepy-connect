@@ -10,13 +10,21 @@ import androidx.core.app.ActivityCompat;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 
+/**
+ * Helper function to get the user's location, used in ObtainGeolocation
+ */
+
 public class LocationHelper {
 
+    // Callback interface for handling location results
     public interface LocationCallback {
         void onLocation(double lat, double lon);
         void onError(String message);
     }
 
+    /**
+     * Gets the device permissions and then gets the user's location
+     */
     public static void getUserLocation(Activity activity, LocationCallback callback) {
 
         if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION)

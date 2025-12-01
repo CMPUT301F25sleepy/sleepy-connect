@@ -41,7 +41,6 @@ public class ObtainGeolocation extends Fragment {
     }
 
 
-    // COULD POTENTIALLY DELETE
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -52,10 +51,10 @@ public class ObtainGeolocation extends Fragment {
 
         locationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
 
-
         return view;
     }
 
+    // Declare vars
     private Double currentLat = null;
     private Double currentLon = null;
 
@@ -96,7 +95,6 @@ public class ObtainGeolocation extends Fragment {
                     // Update database
                     eventDAL.updateEvent(event);
                 }
-            } else {
             }
         });
     }
@@ -121,7 +119,6 @@ public class ObtainGeolocation extends Fragment {
                 grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
             getCurrentLocation();
-        } else {
         }
     }
 }
