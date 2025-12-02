@@ -1,11 +1,12 @@
 package com.example.sleepy_connect;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Object class for the community centres listed on the first screen
  */
-public class CommunityCentre {
+public class CommunityCentre implements Serializable {
     public String communityCentreName;                      // Required
     public String communityCentreLocation;                  // Required
     public ArrayList<String> events;                        // IDs of events hosted at this community centre
