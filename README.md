@@ -17,7 +17,7 @@ Using our lottery system, hosts can randomly select participants from a waitlist
 7. Join a waitlist by scanning QR codes
 8. Restrict enrolment based on geolocation
 9. Maintain a personal account
-10. Passwordless experience
+10. Manage all app aspects through admin view(password: sleepyadmin)
 
 ## Build Requirements
 Minimum Android SDK version 26 \
